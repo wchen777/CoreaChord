@@ -1,6 +1,6 @@
 # cs0320 Term Project 2021
 
-###Team Members: *(including Strengths and Weaknesses)*
+### Team Members: *(including Strengths and Weaknesses)*
 
 **Ashley Chung** *(CS Login hchung21; Github achung695; intro sequence: CS15/16)*<br>
 *Strengths:* <br>
@@ -62,7 +62,8 @@
 • Procrastination<br>
 • Gets frustrated easily when things don’t work 
 
-##Project Idea(s):
+## Project Idea(s):
+
 ### Idea 1 — CoreaChord
 **Problem:**<br>
 Many chord progression programs exist, but most only include basic chord progressions. There isn’t yet an application that creates complex, jazz-specific chord progressions algorithmically. Such an application would be valuable to people who play jazz or are interested in jazz theory.
@@ -100,7 +101,7 @@ More challenging features:<br>
 • A toggle bar to let users set different diversity levels of chord progression generation (high diversity = wide variety of chords and uncommon chord progressions, low diversity = limited range of chords and more standard/typical chord progressions)<br>
 • Option to have chords stay in a certain key center
 
-###Idea 2 — MEWArt
+### Idea 2 — MEWArt
 
 **Problem:**<br>
 There are many platforms online that facilitate sharing artwork, but there isn’t one unified platform for artists to showcase their work while also connecting with people who might want to request commissions (artists completing an individual’s artwork request for payment).<br>
@@ -132,7 +133,7 @@ Possible additional features:<br>
 
 The application will be able to efficiently communicate data between frontend and backend, have a nice, user-friendly user interface, and an ability to display artworks(images) in the highest quality possible.
 
-###Idea 3 — Pathways @ Brown CS
+### Idea 3 — Pathways @ Brown CS
 **Problem:**<br>
 The Brown CS concentration requirements and website can be very confusing or overwhelming, with large amounts of information and various sets of requirements for AB/ScB concentrators in varying class levels.<br>
 An application to solve this problem could take all this information from the CS website and provide the user with a clear and concise front end that more clearly provides what information is relevant to the user. <br>
