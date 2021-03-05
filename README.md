@@ -101,6 +101,8 @@ More challenging features:<br>
 • A toggle bar to let users set different diversity levels of chord progression generation (high diversity = wide variety of chords and uncommon chord progressions, low diversity = limited range of chords and more standard/typical chord progressions)<br>
 • Option to have chords stay in a certain key center
 
+TA Approval (dlichen): Approved! Focus on the generation algorithm and make sure it's sufficiently complex.
+
 ### Idea 2 — MEWArt
 
 **Problem:**<br>
@@ -133,6 +135,8 @@ Possible additional features:<br>
 
 The application will be able to efficiently communicate data between frontend and backend, have a nice, user-friendly user interface, and an ability to display artworks(images) in the highest quality possible.
 
+TA Approval (dlichen): Rejected, not enough algorithmic complexity
+
 ### Idea 3 — Pathways @ Brown CS
 **Problem:**<br>
 The Brown CS concentration requirements and website can be very confusing or overwhelming, with large amounts of information and various sets of requirements for AB/ScB concentrators in varying class levels.<br>
@@ -163,6 +167,9 @@ As they check off more and more courses, they see a tally that keeps track of th
 
 If the user creates an account, we can save this version of the courses they checked off in their account for future reference.
 
+TA Approval (dlichen): Rejected, not enough algorithmic complexity.
+
+No need to resubmit.
 <br>
 
 **Mentor TA:** _Put your mentor TA's name and email here once you're assigned one!_
