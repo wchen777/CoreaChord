@@ -6,7 +6,7 @@
   <!-- groupId is used to identify the organization -->
   <groupId>edu.brown.cs</groupId>
   <!-- artifactId is used to name the specific project -->
-  <artifactId>maps</artifactId>
+  <artifactId>coreachord</artifactId>
   <!-- type of file you want to output -->
   <packaging>jar</packaging>
   <!-- Version of your project -->
