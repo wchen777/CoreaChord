@@ -1,1 +1,12 @@
+edu/brown/cs/student/coreachord/REPL/REPL.class
+edu/brown/cs/student/coreachord/CoreaApp/CoreaApplication$Quality.class
+edu/brown/cs/student/coreachord/DirectedGraph/Edge.class
+edu/brown/cs/student/coreachord/CoreaApp/GeneratedChord.class
+edu/brown/cs/student/coreachord/DirectedGraph/IEdge.class
+edu/brown/cs/student/coreachord/DirectedGraph/IGraphNode.class
 edu/brown/cs/student/coreachord/Main.class
+edu/brown/cs/student/coreachord/REPL/Executable.class
+edu/brown/cs/student/coreachord/CoreaApp/CoreaApplication$Root.class
+edu/brown/cs/student/coreachord/CoreaApp/CoreaApplication.class
+edu/brown/cs/student/coreachord/CoreaApp/Chord.class
+edu/brown/cs/student/coreachord/DirectedGraph/ChordNode.class
