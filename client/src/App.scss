@@ -2,9 +2,11 @@ $teal-500: #329795;
 
 .top-bar {
   position: fixed;
+  z-index: 100;
   top: 0px;
   left: 0;
   min-width: 100vw;
+  max-width: 100vw;
   height: 90px;
   padding-top: 20px;
   padding-bottom: 20px;
@@ -12,8 +14,22 @@ $teal-500: #329795;
 }
 
 .home-body-container {
+  min-width: 100vw;
+  max-width: 100vw;
+  padding-left: 0;
+  padding-right: 0;
   position: relative;
   top: 90px;
   height: 87vh;
-  min-width: 100vw;
+
+}
+
+.lead-sheet {
+  min-height: 550px;
+  min-width: 720px;
+  margin-bottom: 20px;
+}
+
+.side-select {
+  margin-bottom: 320px;
 }

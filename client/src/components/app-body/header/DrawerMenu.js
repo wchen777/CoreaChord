@@ -10,7 +10,8 @@ import {
   useDisclosure,
   IconButton,
   Text,
-  Button
+  Button,
+  useColorModeValue
 } from "@chakra-ui/react"
 import { HamburgerIcon } from '@chakra-ui/icons'
 
@@ -18,7 +19,7 @@ export default function DrawerMenu() {
   const { isOpen, onOpen, onClose } = useDisclosure()
   const btnRef = useRef()
 
-
+  const bgColor = useColorModeValue("white", "")
   return (
     <>
       <IconButton 
@@ -31,6 +32,7 @@ export default function DrawerMenu() {
           p={4}
           w="100%"
           h="80%"
+          backgroundColor={bgColor}
           onClick={onOpen} />
       <Drawer
         isOpen={isOpen}
