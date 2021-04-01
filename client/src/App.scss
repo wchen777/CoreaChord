@@ -5,7 +5,15 @@ $teal-500: #329795;
   top: 0px;
   left: 0;
   min-width: 100vw;
-  height: 70px;
-  margin-top: 20px;
+  height: 90px;
+  padding-top: 20px;
+  padding-bottom: 20px;
   border-bottom: 1.5px solid #d3d3d3;
+}
+
+.home-body-container {
+  position: relative;
+  top: 90px;
+  height: 87vh;
+  min-width: 100vw;
 }

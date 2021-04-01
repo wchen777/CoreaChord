@@ -1,20 +1,23 @@
 import React from 'react'
 
 import {
-  Heading, HStack, Container, Button, VStack, Center, Flex, Spacer, IconButton
+  Heading, HStack, Container, Button, VStack, Center, Flex, Spacer, IconButton, useColorModeValue
 } from '@chakra-ui/react';
+
 
 import { FaInfoCircle } from 'react-icons/fa'
 
-import { ColorModeSwitcher } from '../ColorModeSwitcher';
+import { ColorModeSwitcher } from '../../../ColorModeSwitcher';
 import DrawerMenu from './DrawerMenu';
-import RegisterModal from './forms/RegisterModal';
-import SignInModal from './forms/SignInModal';
+import RegisterModal from '../../forms/RegisterModal';
+import SignInModal from '../../forms/SignInModal';
 
 
 export default function HeaderBar() {
+  const barColor = useColorModeValue('gray.50', 'gray.800')
+
   return (
-    <Container className="top-bar" mb={0} pb={0}>
+    <Container className="top-bar" backgroundColor={barColor}>
       <Flex>
 
 
@@ -24,12 +27,6 @@ export default function HeaderBar() {
 
           <Heading color="teal.500" ml={7} pl={4} fontSize="44px"> CoreaChord </Heading>
 
-
-
-          {/* <VStack mr={4} my={0} py={0}>
-
-           
-          </VStack> */}
         </HStack>
         <Spacer />
         <HStack mr={4}>
