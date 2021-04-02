@@ -22,46 +22,60 @@ export default function LeadSheet() {
    * @param chordProgression - the data for the chord progression to be rendered.
    */
   function renderChordProgression(chordProgression) {
-    // Determine the number of bars to use
-    const numChordsToRender = chordProgression.length;
-    let renderedChordProgression = "<div>";
-    let barRendering = 0;
-    let chordRendering = 0;
-
-    // Render the chords!
-    while (chordRendering < numChordsToRender) {
-      const barCurrentlyOn = Math.floor(chordRendering / NUM_CHORDS_PER_BAR);
-      if (barCurrentlyOn > barRendering) {
-        barRendering++;
-        // Close the previous bar and add a new bar
-        renderedChordProgression += "</div><div class='barDiv'>";
-        // Add the measure number to the start of the bar
-        renderedChordProgression += "<div class='measureNumberDiv'>" + (chordRendering + 1) + "</div>";
-      }
-      // Now add the chord to the current bar
-      renderedChordProgression += "<div class='chordTextDiv'>"
-          + getChordTextRepresentation(chordProgression, chordRendering) + "</div>";
-      chordRendering++;
-    }
-
-    // Close the current bar
-    renderedChordProgression += "</div>";
-
-    // Close the whole wrapper div
-    renderedChordProgression += "</div>";
-    return renderedChordProgression;
+    // Get the data formatted as a list of bars, where each bar is a list of chords
+    const barList = getBarList(chordProgression);
+    return (<div>
+      {/*Iterate over bars*/}
+      {barList.map(
+          (barToRender, barIndex) => {
+            return <div className={"barDiv"} key={barIndex}>
+              {/*Add the measure number at the start of the bar*/}
+              <div className={"measureNumberDiv"}>
+                {(barIndex * NUM_CHORDS_PER_BAR) + 1}
+              </div>
+              {/*Iterate over chords in the bar*/}
+              {barToRender.map(
+                  (chordToRender, chordIndex) => {
+                    return (<div className={"chordTextDiv"} key={chordIndex}>
+                      {getChordTextRepresentation(chordToRender)}
+                    </div>);
+                  }
+              )}
+            </div>;
+          }
+      )}
+    </div>);
   }
 
   /**
-   * Returns the text representation of a chord, given the data and the chord number to return.
+   * Returns the text representation of a chord, given the chord data.
    *
-   * @param chordProgression - all chord data
-   * @param chordNum - the specific number of the chord to get
+   * @param chordRendering - all the data corresponding to the chord
    * @returns {string} - the text representation of the desired chord.
    */
-  function getChordTextRepresentation(chordProgression, chordNum) {
+  function getChordTextRepresentation(chordRendering) {
     // TODO: update when we have proper data
-    return chordProgression[chordNum];
+    if (chordRendering === "") {
+      return "–";
+    } else {
+      return chordRendering;
+    }
+  }
+
+  /**
+   * Converts whatever data format the chord progression is stored in into a list of lists of
+   * NUM_CHORDS_PER_BAR chords that can be passed to .map().
+   *
+   * @param chordProgression - all chord data
+   * @returns {*}
+   */
+  function getBarList(chordProgression) {
+    // TODO: update when we have proper data
+    const barList = [];
+    for (let i = 0; i < chordProgression.length; i += NUM_CHORDS_PER_BAR){
+      barList.push(chordProgression.slice(i, i + NUM_CHORDS_PER_BAR));
+    }
+    return barList;
   }
 
   return (
