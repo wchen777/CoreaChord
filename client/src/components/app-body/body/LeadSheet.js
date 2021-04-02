@@ -1,4 +1,4 @@
-import React, {useState, useEffect, useRef} from 'react'
+import React, {useState} from 'react'
 import {
   Box
 } from "@chakra-ui/react"
@@ -12,12 +12,8 @@ export default function LeadSheet() {
   // TODO: update above line when we know how we'll be getting the chord progression data
   const NUM_CHORDS_PER_BAR = 4;
 
-  // useEffect(() => {
-  //   // Run this once when the component loads!
-  // }, []);
-
   /**
-   * Returns the HTML code to display the chord progression.
+   * Returns the HTML to display the chord progression.
    *
    * @param chordProgression - the data for the chord progression to be rendered.
    */
