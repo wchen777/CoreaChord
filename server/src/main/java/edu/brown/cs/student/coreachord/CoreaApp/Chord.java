@@ -12,4 +12,11 @@ public class Chord {
     root = inputroot;
   }
 
+  public CoreaApplication.Quality getQuality() {
+    return quality;
+  }
+
+  public CoreaApplication.Root getRoot() {
+    return root;
+  }
 }
