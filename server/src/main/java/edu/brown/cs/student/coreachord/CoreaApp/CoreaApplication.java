@@ -1,5 +1,8 @@
 package edu.brown.cs.student.coreachord.CoreaApp;
 
+import org.checkerframework.checker.units.qual.A;
+
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.EnumSet;
 import java.util.Iterator;
@@ -14,12 +17,11 @@ public class CoreaApplication {
     C, Db, D, Eb, E, F, Gb, G, Ab, A, Bb, B
   }
 
-  private List<String> result;
+  private List<GeneratedChord> result;
 
   public CoreaApplication(Chord startingchord, int numbars) {
-    List<GeneratedChord> resultgenchord = this.generateChords(startingchord, numbars);
+    result = this.generateChords(startingchord, numbars);
     // convert list of gen chord to list of strings.
-    result = this.chordListToStringList(resultgenchord);
   }
 
   /**
@@ -29,7 +31,6 @@ public class CoreaApplication {
    * @param startingchord starting chord
    * @param numbars number of bars
    * @return list of generated chord(s)
-   * TODO: Implement & write necessary helper methods (Ashley is doing this)
    */
   private List<GeneratedChord> generateChords(Chord startingchord, int numbars) {
     if (!(numbars == 8) && !(numbars == 16) && !(numbars == 32)) {
@@ -46,22 +47,33 @@ public class CoreaApplication {
     // loop through sets, and add all possible chords to our state space
     Iterator<Quality> itr1 = qualityset.iterator();
     Iterator<Root> itr2 = rootset.iterator();
+    ArrayList<Quality> qualist = new ArrayList<>();
+    ArrayList<Root> rootlist = new ArrayList<>();
     while (itr2.hasNext()) { // root (c, d, etc.)
-      while (itr1.hasNext()) { // quality (major, minor..)
-        stateSpace.add(new Chord(itr2.next(), itr1.next()));
+      rootlist.add(itr2.next()); // add all elements to list
+    }
+    while (itr1.hasNext()) { // quality (major, minor...)
+      qualist.add(itr1.next());
+    }
+    // ... now add everything to state space using a double for loop!
+    for (int i = 0; i < rootlist.size(); i++) { // root
+      Root nextroot = rootlist.get(i);
+      for (int j = 0; j < qualist.size(); j++) { // quality
+        Quality nextquality = qualist.get(j);
+        stateSpace.add(new Chord(nextroot, nextquality));
       }
     }
+
     ArrayList<GeneratedChord> chordProgression = new ArrayList<>();
     int n = stateSpace.size(); // 48 (12*4)
     int[][] transitionMatrix = new int[n][n];
     this.fillTransitionMatrix(transitionMatrix);
-
     int i = 0;
     Chord currchord = startingchord;
     double currlength = Math.random() * 10; // how do we handle length? (discuss w teammates)
     GeneratedChord currgenchord = new GeneratedChord(currchord, currlength);
     // random walk on markov chain with weights
-    while (i != numbars) {
+    while (i < numbars) {
       int currrowstart = currchord.getRoot().ordinal() * 4; // start from 0
       int nextchordindex = this.handleEachQualityCase(transitionMatrix,
           currchord, currgenchord, currrowstart,
@@ -69,6 +81,7 @@ public class CoreaApplication {
       currchord = this.getCorrespondingChord(transitionMatrix, nextchordindex); // update currchord
       currgenchord = new GeneratedChord(currchord, currlength); // update currgenchord
       // update length?
+      i++; // increment i
     }
     return chordProgression;
   }
@@ -124,7 +137,7 @@ public class CoreaApplication {
     // Root order: C, Db, D, Eb, E, F, Gb, G, Ab, A, Bb, B
     // Quality order: MAJOR7, MINOR7, MINOR7FLAT5, DOMINANT7
     int rootordinal = index / 4; // integer division to get root ordinal
-    int qualityordinal =  index % 4; // mod to get quality ordinal (get remainder)
+    int qualityordinal = index % 4; // mod to get quality ordinal (get remainder)
     Root root = Root.values()[rootordinal];
     Quality quality = Quality.values()[qualityordinal];
     Chord nextchord = new Chord(root, quality);
@@ -132,22 +145,10 @@ public class CoreaApplication {
   }
 
   /**
-   * Helper method that will convert chord list to string list
-   * after generateChords() method is called.
-   *
-   * @param resultgenchord a list to convert
-   * @return a list of strings to send to frontend
-   * TODO: Implement this method
-   */
-  private List<String> chordListToStringList(List<GeneratedChord> resultgenchord) {
-    return null;
-  }
-
-  /**
    * Accessor method for resulting string list
    * @return result (list of strings)
    */
-  public List<String> getResult() {
+  public List<GeneratedChord> getResult() {
     return result;
   }
 }
