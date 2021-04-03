@@ -65,7 +65,7 @@ public class CoreaApplication {
     }
 
     ArrayList<GeneratedChord> chordProgression = new ArrayList<>();
-    int n = stateSpace.size(); // 48 (12*4)
+    int n = stateSpace.size(); // all possible chord outcomes
     int[][] transitionMatrix = new int[n][n];
     this.fillTransitionMatrix(transitionMatrix);
     int i = 0;
@@ -74,11 +74,12 @@ public class CoreaApplication {
     GeneratedChord currgenchord = new GeneratedChord(currchord, currlength);
     // random walk on markov chain with weights
     while (i < numbars) {
-      int currrowstart = currchord.getRoot().ordinal() * 4; // start from 0
+      int numqualities = qualist.size(); // number of possible qualities from Quality enum.
+      int currrowstart = currchord.getRoot().ordinal() * numqualities; // start from 0
       int nextchordindex = this.handleEachQualityCase(transitionMatrix,
           currchord, currgenchord, currrowstart,
           chordProgression); // update arraylist (progression)
-      currchord = this.getCorrespondingChord(transitionMatrix, nextchordindex); // update currchord
+      currchord = this.getCorrespondingChord(transitionMatrix, nextchordindex, numqualities); // update currchord
       currgenchord = new GeneratedChord(currchord, currlength); // update currgenchord
       // update length?
       i++; // increment i
@@ -133,11 +134,11 @@ public class CoreaApplication {
    * @param index
    * @return correspoinding Chord
    */
-  private Chord getCorrespondingChord(int[][] tmat, int index) {
+  private Chord getCorrespondingChord(int[][] tmat, int index, int numqualities) {
     // Root order: C, Db, D, Eb, E, F, Gb, G, Ab, A, Bb, B
     // Quality order: MAJOR7, MINOR7, MINOR7FLAT5, DOMINANT7
-    int rootordinal = index / 4; // integer division to get root ordinal
-    int qualityordinal = index % 4; // mod to get quality ordinal (get remainder)
+    int rootordinal = index / numqualities; // integer division to get root ordinal
+    int qualityordinal = index % numqualities; // mod to get quality ordinal (get remainder)
     Root root = Root.values()[rootordinal];
     Quality quality = Quality.values()[qualityordinal];
     Chord nextchord = new Chord(root, quality);
