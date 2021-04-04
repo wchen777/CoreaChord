@@ -24,19 +24,52 @@
       Learn how to configure a non-root public URL by running `npm run build`.
     -->
     <title>CoreaChord</title>
+
+    <!-- TODO delete below code, it was a failed attempt to get MIDI.js to work -->
+<!--    &lt;!&ndash; Below code added to try to get MIDI.js working &ndash;&gt;-->
+<!--    &lt;!&ndash; polyfill &ndash;&gt;-->
+<!--    <script type="text/babel" src="../src/MIDI.js/inc/shim/Base64.js"></script>-->
+<!--    <script type="text/babel" src="../src/MIDI.js/inc/shim/Base64binary.js"></script>-->
+<!--    <script type="text/babel" src="../src/MIDI.js/inc/shim/WebAudioAPI.js"></script>-->
+<!--    &lt;!&ndash; midi.js package &ndash;&gt;-->
+<!--    <script type="text/babel" src="../src/MIDI.js/js/midi/audioDetect.js"></script>-->
+<!--    <script type="text/babel" src="../src/MIDI.js/js/midi/gm.js"></script>-->
+<!--    <script type="text/babel" src="../src/MIDI.js/js/midi/loader.js"></script>-->
+<!--    <script type="text/babel" src="../src/MIDI.js/js/midi/plugin.audiotag.js"></script>-->
+<!--    <script type="text/babel" src="../src/MIDI.js/js/midi/plugin.webaudio.js"></script>-->
+<!--    <script type="text/babel" src="../src/MIDI.js/js/midi/plugin.webmidi.js"></script>-->
+<!--    &lt;!&ndash; utils &ndash;&gt;-->
+<!--    <script type="text/babel" src="../src/MIDI.js/js/util/dom_request_xhr.js"></script>-->
+<!--    <script type="text/babel" src="../src/MIDI.js/js/util/dom_request_script.js"></script>-->
   </head>
   <body>
     <noscript>You need to enable JavaScript to run this app.</noscript>
+    <!-- TODO delete below code, it was a failed attempt to get MIDI.js to work -->
+<!--    <script type="text/javascript">-->
+<!--      console.log("this is running - index.html");-->
+
+<!--      window.onload = function () {-->
+<!--        console.log("window onload called in index.html");-->
+<!--        MIDI.loadPlugin({-->
+<!--          soundfontUrl: "../src/soundfont/",-->
+<!--          instrument: "acoustic_grand_piano",-->
+<!--          onprogress: function(state, progress) {-->
+<!--            console.log(state, progress);-->
+<!--          },-->
+<!--          onsuccess: function() {-->
+<!--            let delay = 0; // play one note every quarter second-->
+<!--            let note = 50; // the MIDI note-->
+<!--            let velocity = 127; // how hard the note hits-->
+<!--            // play the note-->
+<!--            MIDI.setVolume(0, 127);-->
+<!--            MIDI.noteOn(0, note, velocity, delay);-->
+<!--            MIDI.noteOff(0, note, delay + 0.75);-->
+<!--          }-->
+<!--        });-->
+<!--      };-->
+
+<!--    </script>-->
+
     <div id="root"></div>
-    <!--
-      This HTML file is a template.
-      If you open it directly in the browser, you will see an empty page.
-
-      You can add webfonts, meta tags, or analytics to this file.
-      The build step will place the bundled scripts into the <body> tag.
-
-      To begin the development, run `npm start` or `yarn start`.
-      To create a production bundle, use `npm run build` or `yarn build`.
-    -->
   </body>
 </html>
