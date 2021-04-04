@@ -19,7 +19,7 @@ public class CoreaApplication {
 
   public CoreaApplication(Chord startingchord, int numbars) {
     /* TODO: do we need to have the constructor taking in values? I think we should be using this class as a driver for the
-        generateChords method, unless this is for testing
+        generateChords method, unless this is for testing, otherwise the class would be inflexible to generating new chords
     */
     result = this.generateChords(startingchord, numbars);
     // convert list of gen chord to list of strings.
