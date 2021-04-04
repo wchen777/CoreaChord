@@ -5,6 +5,7 @@ import {
 import { DownloadIcon } from '@chakra-ui/icons'
 import { FaPlay, FaStop } from 'react-icons/fa'
 import { Midi as TonalMidi } from "@tonaljs/tonal"
+import * as Tone from 'tone'
 
 export default function LeadSheetButtons() {
   // const MIDI = useRef();
@@ -14,36 +15,6 @@ export default function LeadSheetButtons() {
     // TODO test code for turnChordNotesToMidiNums() below, can probably be deleted
     // const midiNums = turnChordNotesToMidiNums(["C3", "Eb3", "Gb3"]);
     // console.log(midiNums);
-
-    /*
-     * Code for loading MIDI.js javascript files
-     * Workaround for using external js files in React from
-     * https://www.codegrepper.com/code-examples/javascript/load+external+js+file+in+react
-     */
-    // const importScriptURLs = ["../../../MIDI.js/inc/shim/Base64.js", "../../../MIDI.js/inc/shim/Base64binary.js",
-    //   "../../../MIDI.js/inc/shim/WebAudioAPI.js", "../../../MIDI.js/js/midi/audioDetect.js",
-    //   "../../../MIDI.js/js/midi/gm.js", "../../../MIDI.js/js/midi/loader.js",
-    //   "../../../MIDI.js/js/midi/plugin.audiotag.js", "../../../MIDI.js/js/midi/plugin.webaudio.js",
-    //   "../../../MIDI.js/js/midi/plugin.webmidi.js", "../../../MIDI.js/js/util/dom_request_xhr.js",
-    //   "../../../MIDI.js/js/util/dom_request_script.js"];
-    // const scriptsToRemove = [];
-    //
-    // for (let i = 0; i < importScriptURLs.length; i++) {
-    //   const script = document.createElement('script');
-    //
-    //   script.src = importScriptURLs[i];
-    //   script.type = "text/javascript";
-    //   script.async = true;
-    //
-    //   document.body.appendChild(script);
-    //   scriptsToRemove.push(script);
-    // }
-    //
-    // return () => {
-    //   for (let i = 0; i < scriptsToRemove.length; i++) {
-    //     document.body.removeChild(scriptsToRemove[i]);
-    //   }
-    // }
   }, [ ]);
 
   /**
@@ -62,32 +33,55 @@ export default function LeadSheetButtons() {
    */
   function playChordProgression() {
     // TODO in the design docs, this is listed as playChordProgression(chordProgression) -- should we change it?
-    // TODO fill in this method
-    console.log("playing audio");
+    // TODO fill in this method once backend is connected
+    // Start up the synths needed to play four-note chords
+    const synth1 = new Tone.Synth().toDestination();
+    const synth2 = new Tone.Synth().toDestination();
+    const synth3 = new Tone.Synth().toDestination();
+    const synth4 = new Tone.Synth().toDestination();
+    const synths = [synth1, synth2, synth3, synth4];
+    const now = Tone.now()
+    // TODO delete below dummy data once we have proper data
+    const DELAY = 1.0;
+    const DUMMY_CHORDS = [["E3", "G3", "B3", "D3"], ["A3", "C#3", "E3", "G3"], ["C3", "Eb3", "G3", "Bb3"],
+      ["F3", "A3", "C3", "Eb3"], ["F3", "Ab3", "C3", "Eb3"], ["Bb3", "D3", "F3", "Ab3"], ["Eb3", "G3", "Bb3", "D3"],
+      ["Ab3", "C3", "Eb3", "Gb3"], ["Bb3", "D3", "Fb3", "Ab3"], ["A3", "C#3", "E3", "G3"], ["D3", "F3", "A3", "C3"],
+      ["Eb3", "G3", "Bb3", "Db3"], ["F3", "A3", "C3", "E3"], ["A3", "C#3", "E3", "G3"], ["A3", "C3", "E3", "G3"],
+      ["D3", "F#3", "A3", "C3"], ["G3", "B3", "D3", "F3"], ["C3", "Eb3", "G3", "Bb3"], ["Ab3", "C3", "Eb3", "Gb3"],
+      ["Bb3", "D3", "Fb3", "Ab3"], ["E3", "G3", "B3", "D3"], ["A3", "C#3", "E3", "G3"], ["D3", "F3", "A3", "C3"],
+      ["G3", "B3", "D3", "F3"]];
+    const DUMMY_LENGTHS = [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
+      2, 2, 2, 2, 1, 1, 1, 1];
+    let delaySoFar = now;
 
-    // TODO below code is from a failed attempt to get MIDI.js to work
-    // MIDI.loadPlugin({
-    //   soundfontUrl: "../../../soundfont/",
-    //   instrument: "acoustic_grand_piano",
-    //   onprogress: function(state, progress) {
-    //     console.log(state, progress);
-    //   },
-    //   onsuccess: function() {
-    //     let delay = 0; // play one note every quarter second
-    //     let note = 50; // the MIDI note
-    //     let velocity = 127; // how hard the note hits
-    //     // play the note
-    //     MIDI.setVolume(0, 127);
-    //     MIDI.noteOn(0, note, velocity, delay);
-    //     MIDI.noteOff(0, note, delay + 0.75);
-    //   }
-    // });
-    // const chordProgression = getChordProgression();
-    // Implementation pathway
-    // 1. Get the button to play any sound at all
-    // 2. Get the button to play a specific sound
-    // 3. Figure out how to layer three sounds together to make a chord
-    // 4. Use setTimeout() calls to play a series of chords
+    for(let i = 0; i < DUMMY_CHORDS.length; i++) {
+      playChord(synths, DUMMY_CHORDS[i], (4 / DUMMY_LENGTHS[i]) + "n", delaySoFar);
+      delaySoFar += (DUMMY_LENGTHS[Math.max(0, i - 1)] * DELAY);
+    }
+  }
+
+  function getChordNoteNames(chord) {
+    // TODO fill in later after we get proper data
+    const DUMMY_CHORDS = [["C3", "D#3", "Gb3"], ["C3", "E3", "Gb3"], ["C3", "E3", "G3"], ["C3", "Eb3", "G3"]];
+    const chord_to_choose = Math.floor(Math.random() * DUMMY_CHORDS.length);
+    return DUMMY_CHORDS[chord_to_choose];
+  }
+
+  /**
+   * Plays a given chord on a passed list of synths.
+   *
+   * @param synths - list of synth players - expects to be the same length as the number of notes in the chord
+   * @param chordNotes - list of chord notes in note name form
+   * @param length - how long the note should be played for
+   * @param time - when this note should be played
+   */
+  function playChord(synths, chordNotes, length, time) {
+    if (synths.length < chordNotes.length) {
+      throw "ERROR!!! Not enough synths to play the chord correctly";
+    }
+    for (let i = 0; i < chordNotes.length; i++) {
+      synths[i].triggerAttackRelease(chordNotes[i], length, time);
+    }
   }
 
   /**
@@ -128,37 +122,6 @@ export default function LeadSheetButtons() {
 
   return (
     <HStack spacing="70px" mt={12} ml={6}>
-      {/*TODO delete below code, which is from a failed attempt to get MIDI.js to work*/}
-      {/*<script src="../../../MIDI.js/inc/shim/Base64.js" type="text/javascript"/>*/}
-      {/*<script src="../../../MIDI.js/inc/shim/Base64binary.js" type="text/javascript"/>*/}
-      {/*<script src="../../../MIDI.js/inc/shim/WebAudioAPI.js" type="text/javascript"/>*/}
-      {/*<script src="../../../MIDI.js/js/midi/audioDetect.js" type="text/javascript"/>*/}
-      {/*<script src="../../../MIDI.js/js/midi/gm.js" type="text/javascript"/>*/}
-      {/*<script src="../../../MIDI.js/js/midi/loader.js" type="text/javascript"/>*/}
-      {/*<script src="../../../MIDI.js/js/midi/plugin.audiotag.js" type="text/javascript"/>*/}
-      {/*<script src="../../../MIDI.js/js/midi/plugin.webaudio.js" type="text/javascript"/>*/}
-      {/*<script src="../../../MIDI.js/js/midi/plugin.webmidi.js" type="text/javascript"/>*/}
-      {/*<script src="../../../MIDI.js/js/util/dom_request_xhr.js" type="text/javascript"/>*/}
-      {/*<script src="../../../MIDI.js/js/util/dom_request_script.js" type="text/javascript"/>*/}
-
-      {/*<script type="text/javascript">*/}
-      {/*  MIDI.loadPlugin({*/}
-      {/*    soundfontUrl: "../../../soundfont/",*/}
-      {/*    instrument: "acoustic_grand_piano",*/}
-      {/*    onprogress: function(state, progress) {*/}
-      {/*      console.log(state, progress);*/}
-      {/*    },*/}
-      {/*    onsuccess: function() {*/}
-      {/*      var delay = 0; // play one note every quarter second*/}
-      {/*      var note = 50; // the MIDI note*/}
-      {/*      var velocity = 127; // how hard the note hits*/}
-      {/*      // play the note*/}
-      {/*      MIDI.setVolume(0, 127);*/}
-      {/*      MIDI.noteOn(0, note, velocity, delay);*/}
-      {/*      MIDI.noteOff(0, note, delay + 0.75);*/}
-      {/*    }*/}
-      {/*  });*/}
-      {/*</script>*/}
 
       <IconButton
         colorScheme="green"
@@ -169,29 +132,31 @@ export default function LeadSheetButtons() {
         onClick={() => {playChordProgression()}}
       />
 
-      <IconButton
-        colorScheme="red"
-        aria-label="stop button"
-        size="md"
-        py={4}
-        icon={<FaStop />}
-        onClick={() => {stopAudio()}}
-      />
+      {/*TODO uncomment below lines of code when we're ready to deal with them*/}
+      {/* they were lagging my Intellij error checking*/}
+      {/*<IconButton*/}
+      {/*  colorScheme="red"*/}
+      {/*  aria-label="stop button"*/}
+      {/*  size="md"*/}
+      {/*  py={4}*/}
+      {/*  icon={<FaStop />}*/}
+      {/*  onClick={() => {stopAudio()}}*/}
+      {/*/>*/}
 
       {/*TODO fill in the __ below*/}
-      <Tooltip
-        label="Download your lead sheet as __ format."
-        aria-label="measures tooltip"
-        fontSize="sm">
-        <IconButton
-          colorScheme="blue"
-          aria-label="download button"
-          size="md"
-          py={4}
-          icon={<DownloadIcon />}
-          onClick={() => {downloadChordProgression()}}
-        />
-      </Tooltip>
+      {/*<Tooltip*/}
+      {/*  label="Download your lead sheet as __ format."*/}
+      {/*  aria-label="measures tooltip"*/}
+      {/*  fontSize="sm">*/}
+      {/*  <IconButton*/}
+      {/*    colorScheme="blue"*/}
+      {/*    aria-label="download button"*/}
+      {/*    size="md"*/}
+      {/*    py={4}*/}
+      {/*    icon={<DownloadIcon />}*/}
+      {/*    onClick={() => {downloadChordProgression()}}*/}
+      {/*  />*/}
+      {/*</Tooltip>*/}
 
     </HStack>
 
