@@ -144,6 +144,7 @@ public class CoreaApplication {
     int verticallen = tmat.length;
 
     double maxProbability = Integer.MAX_VALUE; // java maximum int.
+
     // here, I will fill the given transition matrix.
   }
 
@@ -168,6 +169,7 @@ public class CoreaApplication {
   /*
    * A helper method that randomly selects an index in a
    * particular given row.
+   * (complete randomness)
    */
   private int randomlySelectIndex(int[][] tmat, int row) {
     int numCols = tmat[row].length; // get number of columns
@@ -175,9 +177,32 @@ public class CoreaApplication {
   }
 
   /*
+   * This selection method is a helper method that selects the
+   * next chord to go to (selects the column in the transition matrix)
+   * while taking into account the probability distribution for a given row.
+   *
+   * The way this method is implemented is that it makes use of the concept of
+   * cumulative probability distribution in probability theory, which
+   * weighs the higher probability index more than the other ones.
+   *
+   * We first initialize a cumulative probability distribution matrix.
+   * populate the array with the current row's probability information,
+   * and do a binary search on that array with a randomly initialized double in [0,1)
+   * (the result of the search will be our newly selected probability value).
+   *
+   * Then, we look for that probability value in our original row in transition matrix.
+   * The column index that contains that probability value will be indicating
+   * our next chord to go to.
+   */
+  private int selectIndexBasedOnWeights(int[][] tmat, int row, ArrayList<Quality> qualist) {
+    Chord currchord = this.getCorrespondingChord(tmat, row, qualist.size());
+    // cumulative probability distribution matrix
+    int[] cpdmatrix = new int[tmat[0].length]; // array as long as one row
+
+  }
+  /*
    * Helper method that gets a random integer
    * within a range. (Uses Math.random())
-   * TODO: potential indexing bug here, double check
    */
   private int getRandomInt(int max) {
     return (int) Math.floor(Math.random() * max);
