@@ -4,7 +4,7 @@ import {
 } from "@chakra-ui/react"
 import { DownloadIcon } from '@chakra-ui/icons'
 import { FaPlay, FaStop } from 'react-icons/fa'
-import { Midi as TonalMidi } from "@tonaljs/tonal"
+// import { Midi as TonalMidi } from "@tonaljs/tonal" // TODO No longer need this, since not using MIDI.js
 import * as Tone from 'tone'
 
 export default function LeadSheetButtons() {
@@ -26,6 +26,12 @@ export default function LeadSheetButtons() {
     const DUMMY_DATA = ["E-7", "A7", "C-7", "F7", "F-7", "Bb7", "Ebmaj7", "Ab7", "Bbmaj7", "A7", "D-7", "Eb7", "Fmaj7",
       "A7", "A-7", "D7", "G7", "", "C-7", "", "Ab7", "", "Bbmaj7", "", "E-7", "A7", "D-7", "G7"];
     return DUMMY_DATA;
+  }
+
+  function getLengthOfChordProgression() {
+    const DUMMY_DATA = ["E-7", "A7", "C-7", "F7", "F-7", "Bb7", "Ebmaj7", "Ab7", "Bbmaj7", "A7", "D-7", "Eb7", "Fmaj7",
+      "A7", "A-7", "D7", "G7", "C-7", "Ab7", "Bbmaj7", "E-7", "A7", "D-7", "G7"];
+    return DUMMY_DATA.length;
   }
 
   /**
@@ -56,20 +62,19 @@ export default function LeadSheetButtons() {
    * @param chordPlaying - the index of the chord that should be played in this step
    */
   function playChordsSetTimeoutLoop(chordProgression, chordPlaying){
-    if (chordPlaying === chordProgression.length) {
-      return;
-    }
     // const chordToPlay = chordProgression[chordPlaying];
-    const chordNumMeasures = getChordMeasures(chordProgression, chordPlaying);
     const chordNoteNames = getChordNoteNames(chordProgression, chordPlaying);
-    const chordLength = (4 / chordNumMeasures) + "n";
-    const lengthOfWait = (chordNumMeasures * DELAY);
+    const chordLength = (4 / getChordMeasures(chordProgression, chordPlaying)) + "n";
+    const lengthOfWait = (getChordMeasures(chordProgression, Math.max(0, chordPlaying - 1)) * DELAY);
     const lengthOfWaitFrames = lengthOfWait * 1000;
     setTimeout(() => {
       if (audioShouldBePlaying.current) {
         const now = Tone.now();
         playChord(synths.current, chordNoteNames, chordLength, now);
-        playChordsSetTimeoutLoop(chordProgression, chordPlaying + 1);
+        // Play the next chord, if there are any left to play!
+        if (chordPlaying + 1 < getLengthOfChordProgression()) {
+          playChordsSetTimeoutLoop(chordProgression, chordPlaying + 1);
+        }
       }
     }, lengthOfWaitFrames);
   }
@@ -117,7 +122,7 @@ export default function LeadSheetButtons() {
    */
   function playChord(synths, chordNotes, length, time) {
     if (synths.length < chordNotes.length) {
-      throw "ERROR!!! Not enough synths to play the chord correctly";
+      throw new Error("ERROR!!! Not enough synths to play the chord correctly");
     }
     // if (curPlayingChordNotes.current.length > 0) {
     //   stopPlayingChord(synths, curPlayingChordNotes.current, time);
@@ -210,12 +215,12 @@ export default function LeadSheetButtons() {
         }
       }
       const chordTextRepresentation = getChordTextRepresentation(chordProgression[i]);
-      textRepresentation += "    " + chordTextRepresentation;
+      textRepresentation += "     " + chordTextRepresentation;
       // Add some padding so the text will line up nicely
       for (let j = 0; j < (MAX_CHORD_TEXT_REPRESENTATION_LENGTH - chordTextRepresentation.length); j++) {
         textRepresentation += " ";
       }
-      textRepresentation += "   |";
+      textRepresentation += "  |";
     }
     return textRepresentation;
   }
