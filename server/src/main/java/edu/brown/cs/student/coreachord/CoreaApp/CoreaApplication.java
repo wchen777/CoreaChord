@@ -93,7 +93,7 @@ public class CoreaApplication {
       int numqualities = qualist.size(); // number of possible qualities from Quality enum.
       int currrowstart = currchord.getRoot().ordinal() * numqualities; // start from 0
 
-      // add to the progression,
+      // add to the progression
       // TODO: I think this fits better inside the while loop rather than obscured in a helper
       chordProgression.add(currgenchord);
 
@@ -114,12 +114,16 @@ public class CoreaApplication {
   }
 
   /**
-   * helper function to get the random length of either 1 or 2 bars, taking into account what is left to generated
+   * helper function to get the random length of either 1 or 2 bars,
+   * taking into account what is left to generated,
+   * weighting 1 bar higher than 2 bars (1 bar chords occur more frequently)
    * @param accumulatedLength - how many bars we have already generated
    * @param numBars - limit of number of bars
    * @return - 1 or 2
    */
   public int getNextChordLength(int accumulatedLength, int numBars) {
+    // 70% change of length 1 bar chord, 30% of length 2 bar
+    double thresholdRange = 0.7;
 
     if (accumulatedLength == numBars - 2) {
       // if we are 2 away from the max value generate a length of 2 to fill in the rest
@@ -128,8 +132,9 @@ public class CoreaApplication {
       // if we are 1 away from the max value generate a length of 1 to fill in the rest
       return 1;
     } else {
-      // otherwise generate either 1 or 2 measures
-      return RAND.nextInt() % 2;
+      // otherwise generate either 1 or 2 measures,
+      // weighted prob based on threshold
+      return Math.random() > thresholdRange ? 2 : 1;
     }
 
   }
