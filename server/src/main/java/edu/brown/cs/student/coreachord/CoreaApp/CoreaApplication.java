@@ -3,11 +3,7 @@ package edu.brown.cs.student.coreachord.CoreaApp;
 import org.checkerframework.checker.units.qual.A;
 
 import java.lang.reflect.Array;
-import java.util.ArrayList;
-import java.util.EnumSet;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 public class CoreaApplication {
   public enum Quality { // 4 possible qualities
@@ -19,7 +15,12 @@ public class CoreaApplication {
 
   private List<GeneratedChord> result;
 
+  private static final Random RAND = new Random();
+
   public CoreaApplication(Chord startingchord, int numbars) {
+    /* TODO: do we need to have the constructor taking in values? I think we should be using this class as a driver for the
+        generateChords method, unless this is for testing, otherwise the class would be inflexible to generating new chords
+    */
     result = this.generateChords(startingchord, numbars);
     // convert list of gen chord to list of strings.
   }
@@ -40,6 +41,8 @@ public class CoreaApplication {
   }
 
   private List<GeneratedChord> markovChain(Chord startingchord, int numbars) {
+
+    // TODO: move this to constructor so we do not have to reinitialize?
     ArrayList<Chord> stateSpace = new ArrayList<>();
     // populating Enum sets with all values in our enum definitions
     Set<Quality> qualityset = EnumSet.allOf(Quality.class);
@@ -68,23 +71,72 @@ public class CoreaApplication {
     int n = stateSpace.size(); // all possible chord outcomes
     int[][] transitionMatrix = new int[n][n];
     this.fillTransitionMatrix(transitionMatrix);
-    int i = 0;
+
+
+//    int i = 0;
+    // TODO: need to check the null case for starting chord, generate a random chord as starting chord if it is null
+
     Chord currchord = startingchord;
     double currlength = Math.random() * 10; // how do we handle length? (discuss w teammates)
     GeneratedChord currgenchord = new GeneratedChord(currchord, currlength);
+
+    // accumulated length to keep track of how much we have generated so far
+    int accumulatedLength = 0;
+
+    // TODO: here is how i envisioned the length mechanic working
+
     // random walk on markov chain with weights
-    while (i < numbars) {
+    while (accumulatedLength < numbars) {
+
+      int generatedLength = getNextChordLength(accumulatedLength, numbars);
+
       int numqualities = qualist.size(); // number of possible qualities from Quality enum.
       int currrowstart = currchord.getRoot().ordinal() * numqualities; // start from 0
-      int nextchordindex = this.handleEachQualityCase(transitionMatrix,
-          currchord, currgenchord, currrowstart,
-          chordProgression); // update arraylist (progression)
+
+      // add to the progression
+      // TODO: I think this fits better inside the while loop rather than obscured in a helper
+      chordProgression.add(currgenchord);
+
+      // get the next chord index based on the current chord
+      int nextchordindex = this.handleEachQualityCase(transitionMatrix, currchord, currrowstart);
+
+
       currchord = this.getCorrespondingChord(transitionMatrix, nextchordindex, numqualities); // update currchord
-      currgenchord = new GeneratedChord(currchord, currlength); // update currgenchord
+      currgenchord = new GeneratedChord(currchord, generatedLength); // update currgenchord
+
       // update length?
-      i++; // increment i
+      accumulatedLength += generatedLength;
+      // increment i
+      // i++
+
     }
     return chordProgression;
+  }
+
+  /**
+   * helper function to get the random length of either 1 or 2 bars,
+   * taking into account what is left to generated,
+   * weighting 1 bar higher than 2 bars (1 bar chords occur more frequently)
+   * @param accumulatedLength - how many bars we have already generated
+   * @param numBars - limit of number of bars
+   * @return - 1 or 2
+   */
+  public int getNextChordLength(int accumulatedLength, int numBars) {
+    // 70% change of length 1 bar chord, 30% of length 2 bar
+    double thresholdRange = 0.7;
+
+    if (accumulatedLength == numBars - 2) {
+      // if we are 2 away from the max value generate a length of 2 to fill in the rest
+      return 2;
+    } else if (accumulatedLength == numBars - 1) {
+      // if we are 1 away from the max value generate a length of 1 to fill in the rest
+      return 1;
+    } else {
+      // otherwise generate either 1 or 2 measures,
+      // weighted prob based on threshold
+      return Math.random() > thresholdRange ? 2 : 1;
+    }
+
   }
 
   private void fillTransitionMatrix(int[][] tmat) {
@@ -99,9 +151,15 @@ public class CoreaApplication {
   /*
    * Below are some helper methods for handling the random walk on markov chain.
    */
-  private int handleEachQualityCase(int[][] tmat, Chord currchord, GeneratedChord currgenchord,
-                                       int currrowstart, ArrayList<GeneratedChord> chordProgression) {
-    chordProgression.add(currgenchord); // add to the progression
+
+  /**
+   * generate the next chord index
+   * @param tmat
+   * @param currchord
+   * @param currrowstart
+   * @return
+   */
+  private int handleEachQualityCase(int[][] tmat, Chord currchord, int currrowstart) {
     int currow = currrowstart + currchord.getQuality().ordinal(); // figure out which row we're on
     int nextchordindex = this.randomlySelectIndex(tmat, currow);
     double probability = tmat[currow][nextchordindex]; // probability (?)
@@ -114,9 +172,8 @@ public class CoreaApplication {
    * (complete randomness)
    */
   private int randomlySelectIndex(int[][] tmat, int row) {
-    int numcols = tmat[row].length; // get number of columns
-    int randomindex = this.getRandomInt(numcols);
-    return randomindex;
+    int numCols = tmat[row].length; // get number of columns
+    return this.getRandomInt(numCols);
   }
 
   /*
@@ -172,7 +229,7 @@ public class CoreaApplication {
 
   /**
    * Accessor method for resulting string list
-   * @return result (list of strings)
+   * @return result (list of generated chords)
    */
   public List<GeneratedChord> getResult() {
     return result;
