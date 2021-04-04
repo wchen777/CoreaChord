@@ -36,6 +36,7 @@ public final class Main {
   private void runSparkServer(int port) {
     Spark.port(port);
     Spark.externalStaticFileLocation("src/main/resources/static");
+    // TODO: CORS STUFF
 //    Spark.exception(Exception.class, new ExceptionPrinter());
 
 //    FreeMarkerEngine freeMarker = createEngine();
