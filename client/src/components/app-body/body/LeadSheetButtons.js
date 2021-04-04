@@ -8,11 +8,14 @@ import { Midi as TonalMidi } from "@tonaljs/tonal"
 import * as Tone from 'tone'
 
 export default function LeadSheetButtons() {
-  // const MIDI = useRef();
+  const synths = useRef([]);
+  const audioShouldBePlaying = useRef(false);
+  const curPlayingChordNotes = useRef([]);
+  const DELAY = 1.0;
 
   useEffect(() => {
-    console.log("page loaded");
-    // TODO test code for turnChordNotesToMidiNums() below, can probably be deleted
+    // console.log("page loaded");
+    // TODO MAXIME test code for turnChordNotesToMidiNums() below, can probably be deleted
     // const midiNums = turnChordNotesToMidiNums(["C3", "Eb3", "Gb3"]);
     // console.log(midiNums);
   }, [ ]);
@@ -24,7 +27,7 @@ export default function LeadSheetButtons() {
    * @returns {*[]} - all chord progression data
    */
   function getChordProgression() {
-    // TODO fill in this method
+    // TODO MAXIME fill in this method
     return [];
   }
 
@@ -33,16 +36,19 @@ export default function LeadSheetButtons() {
    */
   function playChordProgression() {
     // TODO in the design docs, this is listed as playChordProgression(chordProgression) -- should we change it?
-    // TODO fill in this method once backend is connected
+    // TODO MAXIME fill in this method once backend is connected
     // Start up the synths needed to play four-note chords
-    const synth1 = new Tone.Synth().toDestination();
-    const synth2 = new Tone.Synth().toDestination();
-    const synth3 = new Tone.Synth().toDestination();
-    const synth4 = new Tone.Synth().toDestination();
-    const synths = [synth1, synth2, synth3, synth4];
-    const now = Tone.now()
-    // TODO delete below dummy data once we have proper data
-    const DELAY = 1.0;
+    audioShouldBePlaying.current = true;
+    curPlayingChordNotes.current = [];
+    if (synths.current.length === 0) {
+      const synth1 = new Tone.Synth().toDestination();
+      const synth2 = new Tone.Synth().toDestination();
+      const synth3 = new Tone.Synth().toDestination();
+      const synth4 = new Tone.Synth().toDestination();
+      synths.current = [synth1, synth2, synth3, synth4];
+    }
+    // const now = Tone.now()
+    // TODO MAXIME delete below dummy data once we have proper data
     const DUMMY_CHORDS = [["E3", "G3", "B3", "D3"], ["A3", "C#3", "E3", "G3"], ["C3", "Eb3", "G3", "Bb3"],
       ["F3", "A3", "C3", "Eb3"], ["F3", "Ab3", "C3", "Eb3"], ["Bb3", "D3", "F3", "Ab3"], ["Eb3", "G3", "Bb3", "D3"],
       ["Ab3", "C3", "Eb3", "Gb3"], ["Bb3", "D3", "Fb3", "Ab3"], ["A3", "C#3", "E3", "G3"], ["D3", "F3", "A3", "C3"],
@@ -50,21 +56,59 @@ export default function LeadSheetButtons() {
       ["D3", "F#3", "A3", "C3"], ["G3", "B3", "D3", "F3"], ["C3", "Eb3", "G3", "Bb3"], ["Ab3", "C3", "Eb3", "Gb3"],
       ["Bb3", "D3", "Fb3", "Ab3"], ["E3", "G3", "B3", "D3"], ["A3", "C#3", "E3", "G3"], ["D3", "F3", "A3", "C3"],
       ["G3", "B3", "D3", "F3"]];
-    const DUMMY_LENGTHS = [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
-      2, 2, 2, 2, 1, 1, 1, 1];
-    let delaySoFar = now;
-
-    for(let i = 0; i < DUMMY_CHORDS.length; i++) {
-      playChord(synths, DUMMY_CHORDS[i], (4 / DUMMY_LENGTHS[i]) + "n", delaySoFar);
-      delaySoFar += (DUMMY_LENGTHS[Math.max(0, i - 1)] * DELAY);
-    }
+    playChordsSetTimeoutLoop(DUMMY_CHORDS, 0);
+    // const DUMMY_LENGTHS = [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
+    //   2, 2, 2, 2, 1, 1, 1, 1];
+    // let delaySoFar = now;
+    //
+    // for(let i = 0; i < DUMMY_CHORDS.length; i++) {
+    //   playChord(synths.current, DUMMY_CHORDS[i], (4 / DUMMY_LENGTHS[i]) + "n", delaySoFar);
+    //   delaySoFar += (DUMMY_LENGTHS[i] * DELAY);
+    // }
   }
 
+  function playChordsSetTimeoutLoop(chordProgression, chordPlaying){
+    if (chordPlaying === chordProgression.length) {
+      return;
+    }
+    // TODO MAXIME delete below dummy data once we have proper data
+    const DUMMY_LENGTHS = [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
+      2, 2, 2, 2, 1, 1, 1, 1];
+    const chordToPlay = chordProgression[chordPlaying];
+    const chordNumMeasures = getChordLength(DUMMY_LENGTHS[chordPlaying]); // TODO fill this in properly
+    const chordNoteNames = getChordNoteNames(chordToPlay);
+    const chordLength = (4 / chordNumMeasures) + "n";
+    const lengthOfWait = (chordNumMeasures * DELAY);
+    const lengthOfWaitFrames = lengthOfWait * 1000;
+    setTimeout(() => {
+      if (audioShouldBePlaying.current) {
+        const now = Tone.now();
+        playChord(synths.current, chordNoteNames, chordLength, now);
+        playChordsSetTimeoutLoop(chordProgression, chordPlaying + 1);
+      }
+    }, lengthOfWaitFrames);
+  }
+
+  /**
+   * Given a chord, returns a list with the names of all the notes in the chord.
+   *
+   * @param chord - the chord to be converted to a list of note names
+   * @returns {*} - the list of note names in the chord
+   */
   function getChordNoteNames(chord) {
-    // TODO fill in later after we get proper data
-    const DUMMY_CHORDS = [["C3", "D#3", "Gb3"], ["C3", "E3", "Gb3"], ["C3", "E3", "G3"], ["C3", "Eb3", "G3"]];
-    const chord_to_choose = Math.floor(Math.random() * DUMMY_CHORDS.length);
-    return DUMMY_CHORDS[chord_to_choose];
+    // TODO MAXIME fill in later after we get proper data
+    return chord;
+  }
+
+  /**
+   * Given a chord, returns an integer with the length of the chord, in terms of measures.
+   *
+   * @param chord - the chord to find the length of
+   * @returns {*} - the number of measures the chord lasts
+   */
+  function getChordLength(chord) {
+    // TODO MAXIME fill in later after we get proper data
+    return chord;
   }
 
   /**
@@ -79,9 +123,23 @@ export default function LeadSheetButtons() {
     if (synths.length < chordNotes.length) {
       throw "ERROR!!! Not enough synths to play the chord correctly";
     }
+    // if (curPlayingChordNotes.current.length > 0) {
+    //   stopPlayingChord(synths, curPlayingChordNotes.current, time);
+    // }
+    curPlayingChordNotes.current = chordNotes;
     for (let i = 0; i < chordNotes.length; i++) {
+      // console.log("playing note " + chordNotes[i]);
       synths[i].triggerAttackRelease(chordNotes[i], length, time);
     }
+  }
+
+  function stopPlayingChord(synths, chordNotes, time) {
+    // TODO MAXIME connecting this causes an error, but we don't really need it as far as I can tell
+    for (let i = 0; i < chordNotes.length; i++) {
+      console.log("releasing note " + chordNotes[i] + " at time " + time);
+      synths[i].triggerRelease(chordNotes[i], time + (i / 10));
+    }
+    curPlayingChordNotes.current = [];
   }
 
   /**
@@ -104,15 +162,16 @@ export default function LeadSheetButtons() {
    * Stops the audio, if it's playing.
    */
   function stopAudio() {
-    // TODO fill in this method
-    console.log("stopping audio");
+    // TODO MAXIME fill in this method
+    // console.log("stopping audio");
+    audioShouldBePlaying.current = false;
   }
 
   /**
    * Allows the user to download the lead sheet.
    */
   function downloadChordProgression() {
-    // TODO fill in this method
+    // TODO MAXIME fill in this method
     console.log("downloading lead sheet")
     // Implementation pathway
     // 1. Get the button to download ANYTHING when clicked
@@ -132,18 +191,16 @@ export default function LeadSheetButtons() {
         onClick={() => {playChordProgression()}}
       />
 
-      {/*TODO uncomment below lines of code when we're ready to deal with them*/}
-      {/* they were lagging my Intellij error checking*/}
-      {/*<IconButton*/}
-      {/*  colorScheme="red"*/}
-      {/*  aria-label="stop button"*/}
-      {/*  size="md"*/}
-      {/*  py={4}*/}
-      {/*  icon={<FaStop />}*/}
-      {/*  onClick={() => {stopAudio()}}*/}
-      {/*/>*/}
+      <IconButton
+        colorScheme="red"
+        aria-label="stop button"
+        size="md"
+        py={4}
+        icon={<FaStop />}
+        onClick={() => {stopAudio()}}
+      />
 
-      {/*TODO fill in the __ below*/}
+      {/*TODO MAXIME fill in the __ below*/}
       {/*<Tooltip*/}
       {/*  label="Download your lead sheet as __ format."*/}
       {/*  aria-label="measures tooltip"*/}

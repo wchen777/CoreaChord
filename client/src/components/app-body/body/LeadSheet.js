@@ -7,9 +7,9 @@ import './LeadSheet.css'
 export default function LeadSheet() {
   const DUMMY_DATA = ["E-7", "A7", "C-7", "F7", "F-7", "Bb7", "Ebmaj7", "Ab7", "Bbmaj7", "A7", "D-7", "Eb7", "Fmaj7",
     "A7", "A-7", "D7", "G7", "", "C-7", "", "Ab7", "", "Bbmaj7", "", "E-7", "A7", "D-7", "G7"];
-  // TODO: delete above line when we have proper data
+  // TODO: MAXIME delete above line when we have proper data
   const [chordProgression, setChordProgression] = useState(DUMMY_DATA);
-  // TODO: update above line when we know how we'll be getting the chord progression data
+  // TODO: MAXIME update above line when we know how we'll be getting the chord progression data
   const NUM_CHORDS_PER_BAR = 4;
 
   /**
@@ -50,7 +50,7 @@ export default function LeadSheet() {
    * @returns {string} - the text representation of the desired chord.
    */
   function getChordTextRepresentation(chordRendering) {
-    // TODO: update when we have proper data
+    // TODO: MAXIME update when we have proper data
     if (chordRendering === "") {
       return "–";
     } else {
@@ -66,7 +66,7 @@ export default function LeadSheet() {
    * @returns {*}
    */
   function getBarList(chordProgression) {
-    // TODO: update when we have proper data
+    // TODO: MAXIME update when we have proper data
     const barList = [];
     for (let i = 0; i < chordProgression.length; i += NUM_CHORDS_PER_BAR){
       barList.push(chordProgression.slice(i, i + NUM_CHORDS_PER_BAR));
