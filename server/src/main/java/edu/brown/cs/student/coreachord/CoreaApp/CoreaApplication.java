@@ -1,11 +1,17 @@
 package edu.brown.cs.student.coreachord.CoreaApp;
 
-import org.checkerframework.checker.units.qual.A;
+import edu.brown.cs.student.coreachord.REPL.Executable;
 
-import java.lang.reflect.Array;
-import java.util.*;
+import java.util.List;
+import java.util.Random;
+import java.util.ArrayList;
+import java.util.Set;
+import java.util.EnumSet;
+import java.util.Iterator;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
-public class CoreaApplication {
+public class CoreaApplication implements Executable {
   public enum Quality { // 4 possible qualities
     MAJOR7, MINOR7, MINOR7FLAT5, DOMINANT7
   }
@@ -13,16 +19,38 @@ public class CoreaApplication {
     C, Db, D, Eb, E, F, Gb, G, Ab, A, Bb, B
   }
 
+  public static final int EIGHT_BARS = 8;
+  public static final int SIXTEEN_BARS = 16;
+  public static final int THIRTY_TWO_BARS = 32;
+
   private List<GeneratedChord> result;
+
+  private List<Chord> stateSpace;
 
   private static final Random RAND = new Random();
 
-  public CoreaApplication(Chord startingchord, int numbars) {
-    /* TODO: do we need to have the constructor taking in values? I think we should be using this class as a driver for the
-        generateChords method, unless this is for testing, otherwise the class would be inflexible to generating new chords
-    */
-    result = this.generateChords(startingchord, numbars);
-    // convert list of gen chord to list of strings.
+  public CoreaApplication() { //(Chord startingchord, int numbars) {
+    // populating Enum sets with all values in our enum definitions
+    Set<Quality> qualityset = EnumSet.allOf(Quality.class);
+    Set<Root> rootset = EnumSet.allOf(Root.class);
+    // loop through sets, and add all possible chords to our state space
+    Iterator<Quality> itr1 = qualityset.iterator();
+    Iterator<Root> itr2 = rootset.iterator();
+    List<Quality> qualities = new ArrayList<>();
+    List<Root> roots = new ArrayList<>();
+    while (itr2.hasNext()) { // root (c, d, etc.)
+      roots.add(itr2.next()); // add all elements to list
+    }
+    while (itr1.hasNext()) { // quality (major, minor...)
+      qualities.add(itr1.next());
+    }
+    stateSpace = new ArrayList<>();
+    // ... now add everything to state space using a double for loop!
+    for (Root nextroot : roots) { // root
+      for (Quality nextquality : qualities) { // quality
+        stateSpace.add(new Chord(nextroot, nextquality));
+      }
+    }
   }
 
   /**
@@ -34,47 +62,22 @@ public class CoreaApplication {
    * @return list of generated chord(s)
    */
   private List<GeneratedChord> generateChords(Chord startingchord, int numbars) {
-    if (!(numbars == 8) && !(numbars == 16) && !(numbars == 32)) {
+    if (!(numbars == EIGHT_BARS) && !(numbars == SIXTEEN_BARS) && !(numbars == THIRTY_TWO_BARS)) {
       return null; // check for specific inputs, if not one of those, return null.
     }
-    return this.markovChain(startingchord, numbars); // call helper method
+    result = this.markovChain(startingchord, numbars); // call helper method
+    return result;
   }
 
   private List<GeneratedChord> markovChain(Chord startingchord, int numbars) {
-
-    // TODO: move this to constructor so we do not have to reinitialize?
-    ArrayList<Chord> stateSpace = new ArrayList<>();
-    // populating Enum sets with all values in our enum definitions
-    Set<Quality> qualityset = EnumSet.allOf(Quality.class);
-    Set<Root> rootset = EnumSet.allOf(Root.class);
-    // loop through sets, and add all possible chords to our state space
-    Iterator<Quality> itr1 = qualityset.iterator();
-    Iterator<Root> itr2 = rootset.iterator();
-    ArrayList<Quality> qualist = new ArrayList<>();
-    ArrayList<Root> rootlist = new ArrayList<>();
-    while (itr2.hasNext()) { // root (c, d, etc.)
-      rootlist.add(itr2.next()); // add all elements to list
-    }
-    while (itr1.hasNext()) { // quality (major, minor...)
-      qualist.add(itr1.next());
-    }
-    // ... now add everything to state space using a double for loop!
-    for (int i = 0; i < rootlist.size(); i++) { // root
-      Root nextroot = rootlist.get(i);
-      for (int j = 0; j < qualist.size(); j++) { // quality
-        Quality nextquality = qualist.get(j);
-        stateSpace.add(new Chord(nextroot, nextquality));
-      }
-    }
-
     ArrayList<GeneratedChord> chordProgression = new ArrayList<>();
     int n = stateSpace.size(); // all possible chord outcomes
     int[][] transitionMatrix = new int[n][n];
     this.fillTransitionMatrix(transitionMatrix);
 
-
 //    int i = 0;
-    // TODO: need to check the null case for starting chord, generate a random chord as starting chord if it is null
+    // TODO: need to check the null case for starting chord,
+    //  generate a random chord as starting chord if it is null
 
     Chord currchord = startingchord;
     double currlength = Math.random() * 10; // how do we handle length? (discuss w teammates)
@@ -90,7 +93,7 @@ public class CoreaApplication {
 
       int generatedLength = getNextChordLength(accumulatedLength, numbars);
 
-      int numqualities = qualist.size(); // number of possible qualities from Quality enum.
+      int numqualities = Quality.values().length; // number of possible qualities from Quality enum.
       int currrowstart = currchord.getRoot().ordinal() * numqualities; // start from 0
 
       // add to the progression
@@ -100,8 +103,8 @@ public class CoreaApplication {
       // get the next chord index based on the current chord
       int nextchordindex = this.handleEachQualityCase(transitionMatrix, currchord, currrowstart);
 
-
-      currchord = this.getCorrespondingChord(transitionMatrix, nextchordindex, numqualities); // update currchord
+      // update currchord
+      currchord = this.getCorrespondingChord(transitionMatrix, nextchordindex, numqualities);
       currgenchord = new GeneratedChord(currchord, generatedLength); // update currgenchord
 
       // update length?
@@ -116,7 +119,7 @@ public class CoreaApplication {
   /**
    * helper function to get the random length of either 1 or 2 bars,
    * taking into account what is left to generated,
-   * weighting 1 bar higher than 2 bars (1 bar chords occur more frequently)
+   * weighting 1 bar higher than 2 bars (1 bar chords occur more frequently).
    * @param accumulatedLength - how many bars we have already generated
    * @param numBars - limit of number of bars
    * @return - 1 or 2
@@ -153,7 +156,7 @@ public class CoreaApplication {
    */
 
   /**
-   * generate the next chord index
+   * generate the next chord index.
    * @param tmat
    * @param currchord
    * @param currrowstart
@@ -199,6 +202,7 @@ public class CoreaApplication {
     // cumulative probability distribution matrix
     int[] cpdmatrix = new int[tmat[0].length]; // array as long as one row
 
+    return 0; //replace
   }
   /*
    * Helper method that gets a random integer
@@ -223,15 +227,42 @@ public class CoreaApplication {
     int qualityordinal = index % numqualities; // mod to get quality ordinal (get remainder)
     Root root = Root.values()[rootordinal];
     Quality quality = Quality.values()[qualityordinal];
-    Chord nextchord = new Chord(root, quality);
-    return nextchord;
+    return new Chord(root, quality);
   }
 
   /**
-   * Accessor method for resulting string list
+   * Accessor method for resulting string list.
    * @return result (list of generated chords)
    */
   public List<GeneratedChord> getResult() {
     return result;
+  }
+
+  @Override
+  public void execute(String input) {
+    List<String> args = new ArrayList<>();
+    result = new ArrayList<>(); //Clear out results in order to generate new Chords
+    Matcher m = Pattern.compile("([^\"]\\S*|\".+?\")\\s*").matcher(input);
+    while (m.find()) {
+      args.add(m.group(1));
+    }
+    switch (args.get(0)) {
+      case "generate-chords":
+        try {
+          Chord inputChord = new Chord(Root.valueOf(args.get(1)), Quality.valueOf(args.get(2)));
+          generateChords(inputChord, Integer.parseInt(args.get(3)));
+          for (GeneratedChord gChord: result) {
+            System.out.println("\n" + gChord);
+          }
+        } catch (IndexOutOfBoundsException i) {
+          System.out.println("ERROR: incorrect input arguments for generate-chords command");
+        } catch (IllegalArgumentException e) {
+          System.out.println("ERROR: inappropriate root or quality");
+        }
+        break;
+      default:
+        System.out.println("ERROR: Command DNE :/");
+        break;
+    }
   }
 }

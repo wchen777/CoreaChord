@@ -1,14 +1,19 @@
 package edu.brown.cs.student.coreachord.DirectedGraph;
 
-import edu.brown.cs.student.coreachord.CoreaApp.Chord;
-
-import java.util.List;
-
 /*
  * Interface of the Graph Edge.
  */
 public interface IEdge {
+  /**
+   * @return the GraphNode this edge points to.
+   */
   IGraphNode to();
+  /**
+   * @return the GraphNode this edge originates from.
+   */
   IGraphNode from();
-  Double getWeight();
+  /**
+   * @return the weight of the edge between two GraphNodes.
+   */
+  double getWeight();
 }
