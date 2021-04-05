@@ -6,11 +6,11 @@ const ChordProgContext = createContext()
 export const ChordProgContextProvider = ( {children} ) => {
   const [chordProg, setChordProg] = useState({})
 
-  const routes = useMemo(() => {
-    return { chordProg, setChordProg }
-  }, [chordProg, setChordProg])
+  // const chordProgressions = useMemo(() => {
+  //   return { chordProg, setChordProg }
+  // }, [chordProg, setChordProg])
 
-  return <ChordProgContext.Provider value={routes} > {children} </ChordProgContext.Provider>
+  return <ChordProgContext.Provider value={{chordProg, setChordProg}} > {children} </ChordProgContext.Provider>
 }
 
 // allows children to have global access to the context state

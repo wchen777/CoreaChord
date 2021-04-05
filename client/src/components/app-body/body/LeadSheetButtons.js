@@ -6,6 +6,7 @@ import { DownloadIcon } from '@chakra-ui/icons'
 import { FaPlay, FaStop } from 'react-icons/fa'
 // import { Midi as TonalMidi } from "@tonaljs/tonal" // TODO No longer need this, since not using MIDI.js
 import * as Tone from 'tone'
+import {useChordProgContext} from "../../../context/ChordProgContext";
 
 export default function LeadSheetButtons() {
   const synths = useRef([]);
@@ -14,6 +15,7 @@ export default function LeadSheetButtons() {
   const DELAY = 1.0;
   const NUM_CHORDS_PER_BAR = 4;
   const MAX_CHORD_TEXT_REPRESENTATION_LENGTH = 6;
+  const {chordProg, setChordProg} = useChordProgContext();
 
   /**
    * Method to access the chord progression to be played.
@@ -22,10 +24,13 @@ export default function LeadSheetButtons() {
    * @returns {*[]} - all chord progression data
    */
   function getChordProgression() {
+    // TODO Will says: it'll be a JSON list of objects with all the data generated from the back end
+    //
+
     // TODO MAXIME fill in this method after connecting to backend
-    const DUMMY_DATA = ["E-7", "A7", "C-7", "F7", "F-7", "Bb7", "Ebmaj7", "Ab7", "Bbmaj7", "A7", "D-7", "Eb7", "Fmaj7",
-      "A7", "A-7", "D7", "G7", "", "C-7", "", "Ab7", "", "Bbmaj7", "", "E-7", "A7", "D-7", "G7"];
-    return DUMMY_DATA;
+    // const DUMMY_DATA = ["E-7", "A7", "C-7", "F7", "F-7", "Bb7", "Ebmaj7", "Ab7", "Bbmaj7", "A7", "D-7", "Eb7", "Fmaj7",
+    //   "A7", "A-7", "D7", "G7", "", "C-7", "", "Ab7", "", "Bbmaj7", "", "E-7", "A7", "D-7", "G7"];
+    return chordProg;
   }
 
   function getLengthOfChordProgression() {

@@ -1,16 +1,25 @@
-import React, {useState} from 'react'
+import React, {useEffect} from 'react'
 import {
   Box
 } from "@chakra-ui/react"
 import './LeadSheet.css'
+import {useChordProgContext} from '../../../context/ChordProgContext'
 
 export default function LeadSheet() {
   const DUMMY_DATA = ["E-7", "A7", "C-7", "F7", "F-7", "Bb7", "Ebmaj7", "Ab7", "Bbmaj7", "A7", "D-7", "Eb7", "Fmaj7",
     "A7", "A-7", "D7", "G7", "", "C-7", "", "Ab7", "", "Bbmaj7", "", "E-7", "A7", "D-7", "G7"];
   // TODO: MAXIME delete above line when we have proper data
-  const [chordProgression, setChordProgression] = useState(DUMMY_DATA);
-  // TODO: MAXIME update above line when we know how we'll be getting the chord progression data
+  const {chordProg, setChordProg} = useChordProgContext();
   const NUM_CHORDS_PER_BAR = 4;
+
+  useEffect(() => {
+    setChordProg(DUMMY_DATA);
+  }, []);
+
+  useEffect(() => {
+    console.log("component loaded");
+    console.log(chordProg);
+  })
 
   /**
    * Returns the HTML to display the chord progression.
@@ -76,7 +85,7 @@ export default function LeadSheet() {
 
   return (
     <Box mx={0} className="lead-sheet" backgroundColor="gray.200">
-      {renderChordProgression(chordProgression)}
+      {renderChordProgression(chordProg)}
     </Box>
   )
 }
