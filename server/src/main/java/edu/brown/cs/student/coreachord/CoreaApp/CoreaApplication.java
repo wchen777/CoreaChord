@@ -72,8 +72,8 @@ public class CoreaApplication implements Executable {
   private List<GeneratedChord> markovChain(Chord startingchord, int numbars) {
     ArrayList<GeneratedChord> chordProgression = new ArrayList<>();
     int n = stateSpace.size(); // all possible chord outcomes
-    int[][] transitionMatrix = new int[n][n];
-    this.fillTransitionMatrix(transitionMatrix);
+    double[][] transitionMatrix = new double[n][n];
+//    this.fillTransitionMatrix(transitionMatrix);
 
 //    int i = 0;
     // TODO: need to check the null case for starting chord,
@@ -142,15 +142,6 @@ public class CoreaApplication implements Executable {
 
   }
 
-  private void fillTransitionMatrix(int[][] tmat) {
-    int horizontallen = tmat[0].length;
-    int verticallen = tmat.length;
-
-    double maxProbability = Integer.MAX_VALUE; // java maximum int.
-
-    // here, fill the given transition matrix using the inputted csv file.
-  }
-
   /*
    * Below are some helper methods for handling the random walk on markov chain.
    */
@@ -162,7 +153,7 @@ public class CoreaApplication implements Executable {
    * @param currrowstart
    * @return
    */
-  private int handleEachQualityCase(int[][] tmat, Chord currchord, int currrowstart) {
+  private int handleEachQualityCase(double[][] tmat, Chord currchord, int currrowstart) {
     int currow = currrowstart + currchord.getQuality().ordinal(); // figure out which row we're on
     int nextchordindex = this.randomlySelectIndex(tmat, currow);
     double probability = tmat[currow][nextchordindex]; // probability (?)
@@ -174,7 +165,7 @@ public class CoreaApplication implements Executable {
    * particular given row.
    * (complete randomness)
    */
-  private int randomlySelectIndex(int[][] tmat, int row) {
+  private int randomlySelectIndex(double[][] tmat, int row) {
     int numCols = tmat[row].length; // get number of columns
     return this.getRandomInt(numCols);
   }
@@ -199,11 +190,11 @@ public class CoreaApplication implements Executable {
    * The column index that contains that probability value will be indicating
    * our next chord to go to.
    */
-  private Chord getNextChordBasedOnWeights(int[][] tmat, int row, ArrayList<Quality> qualist) {
+  private Chord getNextChordBasedOnWeights(double[][] tmat, int row, ArrayList<Quality> qualist) {
     Chord currchord = this.getCorrespondingChord(tmat, row, qualist.size());
     // cumulative probability distribution matrix
     int rowlen = tmat[0].length; // row's length
-    int[] currrow = tmat[row]; // get current row (current chord).
+    double[] currrow = tmat[row]; // get current row (current chord).
     int[] cpdarray = new int[rowlen]; // array as long as one row
     int sum = 0;
     for (int i = 0; i < rowlen; i++) {
@@ -232,7 +223,7 @@ public class CoreaApplication implements Executable {
    * @param index
    * @return correspoinding Chord
    */
-  private Chord getCorrespondingChord(int[][] tmat, int index, int numqualities) {
+  private Chord getCorrespondingChord(double[][] tmat, int index, int numqualities) {
     // Root order: C, Db, D, Eb, E, F, Gb, G, Ab, A, Bb, B
     // Quality order: MAJOR7, MINOR7, MINOR7FLAT5, DOMINANT7
     int rootordinal = index / numqualities; // integer division to get root ordinal
