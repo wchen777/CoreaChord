@@ -198,7 +198,7 @@ public class CoreaApplication {
     Chord currchord = this.getCorrespondingChord(tmat, row, qualist.size());
     // cumulative probability distribution matrix
     int[] cpdmatrix = new int[tmat[0].length]; // array as long as one row
-
+    return 0;
   }
   /*
    * Helper method that gets a random integer
