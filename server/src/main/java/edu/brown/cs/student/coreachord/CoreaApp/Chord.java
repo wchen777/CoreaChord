@@ -19,4 +19,8 @@ public class Chord {
   public CoreaApplication.Root getRoot() {
     return root;
   }
+  @Override
+  public String toString() {
+    return "Root: " + root + "\nQuality: " + quality;
+  }
 }

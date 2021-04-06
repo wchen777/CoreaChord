@@ -33,32 +33,37 @@ public class MarkovChainTest {
     assert(coreaapp8bars.getResult().size() <= 8);
     assert(coreaapp16bars.getResult().size() <= 16);
     assert(coreaapp32bars.getResult().size() <= 32);
-    assert(coreaappinvalid.getResult() == null);
+    assert(coreaappinvalid.getResult().size() == 0); //changed from null
   }
 
   private void setUpCoreaApps() {
     // initialize starting chords
     System.out.println("setting up corea apps...");
-    CoreaApplication.Root rootC = CoreaApplication.Root.C;
-    CoreaApplication.Root rootEb = CoreaApplication.Root.Eb;
-    CoreaApplication.Root rootG = CoreaApplication.Root.G;
-    CoreaApplication.Root rootBb = CoreaApplication.Root.Bb;
+//    CoreaApplication.Root rootC = CoreaApplication.Root.C;
+//    CoreaApplication.Root rootEb = CoreaApplication.Root.Eb;
+//    CoreaApplication.Root rootG = CoreaApplication.Root.G;
+//    CoreaApplication.Root rootBb = CoreaApplication.Root.Bb;
+//
+//    // initialize starting qualities
+//    CoreaApplication.Quality qualitymaj = CoreaApplication.Quality.MAJOR7;
+//    CoreaApplication.Quality qualitymin = CoreaApplication.Quality.MINOR7;
+//    CoreaApplication.Quality qualityminorflat = CoreaApplication.Quality.MINOR7FLAT5;
+//    CoreaApplication.Quality qualitydominant = CoreaApplication.Quality.DOMINANT7;
 
-    // initialize starting qualities
-    CoreaApplication.Quality qualitymaj = CoreaApplication.Quality.MAJOR7;
-    CoreaApplication.Quality qualitymin = CoreaApplication.Quality.MINOR7;
-    CoreaApplication.Quality qualityminorflat = CoreaApplication.Quality.MINOR7FLAT5;
-    CoreaApplication.Quality qualitydominant = CoreaApplication.Quality.DOMINANT7;
+//    Chord CMajor = new Chord(rootC, qualitymaj);
+//    Chord EbMinor = new Chord(rootEb, qualitymin);
+//    Chord GMinorFlat = new Chord(rootG, qualityminorflat);
+//    Chord BbDominant = new Chord(rootBb, qualitydominant);
 
-    Chord CMajor = new Chord(rootC, qualitymaj);
-    Chord EbMinor = new Chord(rootEb, qualitymin);
-    Chord GMinorFlat = new Chord(rootG, qualityminorflat);
-    Chord BbDominant = new Chord(rootBb, qualitydominant);
+    coreaapp8bars = new CoreaApplication(); // 8-bar app
+    coreaapp16bars = new CoreaApplication(); // 16-bar app
+    coreaapp32bars = new CoreaApplication(); // 32-bar app
+    coreaappinvalid = new CoreaApplication(); // invalid bar param
 
-    coreaapp8bars = new CoreaApplication(CMajor, 8); // 8-bar app
-    coreaapp16bars = new CoreaApplication(EbMinor, 16); // 16-bar app
-    coreaapp32bars = new CoreaApplication(GMinorFlat, 32); // 32-bar app
-    coreaappinvalid = new CoreaApplication(BbDominant, 5); // invalid bar param
+    coreaapp8bars.execute("generate-chords C MAJOR7 8");
+    coreaapp16bars.execute("generate-chords Eb MINOR7 16");
+    coreaapp32bars.execute("generate-chords G MAJOR7FLAT5 32");
+    coreaappinvalid.execute("generate-chords Bb DOMINANT7 5");
 
     // checking the contents of 8-bar corea app
     System.out.println("8-bar corea app chords: ");

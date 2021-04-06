@@ -1,8 +1,13 @@
 package edu.brown.cs.student.coreachord;
 
+import edu.brown.cs.student.coreachord.CoreaApp.CoreaApplication;
+import edu.brown.cs.student.coreachord.REPL.Executable;
+import edu.brown.cs.student.coreachord.REPL.REPL;
 import joptsimple.OptionParser;
 import joptsimple.OptionSet;
 import spark.Spark;
+
+import java.util.HashMap;
 
 public final class Main {
 
@@ -28,14 +33,21 @@ public final class Main {
       runSparkServer((int) options.valueOf("port"));
     }
 
+    System.out.println("Welcome to our REPL\nCurrently we only support "
+            + "the following commands:\n"
+            + "generate-chords <ROOT> <QUALITY> <NUMBARS>");
+    HashMap<String, Executable> commands = new HashMap<>();
+    CoreaApplication coreaApp = new CoreaApplication();
+    commands.put("generate-chords", coreaApp);
+    REPL repl = new REPL(commands);
   }
-
   /*
    * Setting up spark server with GET requests
    */
   private void runSparkServer(int port) {
     Spark.port(port);
     Spark.externalStaticFileLocation("src/main/resources/static");
+    // TODO: CORS STUFF
 //    Spark.exception(Exception.class, new ExceptionPrinter());
 
 //    FreeMarkerEngine freeMarker = createEngine();
