@@ -148,7 +148,7 @@ public class CoreaApplication implements Executable {
 
     double maxProbability = Integer.MAX_VALUE; // java maximum int.
 
-    // here, I will fill the given transition matrix.
+    // here, fill the given transition matrix using the inputted csv file.
   }
 
   /*
@@ -180,30 +180,42 @@ public class CoreaApplication implements Executable {
   }
 
   /*
+   * Explanation:
+   *
    * This selection method is a helper method that selects the
    * next chord to go to (selects the column in the transition matrix)
    * while taking into account the probability distribution for a given row.
    *
    * The way this method is implemented is that it makes use of the concept of
-   * cumulative probability distribution in probability theory, which
+   * "cumulative probability distribution" in probability theory, which
    * weighs the higher probability index more than the other ones.
    *
-   * We first initialize a cumulative probability distribution matrix.
+   * We first initialize a cumulative probability distribution array,
    * populate the array with the current row's probability information,
-   * and do a binary search on that array with a randomly initialized double in [0,1)
-   * (the result of the search will be our newly selected probability value).
+   * and index into that array using a randomly initialized double in [0,1)
+   * (the result of this search will be our newly selected chord value).
    *
    * Then, we look for that probability value in our original row in transition matrix.
    * The column index that contains that probability value will be indicating
    * our next chord to go to.
    */
-  private int selectIndexBasedOnWeights(int[][] tmat, int row, ArrayList<Quality> qualist) {
+  private Chord getNextChordBasedOnWeights(int[][] tmat, int row, ArrayList<Quality> qualist) {
     Chord currchord = this.getCorrespondingChord(tmat, row, qualist.size());
     // cumulative probability distribution matrix
-    int[] cpdmatrix = new int[tmat[0].length]; // array as long as one row
-    return 0;
-
+    int rowlen = tmat[0].length; // row's length
+    int[] currrow = tmat[row]; // get current row (current chord).
+    int[] cpdarray = new int[rowlen]; // array as long as one row
+    int sum = 0;
+    for (int i = 0; i < rowlen; i++) {
+      sum += tmat[row][i]; // sum up as we iterate through the current row.
+      cpdarray[i] = sum;
+    }
+    int randindex = this.getRandomInt(rowlen); // make a random index
+    // get next chord using helper method
+    Chord nextchord = this.getCorrespondingChord(tmat, randindex, qualist.size());
+    return nextchord; // return next chord
   }
+
   /*
    * Helper method that gets a random integer
    * within a range. (Uses Math.random())
