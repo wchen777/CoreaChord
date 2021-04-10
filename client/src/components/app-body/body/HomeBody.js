@@ -3,12 +3,49 @@ import {
   Container, HStack, Center, Flex, Button, Tooltip, Box, Text
 } from "@chakra-ui/react"
 import Select from 'react-select'
+import axios from 'axios'
+import {useChordProgContext} from '../../../context/ChordProgContext'
 
 import { numBars, chordDiversity } from '../../../data/GenerateSettings'
 
 import ResultsBody from './ResultsBody'
 
 export default function HomeBody() {
+  const {chordProg, setChordProg} = useChordProgContext();
+
+  /**
+   * Makes an axios request to generate a set of chords based on the current settings.
+   */
+  function generateChords() {
+    const toSend = { // TODO update these post parameters with data from the page input elements
+      startChord: "A7",
+      chordDiversity: "Medium",
+      numBars: 32
+    };
+    const config = {
+      headers: {
+        "Content-Type": "application/json",
+        'Access-Control-Allow-Origin': '*',
+      }
+    }
+    axios.post(
+        "http://localhost:4567/generate",
+        toSend,
+        config
+    )
+        .then(response => {
+          return response.data;
+        })
+        .then((data) => {
+          console.log("data received!")
+          console.log(data);
+          setChordProg(data); // TODO something may need to be changed here
+        })
+        .catch(function (error) {
+          console.log(error);
+        });
+  }
+
   return (
     <Container className="home-body-container">
       <Center>
@@ -53,7 +90,7 @@ export default function HomeBody() {
 
           </HStack>
 
-          <Button colorScheme="teal" px={10} mx={5} size="lg" >
+          <Button colorScheme="teal" px={10} mx={5} size="lg" onClick={() => {generateChords()}}>
             Generate!
           </Button>
 

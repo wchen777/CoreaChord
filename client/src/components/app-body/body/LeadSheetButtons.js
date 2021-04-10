@@ -25,7 +25,6 @@ export default function LeadSheetButtons() {
    */
   function getChordProgression() {
     // TODO Will says: it'll be a JSON list of objects with all the data generated from the back end
-    //
 
     // TODO MAXIME fill in this method after connecting to backend
     // const DUMMY_DATA = ["E-7", "A7", "C-7", "F7", "F-7", "Bb7", "Ebmaj7", "Ab7", "Bbmaj7", "A7", "D-7", "Eb7", "Fmaj7",

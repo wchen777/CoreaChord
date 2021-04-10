@@ -16,10 +16,10 @@ export default function LeadSheet() {
     setChordProg(DUMMY_DATA);
   }, []);
 
-  useEffect(() => {
-    console.log("component loaded");
-    console.log(chordProg);
-  })
+  // useEffect(() => {
+  //   console.log("LeadSheet component loaded");
+  //   console.log(chordProg);
+  // })
 
   /**
    * Returns the HTML to display the chord progression.
