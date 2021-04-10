@@ -20,7 +20,6 @@ import java.util.HashMap;
 import java.util.List;
 
 public final class Main {
-  // TODO we probably want to remove the target/ directory from our Github repo, and add it to the .gitignore
 
   private static final int DEFAULT_PORT = 4567;
   private static final Gson GSON = new Gson();

@@ -1,4 +1,5 @@
-.target/
+target/
+.idea/
 .mvn-classpath
 .classpath
 **.DS_Store**
