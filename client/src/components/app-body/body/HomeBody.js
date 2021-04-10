@@ -39,7 +39,7 @@ export default function HomeBody() {
         .then((data) => {
           console.log("data received!")
           console.log(data);
-          setChordProg(data); // TODO something may need to be changed here
+          // setChordProg(data); // TODO something may need to be changed here
         })
         .catch(function (error) {
           console.log(error);

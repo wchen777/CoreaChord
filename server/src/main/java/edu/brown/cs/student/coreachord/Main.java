@@ -1,7 +1,10 @@
 package edu.brown.cs.student.coreachord;
 
 import com.google.gson.Gson;
+import com.google.gson.JsonElement;
+import com.google.gson.reflect.TypeToken;
 import edu.brown.cs.student.coreachord.CoreaApp.CoreaApplication;
+import edu.brown.cs.student.coreachord.CoreaApp.GeneratedChord;
 import edu.brown.cs.student.coreachord.REPL.Executable;
 import edu.brown.cs.student.coreachord.REPL.REPL;
 import joptsimple.OptionParser;
@@ -18,11 +21,14 @@ import java.io.StringWriter;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public final class Main {
 
   private static final int DEFAULT_PORT = 4567;
   private static final Gson GSON = new Gson();
+  private static Map<String, String> QUALITIES;
+  private static CoreaApplication coreaApp;
   private final String[] args;
 
   public static void main(String[] args) {
@@ -34,6 +40,13 @@ public final class Main {
   }
 
   private void run() {
+    // Setup the QUALITIES map
+    QUALITIES = new HashMap<>();
+    QUALITIES.put("7", "DOMINANT7");
+    QUALITIES.put("-7", "MINOR7");
+    QUALITIES.put("maj7", "MAJOR7");
+    QUALITIES.put("-7b5", "MINOR7FLAT5");
+
     // Parse command line arguments
     OptionParser parser = new OptionParser();
     parser.accepts("gui");
@@ -48,7 +61,7 @@ public final class Main {
       + "the following commands:\n"
       + "generate-chords <ROOT> <QUALITY> <NUMBARS>");
     HashMap<String, Executable> commands = new HashMap<>();
-    CoreaApplication coreaApp = new CoreaApplication();
+    coreaApp = new CoreaApplication();
     commands.put("generate-chords", coreaApp);
     REPL repl = new REPL(commands);
   }
@@ -108,19 +121,26 @@ public final class Main {
       String chordDiversity = data.getString("chordDiversity");
       int numBars = data.getInt("numBars");
       // System.out.println("data received from frontend: " + startChord + " " + chordDiversity + " " + numBars);
-      //TODO how are we planning to get the roots and qualities from the data passed from the frontend?
-      // (see below)
-      String progRoot = "C";
-      String progQuality = "MAJOR7";
-      String command = "generate-chords " + progRoot + " " + progQuality + " " + numBars;
-      List<String> results = new ArrayList<>();
-      // TODO get proper results
-      results.add("E-7");
-      results.add("A7");
-      results.add("C-7");
-      results.add("F7");
-      return GSON.toJson(results);
+      String progRoot = startChord.substring(0,1);
+      String progQuality = startChord.substring(1);
+      if (startChord.charAt(1) == 'b'){
+        progRoot = startChord.substring(0,2);
+        progQuality = startChord.substring(2);
+      }
 
+      // Convert the progQuality to enum
+      progQuality = QUALITIES.get(progQuality);
+
+      String command = "generate-chords " + progRoot + " " + progQuality + " " + numBars;
+      System.out.println(command);
+
+      // Call the app to generate the chords
+      coreaApp.execute(command);
+      List<GeneratedChord> results = coreaApp.getResult();
+
+      // TODO Convert the GeneratedChord List into JSON
+      JsonElement element = GSON.toJsonTree(results, new TypeToken<List<GeneratedChord>>(){}.getType());
+      return element.getAsJsonArray();
     }
   }
 
