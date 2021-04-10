@@ -1,0 +1,19 @@
+.chordTextDiv{
+    display: inline-block;
+    width: 120px;
+    padding: 10px 0;
+    margin: 20px 0;
+    font-size: x-large;
+    border-right: 2px solid black;
+}
+.chordTextDiv:hover{
+    background-color: lightgrey;
+}
+
+.measureNumberDiv{
+    display: inline-block;
+    font-size: smaller;
+    margin-top: 25px;
+    margin-right: 8px;
+    vertical-align: top;
+}

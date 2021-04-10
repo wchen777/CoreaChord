@@ -1,0 +1,9 @@
+<component name="InspectionProjectProfileManager">
+  <profile version="1.0">
+    <option name="myName" value="Project Default" />
+    <inspection_tool class="Eslint" enabled="true" level="WARNING" enabled_by_default="true" />
+    <inspection_tool class="RequiredAttributes" enabled="true" level="WARNING" enabled_by_default="true">
+      <option name="myAdditionalRequiredHtmlAttributes" value="_active,_activeLink,_after,_activeLink,_autofill,_before,_checked,_dark,_disabled,_empty,_activeLink,_even,_expanded,_first,_focus,_focusVisible,_focusVisible,_focusWithin,_fullScreen,_grabbed,_groupActive,_groupChecked,_groupDisabled,_groupFocus,_groupHover,_groupInvalid,_hidden,_highlighted,_hover,_indeterminate,_invalid,_last,_loading,_mediaDark,_notFirst,_notLast,_odd,_placeholder,_pressed,_readOnly,_rtl,_selected,_selection,_valid,_visited" />
+    </inspection_tool>
+  </profile>
+</component>
