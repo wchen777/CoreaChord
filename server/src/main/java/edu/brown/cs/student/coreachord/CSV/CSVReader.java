@@ -7,15 +7,9 @@ import java.util.List;
 
 public class CSVReader {
 
-  private String filepath;
 
+  public CSVReader() {
 
-  /**.
-   * constructor for CSV parser
-   * @param filepath - the file path for the csv file to be parsed
-   */
-  public CSVReader(String filepath) {
-    this.filepath = filepath;
   }
 
 //    public void invalidFilePathHandler() {
@@ -26,7 +20,7 @@ public class CSVReader {
    * convert a csv file to a list of list of strings
    * @return - list of list of strings of raw CSV data
    */
-  public List<String[]> parseCSV() {
+  public List<String[]> parseCSV(String filepath) {
     List<String[]> csvList = new ArrayList<>();
 
     try {

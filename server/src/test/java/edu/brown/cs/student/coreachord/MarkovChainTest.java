@@ -6,6 +6,7 @@ import edu.brown.cs.student.coreachord.CoreaApp.GeneratedChord;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
+import org.junit.Assert;
 
 import java.util.List;
 
@@ -55,10 +56,11 @@ public class MarkovChainTest {
 //    Chord GMinorFlat = new Chord(rootG, qualityminorflat);
 //    Chord BbDominant = new Chord(rootBb, qualitydominant);
 
-    coreaapp8bars = new CoreaApplication(); // 8-bar app
-    coreaapp16bars = new CoreaApplication(); // 16-bar app
-    coreaapp32bars = new CoreaApplication(); // 32-bar app
-    coreaappinvalid = new CoreaApplication(); // invalid bar param
+    // TODO: change this
+    coreaapp8bars = new CoreaApplication(null); // 8-bar app
+    coreaapp16bars = new CoreaApplication(null); // 16-bar app
+    coreaapp32bars = new CoreaApplication(null); // 32-bar app
+    coreaappinvalid = new CoreaApplication(null); // invalid bar param
 
     coreaapp8bars.execute("generate-chords C MAJOR7 8");
     coreaapp16bars.execute("generate-chords Eb MINOR7 16");

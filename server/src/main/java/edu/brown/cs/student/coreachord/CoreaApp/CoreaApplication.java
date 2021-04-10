@@ -1,7 +1,6 @@
 package edu.brown.cs.student.coreachord.CoreaApp;
 
 import edu.brown.cs.student.coreachord.REPL.Executable;
-
 import java.util.List;
 import java.util.Random;
 import java.util.ArrayList;
@@ -19,17 +18,23 @@ public class CoreaApplication implements Executable {
     C, Db, D, Eb, E, F, Gb, G, Ab, A, Bb, B
   }
 
-  public static final int EIGHT_BARS = 8;
-  public static final int SIXTEEN_BARS = 16;
-  public static final int THIRTY_TWO_BARS = 32;
+  private static final int EIGHT_BARS = 8;
+  private static final int SIXTEEN_BARS = 16;
+  private static final int THIRTY_TWO_BARS = 32;
+
+  private final int numqualities = Quality.values().length;
 
   private List<GeneratedChord> result;
-
   private List<Chord> stateSpace;
-
   private static final Random RAND = new Random();
 
-  public CoreaApplication() { //(Chord startingchord, int numbars) {
+  private TransitionMatrix lowDiversity;
+
+
+  public CoreaApplication(TransitionMatrix lowDiversity) {
+    // set transition matrices fields
+    this.lowDiversity = lowDiversity;
+
     // populating Enum sets with all values in our enum definitions
     Set<Quality> qualityset = EnumSet.allOf(Quality.class);
     Set<Root> rootset = EnumSet.allOf(Root.class);
@@ -59,14 +64,14 @@ public class CoreaApplication implements Executable {
    *
    * @param startingchord starting chord
    * @param numbars number of bars
-   * @return list of generated chord(s)
+   *
    */
-  private List<GeneratedChord> generateChords(Chord startingchord, int numbars) {
+  private void generateChords(Chord startingchord, int numbars) {
     if (!(numbars == EIGHT_BARS) && !(numbars == SIXTEEN_BARS) && !(numbars == THIRTY_TWO_BARS)) {
-      return null; // check for specific inputs, if not one of those, return null.
+      result = new ArrayList<>();
+      return; // check for specific inputs, if not one of those, return null.
     }
     result = this.markovChain(startingchord, numbars); // call helper method
-    return result;
   }
 
   private List<GeneratedChord> markovChain(Chord startingchord, int numbars) {
@@ -78,22 +83,19 @@ public class CoreaApplication implements Executable {
 //    int i = 0;
     // TODO: need to check the null case for starting chord,
     //  generate a random chord as starting chord if it is null
-
-    Chord currchord = startingchord;
-    double currlength = Math.random() * 10; // how do we handle length? (discuss w teammates)
-    GeneratedChord currgenchord = new GeneratedChord(currchord, currlength);
-
     // accumulated length to keep track of how much we have generated so far
     int accumulatedLength = 0;
 
-    // TODO: here is how i envisioned the length mechanic working
+    Chord currchord = startingchord;
+    int currlength = getNextChordLength(accumulatedLength, numbars);
+    GeneratedChord currgenchord = new GeneratedChord(currchord, currlength);
 
     // random walk on markov chain with weights
     while (accumulatedLength < numbars) {
 
       int generatedLength = getNextChordLength(accumulatedLength, numbars);
 
-      int numqualities = Quality.values().length; // number of possible qualities from Quality enum.
+      // number of possible qualities from Quality enum.
       int currrowstart = currchord.getRoot().ordinal() * numqualities; // start from 0
 
       // add to the progression
@@ -104,7 +106,7 @@ public class CoreaApplication implements Executable {
       int nextchordindex = this.handleEachQualityCase(transitionMatrix, currchord, currrowstart);
 
       // update currchord
-      currchord = this.getCorrespondingChord(transitionMatrix, nextchordindex, numqualities);
+      currchord = TransitionMatrix.getCorrespondingChord(nextchordindex, numqualities);
       currgenchord = new GeneratedChord(currchord, generatedLength); // update currgenchord
 
       // update length?
@@ -167,71 +169,18 @@ public class CoreaApplication implements Executable {
    */
   private int randomlySelectIndex(double[][] tmat, int row) {
     int numCols = tmat[row].length; // get number of columns
-    return this.getRandomInt(numCols);
+    return getRandomInt(numCols);
   }
 
-  /*
-   * Explanation:
-   *
-   * This selection method is a helper method that selects the
-   * next chord to go to (selects the column in the transition matrix)
-   * while taking into account the probability distribution for a given row.
-   *
-   * The way this method is implemented is that it makes use of the concept of
-   * "cumulative probability distribution" in probability theory, which
-   * weighs the higher probability index more than the other ones.
-   *
-   * We first initialize a cumulative probability distribution array,
-   * populate the array with the current row's probability information,
-   * and index into that array using a randomly initialized double in [0,1)
-   * (the result of this search will be our newly selected chord value).
-   *
-   * Then, we look for that probability value in our original row in transition matrix.
-   * The column index that contains that probability value will be indicating
-   * our next chord to go to.
-   */
-  private Chord getNextChordBasedOnWeights(double[][] tmat, int row, ArrayList<Quality> qualist) {
-    Chord currchord = this.getCorrespondingChord(tmat, row, qualist.size());
-    // cumulative probability distribution matrix
-    int rowlen = tmat[0].length; // row's length
-    double[] currrow = tmat[row]; // get current row (current chord).
-    int[] cpdarray = new int[rowlen]; // array as long as one row
-    int sum = 0;
-    for (int i = 0; i < rowlen; i++) {
-      sum += tmat[row][i]; // sum up as we iterate through the current row.
-      cpdarray[i] = sum;
-    }
-    int randindex = this.getRandomInt(rowlen); // make a random index
-    // get next chord using helper method
-    Chord nextchord = this.getCorrespondingChord(tmat, randindex, qualist.size());
-    return nextchord; // return next chord
-  }
 
   /*
    * Helper method that gets a random integer
    * within a range. (Uses Math.random())
    */
-  private int getRandomInt(int max) {
+  public static int getRandomInt(int max) {
     return (int) Math.floor(Math.random() * max);
   }
 
-  /**
-   * Helper method that gives you corresponding chord
-   * based on the index in transition matrix.
-   * (Handles chord-index correspondence in the transition
-   * matrix)
-   * @param index
-   * @return correspoinding Chord
-   */
-  private Chord getCorrespondingChord(double[][] tmat, int index, int numqualities) {
-    // Root order: C, Db, D, Eb, E, F, Gb, G, Ab, A, Bb, B
-    // Quality order: MAJOR7, MINOR7, MINOR7FLAT5, DOMINANT7
-    int rootordinal = index / numqualities; // integer division to get root ordinal
-    int qualityordinal = index % numqualities; // mod to get quality ordinal (get remainder)
-    Root root = Root.values()[rootordinal];
-    Quality quality = Quality.values()[qualityordinal];
-    return new Chord(root, quality);
-  }
 
   /**
    * Accessor method for resulting string list.
@@ -254,9 +203,11 @@ public class CoreaApplication implements Executable {
         try {
           Chord inputChord = new Chord(Root.valueOf(args.get(1)), Quality.valueOf(args.get(2)));
           generateChords(inputChord, Integer.parseInt(args.get(3)));
+
           for (GeneratedChord gChord: result) {
             System.out.println("\n" + gChord);
           }
+
         } catch (IndexOutOfBoundsException i) {
           System.out.println("ERROR: incorrect input arguments for generate-chords command");
         } catch (IllegalArgumentException e) {

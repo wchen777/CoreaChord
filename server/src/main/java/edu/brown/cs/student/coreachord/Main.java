@@ -3,8 +3,11 @@ package edu.brown.cs.student.coreachord;
 import com.google.gson.Gson;
 import com.google.gson.JsonElement;
 import com.google.gson.reflect.TypeToken;
+import edu.brown.cs.student.coreachord.CSV.CSVReader;
+import edu.brown.cs.student.coreachord.Commands.GenerateChords;
 import edu.brown.cs.student.coreachord.CoreaApp.CoreaApplication;
 import edu.brown.cs.student.coreachord.CoreaApp.GeneratedChord;
+import edu.brown.cs.student.coreachord.CoreaApp.TransitionMatrix;
 import edu.brown.cs.student.coreachord.REPL.Executable;
 import edu.brown.cs.student.coreachord.REPL.REPL;
 import joptsimple.OptionParser;
@@ -53,17 +56,27 @@ public final class Main {
     parser.accepts("port").withRequiredArg().ofType(Integer.class)
       .defaultsTo(DEFAULT_PORT);
     OptionSet options = parser.parse(args);
+
     if (options.has("gui")) {
       runSparkServer((int) options.valueOf("port"));
     }
+
+    // read in transition matrix csvs
+    CSVReader csv = new CSVReader();
+
+    List<String[]> lowDivCSV = csv.parseCSV("../scripts/t-mat-low.csv");
+    TransitionMatrix lowDiversity = new TransitionMatrix(lowDivCSV);
 
     System.out.println("Welcome to our REPL\nCurrently we only support "
       + "the following commands:\n"
       + "generate-chords <ROOT> <QUALITY> <NUMBARS>");
     HashMap<String, Executable> commands = new HashMap<>();
-    coreaApp = new CoreaApplication();
+
+    coreaApp = new CoreaApplication(lowDiversity);
     commands.put("generate-chords", coreaApp);
+
     REPL repl = new REPL(commands);
+
   }
 
   /*
