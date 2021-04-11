@@ -1,4 +1,4 @@
-import React, { useRef } from 'react'
+import React, { useRef, useState } from 'react'
 import {
   Heading,
   Button,
@@ -14,11 +14,26 @@ import {
   Box
 } from '@chakra-ui/react';
 import RegisterForm from './RegisterForm';
+import { registration } from '../../api/Firebase'
 
 export default function RegisterModal() {
 
   const { isOpen, onOpen, onClose } = useDisclosure()
   const finalRef = useRef()
+
+  const [regData, setRegData] = useState({})
+
+  const submitRegister = () => {
+    if (!regData.email || !regData.password || !regData.confirmPassword) {
+      alert("Please enter in all fields.")
+      return
+    } else if (regData.confirmPassword !== regData.password) {
+      alert("Passwords do not match.")
+      return
+    }
+
+    registration(regData)
+  }
 
   return (
     <>
@@ -43,14 +58,13 @@ export default function RegisterModal() {
           <ModalCloseButton />
 
           <ModalBody>
-            <RegisterForm />
+            <RegisterForm regData={regData} setRegData={setRegData}/>
           </ModalBody>
-
 
           <Box my={8}>
             <Center>
               <VStack>
-                <Button colorScheme="teal" size="lg">
+                <Button colorScheme="teal" size="lg" onClick={() => submitRegister()}>
                   Register!
                 </Button>
                 <Button variant="ghost" colorScheme="red" size="lg" onClick={onClose}>Close</Button>

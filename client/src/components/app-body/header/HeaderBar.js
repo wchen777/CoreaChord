@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useContext } from 'react'
 
 import {
   Heading, HStack, Container, Flex, Spacer, IconButton, useColorModeValue
@@ -12,9 +12,14 @@ import DrawerMenu from './DrawerMenu';
 import RegisterModal from '../../forms/RegisterModal';
 import SignInModal from '../../forms/SignInModal';
 
+import { AuthContext } from '../../../context/AuthContext'
+import SignOutModal from '../../forms/SignOutModal';
+
 
 export default function HeaderBar() {
   const barColor = useColorModeValue('gray.50', 'gray.800')
+
+  const { user, _ } = useContext(AuthContext) 
 
   return (
     <Container className="top-bar" backgroundColor={barColor}>
@@ -31,9 +36,12 @@ export default function HeaderBar() {
         <Spacer />
         <HStack mr={4}>
 
-          <RegisterModal />
+          {user && <Heading color="teal.500" mx={10} fontSize="17px"> Welcome <i>{user.email.split("@")[0]}</i>, you are signed in. </Heading>}
 
-          <SignInModal />
+          {!user && <RegisterModal /> }
+
+          {!user && <SignInModal />}
+          {user && <SignOutModal />}
 
           {/* Refactor this elsewhere, add modal */}
           <IconButton

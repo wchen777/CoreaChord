@@ -8,7 +8,7 @@ import {
   InputGroup
 } from '@chakra-ui/react';
 
-export default function RegisterForm() {
+export default function RegisterForm({ regData, setRegData }) {
 
   const [show, setShow] = useState(false)
   const handleClick = () => setShow(!show)
@@ -17,7 +17,11 @@ export default function RegisterForm() {
     <FormControl isRequired>
      
         <FormLabel textAlign="left">Email</FormLabel>
-        <Input placeholder="Enter email" mb={6}/>
+        <Input 
+          placeholder="Enter email" 
+          mb={6}
+          onChange={(e) => setRegData({...regData, email: e.target.value})}
+          />
 
 
         <FormLabel>Password</FormLabel>
@@ -26,6 +30,7 @@ export default function RegisterForm() {
             pr="4.5rem"
             type={show ? "text" : "password"}
             placeholder="Enter password"
+            onChange={(e) => setRegData({...regData, password: e.target.value})}
           />
           <InputRightElement width="4.5rem">
             <Button h="1.75rem" size="sm" onClick={handleClick}>
@@ -42,6 +47,7 @@ export default function RegisterForm() {
             pr="4.5rem"
             type={show ? "text" : "password"}
             placeholder="Confirm password"
+            onChange={(e) => setRegData({...regData, confirmPassword: e.target.value})}
           />
           <InputRightElement width="4.5rem">
             <Button h="1.75rem" size="sm" onClick={handleClick}>

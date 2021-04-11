@@ -6,7 +6,7 @@ export const voicings = {
 
     Dbmaj7: ["Db3", "Ab3", "C4", "F4"],
     Dbm7: ["Db3", "B3", "Eb4", "E4"],
-    Db7: ["Db3", "B3", "Eb4", "E4"],
+    Db7: ["Db3", "B3", "Eb4", "G4"],
     Db7m5: ["Db2", "F3", "B3", "Eb4", "G4"],
 
     Dmaj7: ["D3", "A3", "C#4", "F#4"],
@@ -19,7 +19,7 @@ export const voicings = {
     Eb7: ["Eb2", "Gb3", "Db4", "E4"],
     Ebm7b5: ["Eb2", "Gb3", "A3", "Db4"],
 
-    Emaj7: ["E3", "B3", "D#F", "G#4"],
+    Emaj7: ["E3", "B3", "D#4", "G#4"],
     Em7: ["E2", "G3", "B3", "D4"],
     E7: ["E2", "D3", "G#3", "F4"],
     Em7b5: ["E2", "G3", "Bb3", "D4"],
