@@ -79,12 +79,13 @@ public class CoreaApplication implements Executable {
     // TODO: need to check the null case for starting chord,
     //  generate a random chord as starting chord if it is null
 
-    Chord currchord = startingchord;
-    double currlength = Math.random() * 10; // how do we handle length? (discuss w teammates)
-    GeneratedChord currgenchord = new GeneratedChord(currchord, currlength);
-
     // accumulated length to keep track of how much we have generated so far
     int accumulatedLength = 0;
+
+    Chord currchord = startingchord;
+    int currlength = getNextChordLength(accumulatedLength, numbars);
+    GeneratedChord currgenchord = new GeneratedChord(currchord, currlength);
+
 
     // TODO: here is how i envisioned the length mechanic working
 

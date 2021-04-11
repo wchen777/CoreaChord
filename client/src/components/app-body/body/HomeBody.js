@@ -1,26 +1,40 @@
-import React from 'react'
+import React, {useState} from 'react'
 import {
-  Container, HStack, Center, Flex, Button, Tooltip, Box, Text
+  Container, HStack, Center, Button, Tooltip, Box, Text
 } from "@chakra-ui/react"
 import Select from 'react-select'
 import axios from 'axios'
 import {useChordProgContext} from '../../../context/ChordProgContext'
 
-import { numBars, chordDiversity } from '../../../data/GenerateSettings'
+import { numBars, chordDiversity, chordValues } from '../../../data/GenerateSettings'
 
 import ResultsBody from './ResultsBody'
 
 export default function HomeBody() {
   const {chordProg, setChordProg} = useChordProgContext();
+  const [startChordInput, setStartChordInput] = useState("");
+  const [chordDiversityInput, setChordDiversityInput] = useState("");
+  const [numBarsInput, setNumBarsInput] = useState(0);
 
   /**
    * Makes an axios request to generate a set of chords based on the current settings.
    */
   function generateChords() {
-    const toSend = { // TODO update these post parameters with data from the page input elements
-      startChord: "A7",
-      chordDiversity: "Medium",
-      numBars: 32
+    if (startChordInput === "" || chordDiversityInput === "" || numBarsInput <= 0) {
+      alert("Please make a selection in all three dropdowns.");
+      return;
+    }
+
+    let chordToSend = startChordInput;
+    while (chordToSend === "None") {
+      const randomIndex = Math.floor(Math.random() * chordValues.length);
+      chordToSend = chordValues[randomIndex].value;
+    }
+
+    const toSend = {
+      startChord: chordToSend,
+      chordDiversity: chordDiversityInput,
+      numBars: numBarsInput
     };
     const config = {
       headers: {
@@ -39,7 +53,7 @@ export default function HomeBody() {
         .then((data) => {
           console.log("data received!")
           console.log(data);
-          // setChordProg(data); // TODO something may need to be changed here
+          setChordProg(data);
         })
         .catch(function (error) {
           console.log(error);
@@ -64,7 +78,8 @@ export default function HomeBody() {
                 fontSize="sm">
                 <Text fontWeight="semibold" my={2} fontSize="lg" color="gray.700"># of Bars</Text>
               </Tooltip>
-              <Select options={numBars} placeholder="# of Bars" defaultValue={32} isSearchable={false} />
+              <Select options={numBars} placeholder="# of Bars" defaultValue={32}
+                      isSearchable={false}  onChange={(event) => {setNumBarsInput(event.value)}}/>
             </Box>
 
             <Box w="60">
@@ -74,8 +89,8 @@ export default function HomeBody() {
                 fontSize="sm">
                 <Text fontWeight="semibold" my={2} fontSize="lg" color="gray.700">Starting Chord</Text>
               </Tooltip>
-              <Select options={[{ value: 'None', label: 'None' }, { value: 'E-7', label: 'E-7' },
-              { value: 'A7', label: 'A7' }]} placeholder="Starting Chord" defaultValue="None" isSearchable={false} />
+              <Select options={chordValues} placeholder="Starting Chord" defaultValue="None"
+                      isSearchable={false} onChange={(event) => {setStartChordInput(event.value)}}/>
             </Box>
 
             <Box w="60">
@@ -85,12 +100,13 @@ export default function HomeBody() {
                 fontSize="sm">
                 <Text fontWeight="semibold" my={2} fontSize="lg" color="gray.700">Chord Diversity</Text>
               </Tooltip>
-              <Select options={chordDiversity} defaultValue="Medium" placeholder="Chord Diversity" isSearchable={false} />
+              <Select options={chordDiversity} defaultValue="Medium" placeholder="Chord Diversity"
+                      isSearchable={false} onChange={(event) => {setChordDiversityInput(event.value)}}/>
             </Box>
 
           </HStack>
 
-          <Button colorScheme="teal" px={10} mx={5} size="lg" onClick={() => {generateChords()}}>
+          <Button colorScheme="teal" px={10} mx={5} size="lg" onClick={() => { generateChords() }}>
             Generate!
           </Button>
 

@@ -8,8 +8,8 @@ package edu.brown.cs.student.coreachord.CoreaApp;
  */
 public class GeneratedChord {
   private Chord chorddata;
-  private double chordlength;
-  public GeneratedChord(Chord chord, double length) {
+  private int chordlength;
+  public GeneratedChord(Chord chord, int length) {
     chorddata = chord;
     chordlength = length;
   }
@@ -17,7 +17,7 @@ public class GeneratedChord {
   public Chord getChorddata() {
     return chorddata;
   }
-  public double getChordlength() {
+  public int getChordlength() {
     return chordlength;
   }
   @Override

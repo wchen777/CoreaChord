@@ -1,4 +1,4 @@
-import React, { useContext, createContext, useState, useMemo } from 'react'
+import React, { useContext, createContext, useState} from 'react'
 
 const ChordProgContext = createContext()
 
