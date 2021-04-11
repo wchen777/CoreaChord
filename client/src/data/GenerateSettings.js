@@ -5,3 +5,5 @@ export const chordDiversity =
   [{value: "Low", label: "Low"}, {value: "Medium", label: "Medium"}, {value: "High", label: "High"}]
 
   // TODO: need to fill in all chord values
+export const chordValues = [{ value: 'None', label: 'None' }, { value: 'E-7', label: 'E-7' },
+  { value: 'A7', label: 'A7' }]
