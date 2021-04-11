@@ -38,7 +38,7 @@ export const voicings = {
     Gm7: ["G2", "F3", "A3", "Bb3", "D4"],
     G7: ["G2", "F3", "B3", "E4", "Ab4"],
     Gm7b5: ["G2", "Bb3", "Db4", "F4"],
-
+ 
     Abmaj7: ["Ab2", "Eb3", "G3", "C4"],
     Abm7: ["Ab2", "Gb3", "B3", "Eb4"],
     Ab7: ["Ab2", "Gb3", "C4", "F4"],
