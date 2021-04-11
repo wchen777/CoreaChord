@@ -1,6 +1,7 @@
 package edu.brown.cs.student.coreachord.CoreaApp;
 
 import edu.brown.cs.student.coreachord.REPL.Executable;
+
 import java.util.List;
 import java.util.Random;
 import java.util.ArrayList;
@@ -77,18 +78,20 @@ public class CoreaApplication implements Executable {
   private List<GeneratedChord> markovChain(Chord startingchord, int numbars) {
     ArrayList<GeneratedChord> chordProgression = new ArrayList<>();
     int n = stateSpace.size(); // all possible chord outcomes
-    double[][] transitionMatrix = new double[n][n];
-//    this.fillTransitionMatrix(transitionMatrix);
 
-//    int i = 0;
     // TODO: need to check the null case for starting chord,
-    //  generate a random chord as starting chord if it is null
+    //    //  generate a random chord as starting chord if it is null, this should be handled in front end
+
+
     // accumulated length to keep track of how much we have generated so far
     int accumulatedLength = 0;
 
+    // first iteration with specified chord
     Chord currchord = startingchord;
     int currlength = getNextChordLength(accumulatedLength, numbars);
     GeneratedChord currgenchord = new GeneratedChord(currchord, currlength);
+    accumulatedLength += currlength;
+    chordProgression.add(currgenchord);
 
     // random walk on markov chain with weights
     while (accumulatedLength < numbars) {
@@ -98,23 +101,24 @@ public class CoreaApplication implements Executable {
       // number of possible qualities from Quality enum.
       int currrowstart = currchord.getRoot().ordinal() * numqualities; // start from 0
 
-      // add to the progression
-      // TODO: I think this fits better inside the while loop rather than obscured in a helper
-      chordProgression.add(currgenchord);
-
       // get the next chord index based on the current chord
-      int nextchordindex = this.handleEachQualityCase(transitionMatrix, currchord, currrowstart);
+      // TODO: allow for different diversities
+      int nextchordindex = this.nextChordFromQualityCase(lowDiversity, currchord, currrowstart);
 
       // update currchord
       currchord = TransitionMatrix.getCorrespondingChord(nextchordindex, numqualities);
       currgenchord = new GeneratedChord(currchord, generatedLength); // update currgenchord
 
+      // add to the progression
+      chordProgression.add(currgenchord);
       // update length?
+
       accumulatedLength += generatedLength;
       // increment i
       // i++
 
     }
+    System.out.println(accumulatedLength);
     return chordProgression;
   }
 
@@ -155,11 +159,11 @@ public class CoreaApplication implements Executable {
    * @param currrowstart
    * @return
    */
-  private int handleEachQualityCase(double[][] tmat, Chord currchord, int currrowstart) {
-    int currow = currrowstart + currchord.getQuality().ordinal(); // figure out which row we're on
-    int nextchordindex = this.randomlySelectIndex(tmat, currow);
-    double probability = tmat[currow][nextchordindex]; // probability (?)
-    return nextchordindex; // return next chord index
+  private int nextChordFromQualityCase(TransitionMatrix tmat, Chord currchord, int currrowstart) {
+    // given current starting chord and its respective root number
+    // get the corresponding chord index value
+    int currRow = currrowstart + currchord.getQuality().ordinal(); // figure out which row we're on
+    return tmat.getNextChordIndex(currRow, numqualities); // return next chord index
   }
 
   /*

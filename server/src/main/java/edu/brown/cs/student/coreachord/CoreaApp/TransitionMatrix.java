@@ -9,7 +9,7 @@ public class TransitionMatrix {
     private double[][] tmat;
 
     public TransitionMatrix(List<String[]> probabilities) {
-        fillTransitionMatrix(probabilities);
+        this.fillTransitionMatrix(probabilities);
     }
 
     // for dynamic transition matrix, different constructor
@@ -26,17 +26,15 @@ public class TransitionMatrix {
      */
     private void fillTransitionMatrix(List<String[]> probabilities) {
         // get lengths of dimensions of probability matrix
-        int horizontallen = tmat[0].length;
-        int verticallen = tmat.length;
+        int horizontallen = probabilities.get(0).length;
+        int verticallen =  probabilities.size();
         // initialize transition matrix
         this.tmat = new double[verticallen - 1][horizontallen - 1];
-
-        double maxProbability = 1; // maximum probability value
 
         for (int i = 1; i < verticallen; i++) {
             for (int j = 1; j < horizontallen; j++) {
                 String currprobstring = probabilities.get(i)[j]; // get individual probability
-                this.tmat[i][j] = Double.parseDouble(currprobstring); // store into each index of tmat
+                this.tmat[i - 1][j - 1] = Double.parseDouble(currprobstring); // store into each index of tmat
             }
         }
     }
@@ -80,10 +78,10 @@ public class TransitionMatrix {
      * The column index that contains that probability value will be indicating
      * our next chord to go to.
      */
-    public Chord getNextChordBasedOnWeights(int row, ArrayList<CoreaApplication.Quality> qualist) {
-        if (this.tmat == null) return null;
+    public int getNextChordIndex(int row, int numQualities) {
+        if (this.tmat == null) return -1;
 
-        Chord currchord = TransitionMatrix.getCorrespondingChord(row, qualist.size());
+        Chord currchord = TransitionMatrix.getCorrespondingChord(row, numQualities);
         // cumulative probability distribution matrix
         int rowlen = this.tmat[0].length; // row's length
         double[] currrow = this.tmat[row]; // get current row (current chord).
@@ -104,10 +102,7 @@ public class TransitionMatrix {
         }
 
         // get index from probability distribution
-        int index = digitize(cumulativeDist);
-
-        // get next chord using helper method
-        return TransitionMatrix.getCorrespondingChord(index, qualist.size());
+        return digitize(cumulativeDist);
     }
 
     /**
