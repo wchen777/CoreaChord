@@ -20,6 +20,11 @@ public class REPL {
     run();
   }
 
+
+  public void addCommand(Executable e) {
+
+  }
+
   /**
    * Begins the REPL.
    */
