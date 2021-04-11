@@ -1,7 +1,7 @@
 import React from 'react'
 
 import {
-  Heading, HStack, Container, Button, VStack, Center, Flex, Spacer, IconButton, useColorModeValue
+  Heading, HStack, Container, Flex, Spacer, IconButton, useColorModeValue
 } from '@chakra-ui/react';
 
 

@@ -51,8 +51,7 @@ export default function HomeBody() {
           return response.data;
         })
         .then((data) => {
-          console.log("data received!")
-          console.log(data);
+          // console.log(data);
           setChordProg(data);
         })
         .catch(function (error) {

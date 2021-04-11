@@ -6,7 +6,7 @@ import { DownloadIcon } from '@chakra-ui/icons'
 import { FaPlay, FaStop } from 'react-icons/fa'
 import * as Tone from 'tone'
 import {useChordProgContext} from "../../../context/ChordProgContext";
-import {NUM_MEASURES_PER_BAR, getChordTextRepresentation, getChordMeasureLength, getBarList} from '../../../ChordUtils'
+import {NUM_MEASURES_PER_BAR, DUMMY_CHORD_NOTES, getChordTextRepresentation, getChordMeasureLength, getBarList} from '../../../ChordUtils'
 
 export default function LeadSheetButtons() {
   const synths = useRef([]);
@@ -15,14 +15,6 @@ export default function LeadSheetButtons() {
   const DELAY = 1.0;
   const MAX_CHORD_TEXT_REPRESENTATION_LENGTH = 6;
   const {chordProg, setChordProg} = useChordProgContext();
-
-  function getLengthOfChordProgression() {
-    let progressionLength = 0;
-    for (let chord of chordProg) {
-      progressionLength += getChordMeasureLength(chord);
-    }
-    return progressionLength;
-  }
 
   /**
    * Plays the audio for the chord progression.
@@ -60,7 +52,7 @@ export default function LeadSheetButtons() {
         const now = Tone.now();
         playChord(synths.current, chordNoteNames, chordLength, now);
         // Play the next chord, if there are any left to play!
-        if (chordPlaying + 1 < getLengthOfChordProgression()) {
+        if (chordPlaying + 1 < chordProgression.length) {
           playChordsSetTimeoutLoop(chordProgression, chordPlaying + 1);
         }
       }
@@ -75,14 +67,7 @@ export default function LeadSheetButtons() {
    * @returns {*} - the list of note names in the chord
    */
   function getChordNoteNames(chordProgression, chordPlaying) {
-    // TODO delete below dummy data and fill in once we have chord voicings
-    const DUMMY_CHORD_NOTES = [["E3", "G3", "B3", "D3"], ["A3", "C#3", "E3", "G3"], ["C3", "Eb3", "G3", "Bb3"],
-      ["F3", "A3", "C3", "Eb3"], ["F3", "Ab3", "C3", "Eb3"], ["Bb3", "D3", "F3", "Ab3"], ["Eb3", "G3", "Bb3", "D3"],
-      ["Ab3", "C3", "Eb3", "Gb3"], ["Bb3", "D3", "Fb3", "Ab3"], ["A3", "C#3", "E3", "G3"], ["D3", "F3", "A3", "C3"],
-      ["Eb3", "G3", "Bb3", "Db3"], ["F3", "A3", "C3", "E3"], ["A3", "C#3", "E3", "G3"], ["A3", "C3", "E3", "G3"],
-      ["D3", "F#3", "A3", "C3"], ["G3", "B3", "D3", "F3"], ["C3", "Eb3", "G3", "Bb3"], ["Ab3", "C3", "Eb3", "Gb3"],
-      ["Bb3", "D3", "Fb3", "Ab3"], ["E3", "G3", "B3", "D3"], ["A3", "C#3", "E3", "G3"], ["D3", "F3", "A3", "C3"],
-      ["G3", "B3", "D3", "F3"]];
+    // TODO fill in once we have chord voicings
     return DUMMY_CHORD_NOTES[chordPlaying];
   }
 
@@ -112,8 +97,7 @@ export default function LeadSheetButtons() {
    * Stops the audio, if it's playing.
    */
   function stopAudio() {
-    // TODO this method won't stop the audio immediately: only after the current chord is finished playing
-    // console.log("stopping audio");
+    // TODO this method doesn't stop the audio immediately: only after the current chord is finished playing
     audioShouldBePlaying.current = false;
   }
 

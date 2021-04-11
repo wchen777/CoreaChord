@@ -1,4 +1,4 @@
-import React, {useEffect} from 'react'
+import React from 'react'
 import {
   Box
 } from "@chakra-ui/react"
@@ -8,10 +8,6 @@ import {NUM_MEASURES_PER_BAR, getChordTextRepresentation, getBarList} from '../.
 
 export default function LeadSheet() {
   const {chordProg, setChordProg} = useChordProgContext();
-
-  useEffect(() => {
-    console.log("LeadSheet component loaded");
-  })
 
   /**
    * Returns the HTML to display the chord progression.

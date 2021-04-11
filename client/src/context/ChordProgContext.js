@@ -6,10 +6,6 @@ const ChordProgContext = createContext()
 export const ChordProgContextProvider = ( {children} ) => {
   const [chordProg, setChordProg] = useState({})
 
-  // const chordProgressions = useMemo(() => {
-  //   return { chordProg, setChordProg }
-  // }, [chordProg, setChordProg])
-
   return <ChordProgContext.Provider value={{chordProg, setChordProg}} > {children} </ChordProgContext.Provider>
 }
 
