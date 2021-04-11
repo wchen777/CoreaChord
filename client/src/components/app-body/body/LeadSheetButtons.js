@@ -6,7 +6,8 @@ import { DownloadIcon } from '@chakra-ui/icons'
 import { FaPlay, FaStop } from 'react-icons/fa'
 import * as Tone from 'tone'
 import {useChordProgContext} from "../../../context/ChordProgContext";
-import {NUM_MEASURES_PER_BAR, DUMMY_CHORD_NOTES, getChordTextRepresentation, getChordMeasureLength, getBarList} from '../../../ChordUtils'
+import {NUM_MEASURES_PER_BAR, getChordTextRepresentation, getChordMeasureLength, getBarList} from '../../../ChordUtils'
+import {voicings} from '../../../data/ChordVoicings'
 
 export default function LeadSheetButtons() {
   const synths = useRef([]);
@@ -28,7 +29,8 @@ export default function LeadSheetButtons() {
       const synth2 = new Tone.Synth().toDestination();
       const synth3 = new Tone.Synth().toDestination();
       const synth4 = new Tone.Synth().toDestination();
-      synths.current = [synth1, synth2, synth3, synth4];
+      const synth5 = new Tone.Synth().toDestination();
+      synths.current = [synth1, synth2, synth3, synth4, synth5];
     }
     playChordsSetTimeoutLoop(chordProg, 0);
   }
@@ -42,7 +44,7 @@ export default function LeadSheetButtons() {
    */
   function playChordsSetTimeoutLoop(chordProgression, chordPlaying){
     const chordToPlay = chordProgression[chordPlaying];
-    const chordNoteNames = getChordNoteNames(chordProgression, chordPlaying);
+    const chordNoteNames = getChordNoteNames(chordToPlay);
     const chordLength = (4 / getChordMeasureLength(chordToPlay)) + "n";
     const chordForLength = chordProgression[Math.max(0, chordPlaying - 1)];
     const lengthOfWait = (getChordMeasureLength(chordForLength) * DELAY);
@@ -59,16 +61,16 @@ export default function LeadSheetButtons() {
     }, lengthOfWaitFrames);
   }
 
-  /**
-   * Given a chord, returns a list with the names of all the notes in the chord.
-   *
-   * @param chordProgression - the chordProgression that the chord is in
-   * @param chordPlaying - the specific index of the chord to be converted to a list of note names
-   * @returns {*} - the list of note names in the chord
-   */
-  function getChordNoteNames(chordProgression, chordPlaying) {
-    // TODO fill in once we have chord voicings
-    return DUMMY_CHORD_NOTES[chordPlaying];
+  function getChordNoteNames(chordPlaying) {
+    const CHORD_QUALITIES = {"DOMINANT7": "7", "MINOR7": "m7", "MAJOR7": "maj7", "MINOR7FLAT5": "m7b5"};
+    const chordQuality = chordPlaying["chorddata"]["quality"];
+    const voicingKey = chordPlaying["chorddata"]["root"] + CHORD_QUALITIES[chordQuality];
+    console.log(voicingKey);
+    console.log(voicings[voicingKey]);
+    if (voicings[voicingKey] === undefined) {
+      console.log(chordPlaying);
+    }
+    return voicings[voicingKey];
   }
 
   /**
