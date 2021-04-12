@@ -89,11 +89,6 @@ export default function LeadSheetButtons() {
         const CHORD_QUALITIES = { "DOMINANT7": "7", "MINOR7": "m7", "MAJOR7": "maj7", "MINOR7FLAT5": "m7b5" };
         const chordQuality = chordPlaying["chorddata"]["quality"];
         const voicingKey = chordPlaying["chorddata"]["root"] + CHORD_QUALITIES[chordQuality];
-        console.log(voicingKey);
-        console.log(voicings[voicingKey]);
-        if (voicings[voicingKey] === undefined) {
-            console.log(chordPlaying);
-        }
         return voicings[voicingKey];
     }
 

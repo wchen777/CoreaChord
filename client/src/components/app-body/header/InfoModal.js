@@ -1,4 +1,4 @@
-import React, { useContext, useRef } from 'react'
+import React, { useRef } from 'react'
 
 import {
   Heading, IconButton, Tooltip,
@@ -57,7 +57,7 @@ export default function InfoModal() {
               <VStack>
                 <ModalBody>
                   <Text>
-                    CoreaChord is a jazz chord progression generator named in honor after the late jazz legend <b>Chick Corea</b>.
+                    CoreaChord is a jazz chord progression generator named in honor of the late jazz legend <b>Chick Corea</b>.
                   </Text>
                   <br/>
                   <Text>

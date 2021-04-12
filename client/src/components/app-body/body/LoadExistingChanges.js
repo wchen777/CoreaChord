@@ -1,12 +1,13 @@
 import React, { useState, useEffect } from 'react'
 import {
-  Flex, Button, Text
+  Flex, Button, Text, useColorModeValue
 } from "@chakra-ui/react"
-import Select from 'react-select'
+import Select from 'react-select' // TODO this is why the night mode doesn't work on the Select elements
 import { changes } from '../../../data/ExistingChanges'
 import { useChordProgContext } from '../../../context/ChordProgContext'
 
 export default function LoadExistingChanges() {
+  const labelColor = useColorModeValue('gray.700', 'gray.200')
   const rand = Math.floor(Math.random() * changes.length)
 
   useEffect(() => {
@@ -18,7 +19,7 @@ export default function LoadExistingChanges() {
 
   return (
     <Flex w="60" ml={6} className="side-select" flexDirection="column" justifyContent="flex-start">
-      <Text fontWeight="semibold" my={4} fontSize="lg" color="gray.700">Load Existing Changes <br/> from Popular Songs</Text>
+      <Text fontWeight="semibold" my={4} fontSize="lg" color={labelColor}>Load Existing Changes <br/> from Popular Songs</Text>
       
       <Select options={changes} placeholder="Existing Changes" isSearchable={false} onChange={(event) => {setExisting(event.value)}} defaultValue={changes[rand]}/>
       

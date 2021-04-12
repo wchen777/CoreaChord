@@ -1,11 +1,8 @@
 import React, { useContext } from 'react'
 
 import {
-  Heading, HStack, Container, Flex, Spacer, IconButton, useColorModeValue
+  Heading, HStack, Container, Flex, Spacer, useColorModeValue
 } from '@chakra-ui/react';
-
-
-import { FaInfoCircle } from 'react-icons/fa'
 
 import { ColorModeSwitcher } from '../../../ColorModeSwitcher';
 import DrawerMenu from './DrawerMenu';
