@@ -7,7 +7,7 @@ export const voicings = {
     Dbmaj7: ["Db3", "Ab3", "C4", "F4"],
     Dbm7: ["Db3", "B3", "Eb4", "E4"],
     Db7: ["Db3", "B3", "Eb4", "G4"],
-    Db7m5: ["Db2", "F3", "B3", "Eb4", "G4"],
+    Dbm7b5: ["Db2", "F3", "B3", "Eb4", "G4"],
 
     Dmaj7: ["D3", "A3", "C#4", "F#4"],
     Dm7: ["D3", "A3", "C4", "E4", "F4"],

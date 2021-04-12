@@ -14,6 +14,7 @@ import SignInModal from '../../forms/SignInModal';
 
 import { AuthContext } from '../../../context/AuthContext'
 import SignOutModal from '../../forms/SignOutModal';
+import InfoModal from './InfoModal';
 
 
 export default function HeaderBar() {
@@ -43,17 +44,7 @@ export default function HeaderBar() {
           {!user && <SignInModal />}
           {user && <SignOutModal />}
 
-          {/* Refactor this elsewhere, add modal */}
-          <IconButton
-            size="md"
-            fontSize="2xl"
-            aria-label="info button"
-            variant="ghost"
-            color="current"
-            mx={2}
-            icon={<FaInfoCircle />}
-
-          />
+          <InfoModal/>
 
           <ColorModeSwitcher />
         </HStack>

@@ -9,6 +9,8 @@ import {NUM_MEASURES_PER_BAR, getChordTextRepresentation, getBarList} from '../.
 export default function LeadSheet() {
   const {chordProg, setChordProg} = useChordProgContext();
 
+  console.log(chordProg)
+
   /**
    * Returns the HTML to display the chord progression.
    *

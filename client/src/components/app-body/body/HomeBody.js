@@ -15,13 +15,16 @@ export default function HomeBody() {
   const [startChordInput, setStartChordInput] = useState("");
   const [chordDiversityInput, setChordDiversityInput] = useState("");
   const [numBarsInput, setNumBarsInput] = useState(0);
+  const [loading, setLoading] = useState(false)
 
   /**
    * Makes an axios request to generate a set of chords based on the current settings.
    */
   function generateChords() {
+    setLoading(true)
     if (startChordInput === "" || chordDiversityInput === "" || numBarsInput <= 0) {
       alert("Please make a selection in all three dropdowns.");
+      setLoading(false)
       return;
     }
 
@@ -53,10 +56,13 @@ export default function HomeBody() {
         .then((data) => {
           // console.log(data);
           setChordProg(data);
+          setLoading(false)
         })
         .catch(function (error) {
           console.log(error);
+          setLoading(false)
         });
+         
   }
 
   return (
@@ -105,7 +111,7 @@ export default function HomeBody() {
 
           </HStack>
 
-          <Button colorScheme="teal" px={10} mx={5} size="lg" onClick={() => { generateChords() }}>
+          <Button colorScheme="teal" px={10} mx={5} size="lg" onClick={() => { generateChords() }} isLoading={loading}>
             Generate!
           </Button>
 
