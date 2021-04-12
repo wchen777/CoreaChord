@@ -1,4 +1,4 @@
-import React, { useRef, useState } from 'react'
+import React, { useRef } from 'react'
 import {
   Heading,
   Button,
@@ -13,24 +13,21 @@ import {
   Tooltip,
   Box
 } from '@chakra-ui/react';
-import SignInForm from './SignInForm';
-import { signIn } from '../../api/Firebase'
+import { signOut } from '../../api/Firebase'
 
-export default function SignInModal() {
+export default function SignOutModal() {
 
   const { isOpen, onOpen, onClose } = useDisclosure()
   const finalRef = useRef()
 
-  const [signInData, setSignInData] = useState({})
-
   return (
     <>
       <Tooltip
-        label="Sign in to your CoreaChord account to view and play your chord progressions."
+        label="Sign out of your CoreaChord account."
         aria-label="sign in tooltip"
         fontSize="sm">
         <Button colorScheme="teal" px={10} mx={5} size="lg" onClick={onOpen}>
-          Sign in
+          Sign out
         </Button>
       </Tooltip>
 
@@ -40,23 +37,18 @@ export default function SignInModal() {
         <ModalContent>
 
 
-          <Center> <Heading color="teal.500" size="xl" mt={12} mb={8}>
-            Sign in: </Heading> </Center>
+          <Center> <Heading color="teal.500" fontSize="25px" mt={12} mb={8} mx={3}>
+            Are you sure you want to sign out? </Heading> </Center>
           {/* <ModalHeader w="200">Register for an account:</ModalHeader>  */}
           <ModalCloseButton />
-
-          <ModalBody>
-            <SignInForm setSignInData={setSignInData} signInData={signInData}/>
-          </ModalBody>
-
 
           <Box my={8}>
             <Center>
               <VStack>
-                <Button colorScheme="teal" size="lg" onClick={() => signIn(signInData)}>
-                  Sign in!
+                <Button colorScheme="teal" size="lg" onClick={() => signOut()}>
+                  Sign me out!
                 </Button>
-                <Button variant="ghost" colorScheme="red" size="lg" onClick={onClose}>Close</Button>
+                <Button variant="ghost" colorScheme="red" size="lg" onClick={onClose}>No, go back.</Button>
               </VStack>
             </Center>
           </Box>

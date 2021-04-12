@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import {
   ChakraProvider,
   Box,
@@ -8,22 +8,30 @@ import {
 import './App.scss'
 import HomePage from './pages/HomePage';
 import { ChordProgContextProvider } from './context/ChordProgContext'
+import { AuthProvider, AuthContext } from './context/AuthContext'
+// import firebase from "firebase/app";
+// import "firebase/auth";
 
 function App() {
+
+
   return (
     <ChakraProvider theme={theme}>
+      {/* <FirebaseAuthProvider firebase={firebase} {...firebaseConfig}> */}
 
-      <ChordProgContextProvider>
-        <Box textAlign="center" fontSize="xl">
-          <Grid minH="100vh">
+      <AuthProvider>
+        <ChordProgContextProvider>
+          <Box textAlign="center" fontSize="xl">
+            <Grid minH="100vh">
 
-            {/* TODO: NEED REACT ROUTER DOM */}
-            <HomePage />
+              {/* TODO: NEED REACT ROUTER DOM */}
+              <HomePage />
 
-          </Grid>
-        </Box>
-      </ChordProgContextProvider>
-      
+            </Grid>
+          </Box>
+        </ChordProgContextProvider>
+      </AuthProvider>
+      {/* </FirebaseAuthProvider> */}
     </ChakraProvider>
   );
 }

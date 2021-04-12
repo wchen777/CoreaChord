@@ -80,8 +80,7 @@ public class CoreaApplication implements Executable {
     int n = stateSpace.size(); // all possible chord outcomes
 
     // TODO: need to check the null case for starting chord,
-    //    //  generate a random chord as starting chord if it is null, this should be handled in front end
-
+    //  generate a random chord as starting chord if it is null, this should be handled in front end
 
     // accumulated length to keep track of how much we have generated so far
     int accumulatedLength = 0;

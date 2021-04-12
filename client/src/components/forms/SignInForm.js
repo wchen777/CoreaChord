@@ -8,7 +8,7 @@ import {
   InputGroup
 } from '@chakra-ui/react';
 
-export default function SignInForm() {
+export default function SignInForm({ signInData, setSignInData }) {
 
   const [show, setShow] = useState(false)
   const handleClick = () => setShow(!show)
@@ -17,7 +17,7 @@ export default function SignInForm() {
     <FormControl isRequired>
      
         <FormLabel textAlign="left">Email</FormLabel>
-        <Input placeholder="Enter email" mb={6}/>
+        <Input placeholder="Enter email" mb={6} onChange={(e) => setSignInData({...signInData, email: e.target.value})}/>
 
 
         <FormLabel>Password</FormLabel>
@@ -26,6 +26,7 @@ export default function SignInForm() {
             pr="4.5rem"
             type={show ? "text" : "password"}
             placeholder="Enter password"
+            onChange={(e) => setSignInData({...signInData, password: e.target.value})}
           />
           <InputRightElement width="4.5rem">
             <Button h="1.75rem" size="sm" onClick={handleClick}>

@@ -1,4 +1,4 @@
-import React, { useRef } from 'react'
+import React, { useRef, useContext } from 'react'
 import {
   Drawer,
   DrawerBody,
@@ -14,10 +14,13 @@ import {
   useColorModeValue
 } from "@chakra-ui/react"
 import { HamburgerIcon } from '@chakra-ui/icons'
+import { AuthContext } from '../../../context/AuthContext'
 
 export default function DrawerMenu() {
   const { isOpen, onOpen, onClose } = useDisclosure()
   const btnRef = useRef()
+
+  const {user, _} = useContext(AuthContext)
 
   const bgColor = useColorModeValue("white", "")
   return (
@@ -46,7 +49,8 @@ export default function DrawerMenu() {
             <DrawerHeader>Welcome to CoreaChord!</DrawerHeader>
 
             <DrawerBody>
-              <Text> Placeholder </Text>
+              {!user && <Text> Sign in or create a CoreaChord account to save your chord progressions!</Text>} 
+              {user && <Text> Your account email: <i>{user.email}</i></Text>} 
             </DrawerBody>
 
             <DrawerFooter>

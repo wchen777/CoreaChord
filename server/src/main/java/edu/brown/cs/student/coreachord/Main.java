@@ -21,7 +21,6 @@ import spark.Spark;
 
 import java.io.PrintWriter;
 import java.io.StringWriter;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -98,7 +97,7 @@ public final class Main {
     Spark.before((request, response) -> response.header("Access-Control-Allow-Origin", "*"));
     Spark.exception(Exception.class, new ExceptionPrinter());
 
-    // TODO: CORS STUFF (Maxime: I think I handled this TODO?)
+    // TODO: CORS STUFF (Maxime: I think I handled this in the above code?)
 
     // Setup Spark Routes
     Spark.post("/generate", new GenerateChordsHandler());
@@ -145,13 +144,13 @@ public final class Main {
       progQuality = QUALITIES.get(progQuality);
 
       String command = "generate-chords " + progRoot + " " + progQuality + " " + numBars;
-      System.out.println(command);
+      System.out.println(command); // TODO delete this later
 
       // Call the app to generate the chords
       coreaApp.execute(command);
       List<GeneratedChord> results = coreaApp.getResult();
 
-      // TODO Convert the GeneratedChord List into JSON
+      // Convert the GeneratedChord List into JSON
       JsonElement element = GSON.toJsonTree(results, new TypeToken<List<GeneratedChord>>(){}.getType());
       return element.getAsJsonArray();
     }
