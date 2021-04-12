@@ -32,8 +32,13 @@ public class REPL {
     String line = "";
     try (BufferedReader reader = new BufferedReader(new InputStreamReader(System.in))) {
       while ((line = reader.readLine()) != null) {
-        String firstWord = line.split(" ")[0];
-        commands.get(firstWord).execute(line);
+        String[] input = line.split(" ");
+        Executable app = commands.get(input[0]);
+        if (app != null) {
+          app.execute(input);
+        } else {
+          System.out.println("ERROR: Command DNE :/");
+        }
       }
     } catch (IOException e) {
       System.out.println("ERROR: Buffered Reader error");
