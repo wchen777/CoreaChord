@@ -1,6 +1,7 @@
 import React from 'react'
 import {
-  Box
+  Box,
+  useColorModeValue
 } from "@chakra-ui/react"
 import './LeadSheet.css'
 import {useChordProgContext} from '../../../context/ChordProgContext'
@@ -10,6 +11,8 @@ export default function LeadSheet() {
   const {chordProg, setChordProg} = useChordProgContext();
 
   console.log(chordProg)
+
+  const bgColor = useColorModeValue('gray.200', 'gray.700')
 
   /**
    * Returns the HTML to display the chord progression.
@@ -43,7 +46,7 @@ export default function LeadSheet() {
   }
 
   return (
-    <Box mx={0} className="lead-sheet" backgroundColor="gray.200">
+    <Box mx={0} className="lead-sheet" backgroundColor={bgColor}>
       {renderChordProgression(chordProg)}
     </Box>
   )

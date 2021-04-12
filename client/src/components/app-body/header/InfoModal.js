@@ -65,7 +65,7 @@ export default function InfoModal() {
                   </Text>
                   <br/>
                   <Text>
-                  Built by<b>Ashley, Erick, Maxime, and Will</b>for CS32: Software Engineering @ Brown.
+                  Built by<b> Ashley, Erick, Maxime, and Will</b> for CS32: Software Engineering @ Brown.
                   </Text>
                     
 
