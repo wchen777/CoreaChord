@@ -81,9 +81,9 @@ public class CoreaApplication {
     if (diversityLevel == Diversity.Low) {
       matrix = lowDiversity;
     } else if (diversityLevel == Diversity.Medium) {
-      matrix = mediumDiversity;
+      matrix = lowDiversity; // open low matrix for now
     } else if (diversityLevel == Diversity.High) {
-      matrix = highDiversity;
+      matrix = lowDiversity; // open low matrix for now
     }
     result = this.markovChain(startingchord, numbars, matrix); // call helper method
   }
