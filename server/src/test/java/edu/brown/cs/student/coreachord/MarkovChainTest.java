@@ -43,21 +43,6 @@ public class MarkovChainTest {
   private void setUpCoreaApps() {
     // initialize starting chords
     System.out.println("setting up corea apps...");
-//    CoreaApplication.Root rootC = CoreaApplication.Root.C;
-//    CoreaApplication.Root rootEb = CoreaApplication.Root.Eb;
-//    CoreaApplication.Root rootG = CoreaApplication.Root.G;
-//    CoreaApplication.Root rootBb = CoreaApplication.Root.Bb;
-//
-//    // initialize starting qualities
-//    CoreaApplication.Quality qualitymaj = CoreaApplication.Quality.MAJOR7;
-//    CoreaApplication.Quality qualitymin = CoreaApplication.Quality.MINOR7;
-//    CoreaApplication.Quality qualityminorflat = CoreaApplication.Quality.MINOR7FLAT5;
-//    CoreaApplication.Quality qualitydominant = CoreaApplication.Quality.DOMINANT7;
-
-//    Chord CMajor = new Chord(rootC, qualitymaj);
-//    Chord EbMinor = new Chord(rootEb, qualitymin);
-//    Chord GMinorFlat = new Chord(rootG, qualityminorflat);
-//    Chord BbDominant = new Chord(rootBb, qualitydominant);
 
     // TODO: change this
 

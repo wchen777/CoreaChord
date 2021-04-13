@@ -110,12 +110,9 @@ public class CoreaApplication implements Executable {
 
       // add to the progression
       chordProgression.add(currgenchord);
-      // update length?
 
+      // update length
       accumulatedLength += generatedLength;
-      // increment i
-      // i++
-
     }
     System.out.println(accumulatedLength);
     return chordProgression;
@@ -168,7 +165,7 @@ public class CoreaApplication implements Executable {
   /*
    * A helper method that randomly selects an index in a
    * particular given row.
-   * (complete randomness)
+   * (complete randomness) - initial implementation without weights
    */
   private int randomlySelectIndex(double[][] tmat, int row) {
     int numCols = tmat[row].length; // get number of columns
@@ -178,7 +175,7 @@ public class CoreaApplication implements Executable {
 
   /*
    * Helper method that gets a random integer
-   * within a range. (Uses Math.random())
+   * in a range. (Uses Math.random())
    */
   public static int getRandomInt(int max) {
     return (int) Math.floor(Math.random() * max);
