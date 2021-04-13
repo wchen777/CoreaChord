@@ -18,6 +18,40 @@ export default function HomeBody() {
   const [numBarsInput, setNumBarsInput] = useState(0);
   const [loading, setLoading] = useState(false)
 
+
+  const selectBackgroundColor = useColorModeValue('white', '#1A202C')
+  const selectOptionHoverColor = useColorModeValue('#b3d3ff', '#003680')
+  const selectBorderColor = useColorModeValue('gray.200', 'gray.700')
+  const customSelectStyles = {
+    menu: (provided) => ({
+      ...provided,
+      color: labelColor,
+      backgroundColor: selectBackgroundColor,
+    }),
+    option: (provided, state) => ({
+      ...provided,
+      color: labelColor,
+      backgroundColor: state.isFocused ? selectOptionHoverColor : selectBackgroundColor,
+    }),
+    // TODO possibly change the color of the shadow highlight around the box to white,
+    //  possibly change the color of the indicatorSeparator or the dropdown arrow
+    //  https://react-select.com/components#replaceable-components
+    control: (provided, state) => ({
+      ...provided,
+      backgroundColor: selectBackgroundColor,
+      borderColor: selectBorderColor,
+      boxShadow: "none",
+    }),
+    singleValue: (provided) => ({
+      ...provided,
+      color: labelColor,
+    }),
+    placeHolder: (provided) => ({
+      ...provided,
+      color: labelColor,
+    })
+  }
+
   /**
    * Makes an axios request to generate a set of chords based on the current settings.
    */
@@ -84,7 +118,7 @@ export default function HomeBody() {
                 fontSize="sm">
                 <Text fontWeight="semibold" my={2} fontSize="lg" color={labelColor}># of Bars</Text>
               </Tooltip>
-              <Select options={numBars} placeholder="# of Bars" defaultValue={32}
+              <Select styles={customSelectStyles} options={numBars} placeholder="# of Bars" defaultValue={32}
                       isSearchable={false} onChange={(event) => {setNumBarsInput(event.value)}}/>
             </Box>
 
@@ -95,7 +129,7 @@ export default function HomeBody() {
                 fontSize="sm">
                 <Text fontWeight="semibold" my={2} fontSize="lg" color={labelColor}>Starting Chord</Text>
               </Tooltip>
-              <Select options={chordValues} placeholder="Starting Chord" defaultValue="None"
+              <Select styles={customSelectStyles} options={chordValues} placeholder="Starting Chord" defaultValue="None"
                       isSearchable={false} onChange={(event) => {setStartChordInput(event.value)}}/>
             </Box>
 
@@ -106,7 +140,7 @@ export default function HomeBody() {
                 fontSize="sm">
                 <Text fontWeight="semibold" my={2} fontSize="lg" color={labelColor}>Chord Diversity</Text>
               </Tooltip>
-              <Select options={chordDiversity} defaultValue="Medium" placeholder="Chord Diversity"
+              <Select styles={customSelectStyles} options={chordDiversity} defaultValue="Medium" placeholder="Chord Diversity"
                       isSearchable={false} onChange={(event) => {setChordDiversityInput(event.value)}}/>
             </Box>
 
