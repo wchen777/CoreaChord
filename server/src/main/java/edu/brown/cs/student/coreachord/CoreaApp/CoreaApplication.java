@@ -18,6 +18,9 @@ public class CoreaApplication {
   public enum Root { // 12 possible roots
     C, Db, D, Eb, E, F, Gb, G, Ab, A, Bb, B
   }
+  public enum Diversity {
+    Low, Medium, High
+  }
 
   private static final int EIGHT_BARS = 8;
   private static final int SIXTEEN_BARS = 16;
@@ -30,11 +33,13 @@ public class CoreaApplication {
   private static final Random RAND = new Random();
 
   private TransitionMatrix lowDiversity;
-
+  private TransitionMatrix mediumDiversity; // medium,
+  private TransitionMatrix highDiversity; // high diversity matrices
 
   public CoreaApplication(TransitionMatrix lowDiversity) {
     // set transition matrices fields
     this.lowDiversity = lowDiversity;
+    // TODO: initialize medium & high diversity matrices
 
     // populating Enum sets with all values in our enum definitions
     Set<Quality> qualityset = EnumSet.allOf(Quality.class);
@@ -67,15 +72,23 @@ public class CoreaApplication {
    * @param numbars number of bars
    *
    */
-  public void generateChords(Chord startingchord, int numbars) {
+  public void generateChords(Chord startingchord, int numbars, Diversity diversityLevel) {
     if (!(numbars == EIGHT_BARS) && !(numbars == SIXTEEN_BARS) && !(numbars == THIRTY_TWO_BARS)) {
       result = new ArrayList<>();
       return; // check for specific inputs, if not one of those, return null.
     }
-    result = this.markovChain(startingchord, numbars); // call helper method
+    TransitionMatrix matrix = lowDiversity;
+    if (diversityLevel == Diversity.Low) {
+      matrix = lowDiversity;
+    } else if (diversityLevel == Diversity.Medium) {
+      matrix = mediumDiversity;
+    } else if (diversityLevel == Diversity.High) {
+      matrix = highDiversity;
+    }
+    result = this.markovChain(startingchord, numbars, matrix); // call helper method
   }
 
-  private List<GeneratedChord> markovChain(Chord startingchord, int numbars) {
+  private List<GeneratedChord> markovChain(Chord startingchord, int numbars, TransitionMatrix matrix) {
     ArrayList<GeneratedChord> chordProgression = new ArrayList<>();
     int n = stateSpace.size(); // all possible chord outcomes
 
@@ -101,7 +114,7 @@ public class CoreaApplication {
       int currrowstart = currchord.getRoot().ordinal() * numqualities; // start from 0
 
       // get the next chord index based on the current chord
-      int nextchordindex = this.nextChordFromQualityCase(lowDiversity, currchord, currrowstart);
+      int nextchordindex = this.nextChordFromQualityCase(matrix, currchord, currrowstart);
 
       // update currchord
       currchord = TransitionMatrix.getCorrespondingChord(nextchordindex, numqualities);

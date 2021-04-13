@@ -25,13 +25,13 @@ public class GenerateChords implements Executable {
   }
   @Override
   public void execute(String[] input) {
-    if (input.length != 4) {
+    if (input.length != 5) {
       System.out.println("ERROR: Incorrect number of arguments for generate-chords");
       return;
     }
     try {
       Chord inputChord = new Chord(CoreaApplication.Root.valueOf(input[1]), CoreaApplication.Quality.valueOf(input[2]));
-      callGenerateChords.generateChords(inputChord, Integer.parseInt(input[3]));
+      callGenerateChords.generateChords(inputChord, Integer.parseInt(input[3]), CoreaApplication.Diversity.valueOf(input[4]));
       result = callGenerateChords.getResult();
       for (GeneratedChord gChord: result) {
         System.out.println("\n" + gChord);

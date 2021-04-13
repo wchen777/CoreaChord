@@ -68,7 +68,7 @@ public final class Main {
 
     System.out.println("Welcome to our REPL\nCurrently we only support "
       + "the following commands:\n"
-      + "generate-chords <ROOT> <QUALITY> <NUMBARS>");
+      + "generate-chords <ROOT> <QUALITY> <NUMBARS> <DIVERSITY>");
     HashMap<String, Executable> commands = new HashMap<>();
 
     generateChordsApp = new GenerateChords(lowDiversity);
@@ -139,11 +139,10 @@ public final class Main {
         progRoot = startChord.substring(0,2);
         progQuality = startChord.substring(2);
       }
-
       // Convert the progQuality to enum
       progQuality = QUALITIES.get(progQuality);
 
-      String[] command = {"generate-chords", progRoot, progQuality, Integer.toString(numBars)};
+      String[] command = {"generate-chords", progRoot, progQuality, Integer.toString(numBars), chordDiversity};
 
       // Call the app to generate the chords
       generateChordsApp.execute(command);
