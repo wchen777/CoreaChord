@@ -41,9 +41,9 @@ export default function LeadSheetButtons() {
     /**
      * Plays the audio for the chord progression.
      */
-    function playChordProgression() {
+    function playChordProgression(chordProgression, startIndex) {
         // check if chordProg exists
-        if (chordProg === {} || chordProg === undefined) return
+        if (chordProgression === {} || chordProgression === undefined) return
 
         // Start up the synths needed to play four-note chords
         audioShouldBePlaying.current = true;
@@ -56,7 +56,7 @@ export default function LeadSheetButtons() {
             const synth5 = new Tone.Sampler(pianoSample).toDestination();
             synths.current = [synth1, synth2, synth3, synth4, synth5];
         }
-        playChordsSetTimeoutLoop(chordProg, 0);
+        playChordsSetTimeoutLoop(chordProgression, startIndex);
     }
 
     /**
@@ -134,7 +134,7 @@ export default function LeadSheetButtons() {
     /**
      * Allows the user to download the lead sheet.
      */
-    function downloadChordProgression() {
+    function downloadChordProgression(chordProgression) {
         // TODO MAXIME use PDFs instead of TXTs
         /*
          * Code in this snippet adapted from:
@@ -142,7 +142,7 @@ export default function LeadSheetButtons() {
          * not-through-server
          */
         const filename = "lead-sheet.txt";
-        const text = formatChordProgressionAsText(chordProg);
+        const text = formatChordProgressionAsText(chordProgression);
         let element = document.createElement('a');
         element.setAttribute('href', 'data:text/plain;charset=utf-8,' + encodeURIComponent(text));
         element.setAttribute('download', filename);
@@ -199,7 +199,7 @@ export default function LeadSheetButtons() {
                 size="md"
                 py={4}
                 icon={<FaPlay />}
-                onClick={() => { playChordProgression() }}
+                onClick={() => { playChordProgression(chordProg, 0) }}
             />
 
             <IconButton
@@ -222,7 +222,7 @@ export default function LeadSheetButtons() {
                     size="md"
                     py={4}
                     icon={<DownloadIcon />}
-                    onClick={() => { downloadChordProgression() }}
+                    onClick={() => { downloadChordProgression(chordProg) }}
                 />
             </Tooltip>
 
