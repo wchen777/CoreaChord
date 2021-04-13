@@ -4,7 +4,6 @@ export const numBars =
 export const chordDiversity =
     [{value: "Low", label: "Low"}, {value: "Medium", label: "Medium"}, {value: "High", label: "High"}]
 
-// TODO: need to fill in all chord values
 export const chordValues = [{value: 'None', label: 'None'}, {value: 'Cmaj7', label: 'Cmaj7'},
   {value: 'C-7', label: 'Cm7'}, {value: 'C7', label: 'C7'}, {value: 'C-7b5', label: 'Cm7b5'},
   {value: 'Dbmaj7', label: 'Dbmaj7'}, {value: 'Db-7', label: 'Dbm7'}, {value: 'Db7', label: 'Db7'},

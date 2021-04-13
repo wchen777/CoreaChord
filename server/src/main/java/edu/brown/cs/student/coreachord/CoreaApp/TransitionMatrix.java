@@ -88,8 +88,6 @@ public class TransitionMatrix {
 
         List<Tuple<Double, Integer>> cumulativeDist = new ArrayList<>();
 
-//        int[] cpdarray = new int[rowlen]; // array as long as one row
-
         double cumulative = 0;
         for (int i = 0; i < rowlen; i++) {
             double curr = tmat[row][i];

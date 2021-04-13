@@ -10,7 +10,7 @@ import {NUM_MEASURES_PER_BAR, getChordTextRepresentation, getBarList} from '../.
 export default function LeadSheet() {
   const {chordProg, setChordProg} = useChordProgContext();
 
-  console.log(chordProg)
+  // console.log(chordProg)
 
   const bgColor = useColorModeValue('gray.200', 'gray.700')
 
