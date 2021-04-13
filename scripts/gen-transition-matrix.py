@@ -114,7 +114,7 @@ def maj7_rule(chord_num, row):
     # G
     u5 = up5(chord_name_num)
     # G7
-    row[(u5 * quals) + 3 + 1] = 0.2
+    row[(u5 * quals) + 3 + 1] = 0.15
 
     # TOTAL 0.05
     # B
