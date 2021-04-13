@@ -1,6 +1,7 @@
 package edu.brown.cs.student.coreachord;
 
 import edu.brown.cs.student.coreachord.CSV.CSVReader;
+import edu.brown.cs.student.coreachord.Commands.GenerateChords;
 import edu.brown.cs.student.coreachord.CoreaApp.Chord;
 import edu.brown.cs.student.coreachord.CoreaApp.CoreaApplication;
 import edu.brown.cs.student.coreachord.CoreaApp.GeneratedChord;
@@ -14,10 +15,10 @@ import java.util.Arrays;
 import java.util.List;
 
 public class MarkovChainTest {
-  private CoreaApplication coreaapp8bars; // 8 bars
-  private CoreaApplication coreaapp16bars; // 16 bars
-  private CoreaApplication coreaapp32bars; // 32 bars
-  private CoreaApplication coreaappinvalid; // invalid app
+  private GenerateChords coreaapp8bars; // 8 bars
+  private GenerateChords coreaapp16bars; // 16 bars
+  private GenerateChords coreaapp32bars; // 32 bars
+  private GenerateChords coreaappinvalid; // invalid app
 
   @Before
   public void setUp() { // initialize
@@ -43,24 +44,21 @@ public class MarkovChainTest {
   private void setUpCoreaApps() {
     // initialize starting chords
     System.out.println("setting up corea apps...");
-
-    // TODO: change this
-
     // read in transition matrix csvs
     CSVReader csv = new CSVReader();
 
     List<String[]> lowDivCSV = csv.parseCSV("../scripts/t-mat-low.csv");
     TransitionMatrix lowDiversity = new TransitionMatrix(lowDivCSV);
 
-    coreaapp8bars = new CoreaApplication(lowDiversity); // 8-bar app
-    coreaapp16bars = new CoreaApplication(lowDiversity); // 16-bar app
-    coreaapp32bars = new CoreaApplication(lowDiversity); // 32-bar app
-    coreaappinvalid = new CoreaApplication(lowDiversity); // invalid bar param
+    coreaapp8bars = new GenerateChords(lowDiversity); // 8-bar app
+    coreaapp16bars = new GenerateChords(lowDiversity); // 16-bar app
+    coreaapp32bars = new GenerateChords(lowDiversity); // 32-bar app
+    coreaappinvalid = new GenerateChords(lowDiversity); // invalid bar param
 
-    coreaapp8bars.execute("generate-chords C MAJOR7 8");
-    coreaapp16bars.execute("generate-chords Eb MINOR7 16");
-    coreaapp32bars.execute("generate-chords G MAJOR7FLAT5 32");
-    coreaappinvalid.execute("generate-chords Bb DOMINANT7 5");
+    coreaapp8bars.execute(new String[]{"generate-chords", "C", "MAJOR7", "8"});
+    coreaapp16bars.execute(new String[]{"generate-chords", "Eb", "MINOR7", "16"});
+    coreaapp32bars.execute(new String[]{"generate-chords", "G", "MINOR7FLAT5", "32"});
+    coreaappinvalid.execute(new String[]{"generate-chords", "Bb", "DOMINANT7", "5"});
 
     // checking the contents of 8-bar corea app
     System.out.println("8-bar corea app chords: ");

@@ -11,7 +11,7 @@ import java.util.Iterator;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public class CoreaApplication implements Executable {
+public class CoreaApplication {
   public enum Quality { // 4 possible qualities
     MAJOR7, MINOR7, MINOR7FLAT5, DOMINANT7
   }
@@ -67,7 +67,7 @@ public class CoreaApplication implements Executable {
    * @param numbars number of bars
    *
    */
-  private void generateChords(Chord startingchord, int numbars) {
+  public void generateChords(Chord startingchord, int numbars) {
     if (!(numbars == EIGHT_BARS) && !(numbars == SIXTEEN_BARS) && !(numbars == THIRTY_TWO_BARS)) {
       result = new ArrayList<>();
       return; // check for specific inputs, if not one of those, return null.
@@ -101,7 +101,6 @@ public class CoreaApplication implements Executable {
       int currrowstart = currchord.getRoot().ordinal() * numqualities; // start from 0
 
       // get the next chord index based on the current chord
-      // TODO: allow for different diversities
       int nextchordindex = this.nextChordFromQualityCase(lowDiversity, currchord, currrowstart);
 
       // update currchord
@@ -188,35 +187,5 @@ public class CoreaApplication implements Executable {
    */
   public List<GeneratedChord> getResult() {
     return result;
-  }
-
-  @Override
-  public void execute(String input) {
-    List<String> args = new ArrayList<>();
-    result = new ArrayList<>(); //Clear out results in order to generate new Chords
-    Matcher m = Pattern.compile("([^\"]\\S*|\".+?\")\\s*").matcher(input);
-    while (m.find()) {
-      args.add(m.group(1));
-    }
-    switch (args.get(0)) {
-      case "generate-chords":
-        try {
-          Chord inputChord = new Chord(Root.valueOf(args.get(1)), Quality.valueOf(args.get(2)));
-          generateChords(inputChord, Integer.parseInt(args.get(3)));
-
-          for (GeneratedChord gChord: result) {
-            System.out.println("\n" + gChord);
-          }
-
-        } catch (IndexOutOfBoundsException i) {
-          System.out.println("ERROR: incorrect input arguments for generate-chords command");
-        } catch (IllegalArgumentException e) {
-          System.out.println("ERROR: inappropriate root or quality");
-        }
-        break;
-      default:
-        System.out.println("ERROR: Command DNE :/");
-        break;
-    }
   }
 }

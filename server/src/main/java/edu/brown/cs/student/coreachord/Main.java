@@ -30,7 +30,7 @@ public final class Main {
   private static final int DEFAULT_PORT = 4567;
   private static final Gson GSON = new Gson();
   private static Map<String, String> QUALITIES;
-  private static CoreaApplication coreaApp;
+  private static GenerateChords generateChordsApp;
   private final String[] args;
 
   public static void main(String[] args) {
@@ -71,8 +71,8 @@ public final class Main {
       + "generate-chords <ROOT> <QUALITY> <NUMBARS>");
     HashMap<String, Executable> commands = new HashMap<>();
 
-    coreaApp = new CoreaApplication(lowDiversity);
-    commands.put("generate-chords", coreaApp);
+    generateChordsApp = new GenerateChords(lowDiversity);
+    commands.put("generate-chords", generateChordsApp);
 
     REPL repl = new REPL(commands);
 
@@ -143,12 +143,11 @@ public final class Main {
       // Convert the progQuality to enum
       progQuality = QUALITIES.get(progQuality);
 
-      String command = "generate-chords " + progRoot + " " + progQuality + " " + numBars;
-      System.out.println(command); // TODO delete this later
+      String[] command = {"generate-chords", progRoot, progQuality, Integer.toString(numBars)};
 
       // Call the app to generate the chords
-      coreaApp.execute(command);
-      List<GeneratedChord> results = coreaApp.getResult();
+      generateChordsApp.execute(command);
+      List<GeneratedChord> results = generateChordsApp.getResult();
 
       // Convert the GeneratedChord List into JSON
       JsonElement element = GSON.toJsonTree(results, new TypeToken<List<GeneratedChord>>(){}.getType());
