@@ -46,7 +46,7 @@ public class TransitionMatrix {
      * (Handles chord-index correspondence in the transition
      * matrix)
      * @param index
-     * @return correspoinding Chord
+     * @return corresponding Chord
      */
     public static Chord getCorrespondingChord(int index, int numqualities) {
         // Root order: C, Db, D, Eb, E, F, Gb, G, Ab, A, Bb, B
@@ -100,7 +100,7 @@ public class TransitionMatrix {
         }
 
         // get index from probability distribution
-        return digitize(cumulativeDist);
+        return digitize(cumulativeDist, 1.0);
     }
 
     /**
@@ -108,8 +108,8 @@ public class TransitionMatrix {
      * @param cumulativeDist - monotonically increasing array where the final value should equal 1, representing cumulative distribution
      * @return - the random index given the weights of the array
      */
-    public int digitize(List<Tuple<Double, Integer>> cumulativeDist) {
-        double rand = Math.random();
+    public int digitize(List<Tuple<Double, Integer>> cumulativeDist, double sumOfProbabbilities) {
+        double rand = Math.random() * sumOfProbabbilities;
 
         for (Tuple<Double, Integer> probToIndex : cumulativeDist) {
             // if generated value is less than the probability cumulative distribution

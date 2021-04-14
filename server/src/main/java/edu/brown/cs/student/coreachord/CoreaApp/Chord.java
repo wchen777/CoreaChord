@@ -1,4 +1,7 @@
 package edu.brown.cs.student.coreachord.CoreaApp;
+
+import java.util.Objects;
+
 /*
  * Class that represents a single Chord. (Example: C, B)
  */
@@ -22,5 +25,18 @@ public class Chord {
   @Override
   public String toString() {
     return "Root: " + root + "\nQuality: " + quality;
+  }
+
+  @Override
+  public boolean equals(Object o) {
+    if (this == o) return true;
+    if (o == null || getClass() != o.getClass()) return false;
+    Chord chord = (Chord) o;
+    return quality.equals(chord.getQuality()) && root.equals(chord.getRoot());
+  }
+
+  @Override
+  public int hashCode() {
+    return Objects.hash(quality, root);
   }
 }

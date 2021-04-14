@@ -9,5 +9,5 @@ public interface Executable {
   /**
    * @param input  - the command given by the user
    */
-  void execute(String input);
+  void execute(String[] input);
 }
