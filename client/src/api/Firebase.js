@@ -1,5 +1,6 @@
 import firebase from "firebase/app";
 import "firebase/firestore";
+import { v4 as uuidv4 } from 'uuid';
 
 
 export async function registration({ email, password }) {
@@ -26,5 +27,24 @@ export async function signOut() {
     await firebase.auth().signOut();
   } catch (err) {
     alert('Error in account sign out.' + err.message);
+  }
+}
+
+export async function saveSheet({ chordProg, userID, name }) {
+  try {
+    await firebase
+      .firestore()
+      .collection("sheets")
+      .doc(uuidv4())
+      .set({
+        chordProg,
+        userID,
+        createdAt: new Date().toDateString(),
+        name
+      })
+
+
+  } catch (err) {
+    alert('Error in save sheets.' + err.message);
   }
 }

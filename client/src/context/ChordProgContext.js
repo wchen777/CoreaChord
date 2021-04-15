@@ -4,7 +4,7 @@ const ChordProgContext = createContext()
 
 // provider wrapper for context
 export const ChordProgContextProvider = ( {children} ) => {
-  const [chordProg, setChordProg] = useState({})
+  const [chordProg, setChordProg] = useState([])
 
   return <ChordProgContext.Provider value={{chordProg, setChordProg}} > {children} </ChordProgContext.Provider>
 }

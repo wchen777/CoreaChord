@@ -9,11 +9,17 @@ import { useChordProgContext } from '../../../context/ChordProgContext'
 export default function LoadExistingChanges() {
   const rand = Math.floor(Math.random() * changes.length)
   const [existing, setExisting] = useState(changes[rand].value)
-  const {chordProg, setChordProg} = useChordProgContext()
+  const { chordProg, setChordProg } = useChordProgContext()
   const labelColor = useColorModeValue('gray.700', 'gray.200')
 
   useEffect(() => {
-    setChordProg(changes[rand].value)
+
+    if (chordProg.length === 0) {
+      setChordProg(changes[rand].value)
+    } else {
+      console.log(chordProg)
+    }
+
   }, [])
 
   // make sure to always copy over any changes in HomeBody.js
@@ -52,12 +58,12 @@ export default function LoadExistingChanges() {
 
   return (
     <Flex w="60" ml={6} className="side-select" flexDirection="column" justifyContent="flex-start">
-      <Text fontWeight="semibold" my={4} fontSize="lg" color={labelColor}>Load Existing Changes <br/> from Popular Songs</Text>
+      <Text fontWeight="semibold" my={4} fontSize="lg" color={labelColor}>Load Existing Changes <br /> from Popular Songs</Text>
 
-      <Select styles={customSelectStyles} options={changes} placeholder="Existing Changes" isSearchable={false} onChange={(event) => {setExisting(event.value)}} defaultValue={changes[rand]}/>
-      
-      <Button colorScheme="teal" px={5} mx={12} mt={4} size="md" 
-        onClick={() => {existing == null ? alert("Please select changes before loading!") : setChordProg(existing)}}>
+      <Select styles={customSelectStyles} options={changes} placeholder="Existing Changes" isSearchable={false} onChange={(event) => { setExisting(event.value) }} defaultValue={changes[rand]} />
+
+      <Button colorScheme="teal" px={5} mx={12} mt={4} size="md"
+        onClick={() => { existing == null ? alert("Please select changes before loading!") : setChordProg(existing) }}>
         Load
       </Button>
 

@@ -10,7 +10,7 @@ import { numBars, chordDiversity, chordValues } from '../../../data/GenerateSett
 
 import ResultsBody from './ResultsBody'
 
-export default function HomeBody() {
+export default function HomeBody( { synths }) {
   const labelColor = useColorModeValue('gray.700', 'gray.200')
   const {chordProg, setChordProg} = useChordProgContext();
   const [startChordInput, setStartChordInput] = useState("");
@@ -156,7 +156,7 @@ export default function HomeBody() {
         </HStack>
       </Center>
 
-      <ResultsBody/>
+      <ResultsBody synths={synths}/>
 
     </Container>
   )

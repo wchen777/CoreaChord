@@ -43,6 +43,7 @@ export const playChord = (synths, chordPlaying) => {
   const now = Tone.now();
 
   if (synths.length < chordNoteNames.length) {
+    console.log(synths.length, "synths")
     throw new Error("ERROR!!! Not enough synths to play the chord correctly");
   }
   for (let i = 0; i < chordNoteNames.length; i++) {

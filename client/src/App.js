@@ -9,6 +9,9 @@ import './App.scss'
 import HomePage from './pages/HomePage';
 import { ChordProgContextProvider } from './context/ChordProgContext'
 import { AuthProvider, AuthContext } from './context/AuthContext'
+// import { BrowserRouter, Switch } from 'react-router-dom'
+// import DynamicRoute from './routes/DynamicRoute';
+// import SavedSheetsPage from './pages/SavedSheetsPage';
 // import firebase from "firebase/app";
 // import "firebase/auth";
 
@@ -21,14 +24,15 @@ function App() {
 
       <AuthProvider>
         <ChordProgContextProvider>
-          <Box textAlign="center" fontSize="xl">
-            <Grid minH="100vh">
+          {/* <BrowserRouter> */}
+            <Box textAlign="center" fontSize="xl">
+              <Grid minH="100vh">
 
-              {/* TODO: NEED REACT ROUTER DOM */}
-              <HomePage />
+                <HomePage/>
 
-            </Grid>
-          </Box>
+              </Grid>
+            </Box>
+          {/* </BrowserRouter> */}
         </ChordProgContextProvider>
       </AuthProvider>
       {/* </FirebaseAuthProvider> */}
