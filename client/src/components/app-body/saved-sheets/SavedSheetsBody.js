@@ -41,11 +41,11 @@ export default function SavedSheetsBody({ setShowSaved }) {
   const chordsList = userSheets.map((sheet, index) => <ChordProgCard key={index} chordProgData={sheet} setShowSaved={setShowSaved} />)
 
   return (
-    <Container className="home-body-container" p={5}>
+    <Container className="home-body-container" p={8} >
       { userSheets.length === 0 ?
         <Text textAlign='center' mx="auto"> You haven't saved any sheets yet!</Text>
         :
-        <Grid templateColumns="repeat(4, 1fr)" gap={6}>
+        <Grid templateColumns="repeat(4, 1fr)" gap={6} pb={12}>
           {chordsList}
         </Grid>
       }

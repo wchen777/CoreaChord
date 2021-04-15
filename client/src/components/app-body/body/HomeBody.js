@@ -1,21 +1,21 @@
-import React, {useState} from 'react'
+import React, { useState } from 'react'
 import {
   Container, HStack, Center, Button, Tooltip, Box, Text, useColorModeValue
 } from "@chakra-ui/react"
 import Select from 'react-select'
 import axios from 'axios'
-import {useChordProgContext} from '../../../context/ChordProgContext'
+import { useChordProgContext } from '../../../context/ChordProgContext'
 
 import { numBars, chordDiversity, chordValues } from '../../../data/GenerateSettings'
 
 import ResultsBody from './ResultsBody'
 
-export default function HomeBody( { synths }) {
+export default function HomeBody({ synths }) {
   const labelColor = useColorModeValue('gray.700', 'gray.200')
-  const {chordProg, setChordProg} = useChordProgContext();
-  const [startChordInput, setStartChordInput] = useState("");
-  const [chordDiversityInput, setChordDiversityInput] = useState("");
-  const [numBarsInput, setNumBarsInput] = useState(0);
+  const { chordProg, setChordProg } = useChordProgContext();
+  const [startChordInput, setStartChordInput] = useState("None");
+  const [chordDiversityInput, setChordDiversityInput] = useState("Medium");
+  const [numBarsInput, setNumBarsInput] = useState(32);
   const [loading, setLoading] = useState(false)
 
 
@@ -84,23 +84,23 @@ export default function HomeBody( { synths }) {
       }
     }
     axios.post(
-        "http://localhost:4567/generate",
-        toSend,
-        config
+      "http://localhost:4567/generate",
+      toSend,
+      config
     )
-        .then(response => {
-          return response.data;
-        })
-        .then((data) => {
-          // console.log(data);
-          setChordProg(data);
-          setLoading(false)
-        })
-        .catch(function (error) {
-          console.log(error);
-          setLoading(false)
-        });
-         
+      .then(response => {
+        return response.data;
+      })
+      .then((data) => {
+        // console.log(data);
+        setChordProg(data);
+        setLoading(false)
+      })
+      .catch(function (error) {
+        console.log(error);
+        setLoading(false)
+      });
+
   }
 
   return (
@@ -121,8 +121,8 @@ export default function HomeBody( { synths }) {
                 fontSize="sm">
                 <Text fontWeight="semibold" my={2} fontSize="lg" color={labelColor}># of Bars</Text>
               </Tooltip>
-              <Select styles={customSelectStyles} options={numBars} placeholder="# of Bars" defaultValue={32}
-                      isSearchable={false} onChange={(event) => {setNumBarsInput(event.value)}}/>
+              <Select styles={customSelectStyles} options={numBars} placeholder="# of Bars" defaultValue={{label: 32, value: 32}}
+                isSearchable={false} onChange={(event) => { setNumBarsInput(event.value) }} />
             </Box>
 
             <Box w="60">
@@ -132,8 +132,8 @@ export default function HomeBody( { synths }) {
                 fontSize="sm">
                 <Text fontWeight="semibold" my={2} fontSize="lg" color={labelColor}>Starting Chord</Text>
               </Tooltip>
-              <Select styles={customSelectStyles} options={chordValues} placeholder="Starting Chord" defaultValue="None"
-                      isSearchable={false} onChange={(event) => {setStartChordInput(event.value)}}/>
+              <Select styles={customSelectStyles} options={chordValues} placeholder="Starting Chord"
+                isSearchable={false} onChange={(event) => { setStartChordInput(event.value) }} defaultValue={{label: "None", value: "None"}} />
             </Box>
 
             <Box w="60">
@@ -143,8 +143,8 @@ export default function HomeBody( { synths }) {
                 fontSize="sm">
                 <Text fontWeight="semibold" my={2} fontSize="lg" color={labelColor}>Chord Diversity</Text>
               </Tooltip>
-              <Select styles={customSelectStyles} options={chordDiversity} defaultValue="Medium" placeholder="Chord Diversity"
-                      isSearchable={false} onChange={(event) => {setChordDiversityInput(event.value)}}/>
+              <Select styles={customSelectStyles} options={chordDiversity} defaultValue={{label: "Medium", value: "Medium"}} placeholder="Chord Diversity"
+                isSearchable={false} onChange={(event) => { setChordDiversityInput(event.value) }} />
             </Box>
 
           </HStack>
@@ -156,7 +156,7 @@ export default function HomeBody( { synths }) {
         </HStack>
       </Center>
 
-      <ResultsBody synths={synths}/>
+      <ResultsBody synths={synths} />
 
     </Container>
   )

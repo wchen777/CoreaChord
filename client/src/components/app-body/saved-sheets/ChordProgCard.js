@@ -17,24 +17,17 @@ export default function ChordProgCard({ chordProgData, setShowSaved }) {
   return (
     <div role="button">
       <Box maxW="sm" borderWidth="1px" borderRadius="lg" overflow="hidden" onClick={() => onChordProgSelect()}>
-        <Box backgroundColor="red.200">
+
+        <Box backgroundColor={chordProgData.color ?? "gray.300"} py={3}>
           <Image src={clefImg} alt="img display" height={150} mx="auto" />
         </Box>
+
         <Box p="6">
           <Box d="flex" alignItems="baseline">
             <Badge borderRadius="full" px="2" colorScheme="teal" ml={2} my={1}>
               Chord Progression
           </Badge>
-            {/* <Box
-            color="gray.500"
-            fontWeight="semibold"
-            letterSpacing="wide"
-            fontSize="xs"
-            textTransform="uppercase"
-            ml="2"
-          >
-            Thu Apr 15 2021
-            </Box> */}
+
           </Box>
 
           <Box
