@@ -16,8 +16,6 @@ export default function LoadExistingChanges() {
 
     if (chordProg.length === 0) {
       setChordProg(changes[rand].value)
-    } else {
-      console.log(chordProg)
     }
 
   }, [])

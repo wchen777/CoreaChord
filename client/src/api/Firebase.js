@@ -30,7 +30,7 @@ export async function signOut() {
   }
 }
 
-export async function saveSheet({ chordProg, userID, name }) {
+export async function saveSheet({ chordProg, userID, name, color }) {
   try {
     await firebase
       .firestore()
@@ -40,7 +40,8 @@ export async function saveSheet({ chordProg, userID, name }) {
         chordProg,
         userID,
         createdAt: new Date().toDateString(),
-        name
+        name,
+        color
       })
 
 
@@ -48,3 +49,5 @@ export async function saveSheet({ chordProg, userID, name }) {
     alert('Error in save sheets.' + err.message);
   }
 }
+
+

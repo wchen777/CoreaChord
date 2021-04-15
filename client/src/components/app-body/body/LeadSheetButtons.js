@@ -10,9 +10,7 @@ import {
 } from '../../../ChordUtils'
 
 export default function LeadSheetButtons(props) {
-  // const synths = useRef([]);
   const audioShouldBePlaying = useRef(false);
-  // const curPlayingChordNotes = useRef([]);
   const DELAY = 1.0;
   const MAX_CHORD_TEXT_REPRESENTATION_LENGTH = 6;
   const FIRST_CHORD_PLAYING_WAIT_FRAMES = 500;
@@ -29,9 +27,7 @@ export default function LeadSheetButtons(props) {
     // check if chordProg exists
     if (chordProgression === {} || chordProgression === undefined) return
 
-    // Start up the synths needed to play four-note chords
     audioShouldBePlaying.current = true;
-    // curPlayingChordNotes.current = [];
     playChordsSetTimeoutLoop(chordProgression, startIndex);
     highlightChordsSetTimeoutLoop(chordProgression, startIndex);
   }
@@ -48,8 +44,7 @@ export default function LeadSheetButtons(props) {
     let lengthOfWaitFrames;
     if (chordPlayingIndex === 0) {
       lengthOfWaitFrames = FIRST_CHORD_PLAYING_WAIT_FRAMES;
-      // TODO this sometimes causes a "buffer is not set or loaded" glitch
-      //  that is probably worse on slow computers
+      // this may cause a "buffer is not set or loaded" glitch on slow computers
     } else {
       const chordForLength = chordProgression[chordPlayingIndex - 1];
       const lengthOfWait = (getChordMeasureLength(chordForLength) * DELAY);
@@ -66,6 +61,12 @@ export default function LeadSheetButtons(props) {
     }, lengthOfWaitFrames);
   }
 
+  /**
+   * Recursive setTimeout function that highlights chords in rhythm as the chord progression is played.
+   *
+   * @param chordProgression - the chord progression being played
+   * @param chordPlayingIndex - the index of the measure that should be played in this step
+   */
   function highlightChordsSetTimeoutLoop(chordProgression, chordPlayingIndex) {
     // Get the length of the chordProgression
     let chordProgressionNumMeasures = 0;
@@ -101,24 +102,13 @@ export default function LeadSheetButtons(props) {
    * Stops the audio, if it's playing.
    */
   function stopAudio() {
-    // TODO this method doesn't stop the audio immediately: only after the current chord is finished playing
     audioShouldBePlaying.current = false;
   }
-
-  // TODO running this causes an error, but we only need it if stopping audio after the current chord isn't good enough
-  // function stopPlayingChord(synths, chordNotes, time) {
-  //   for (let i = 0; i < chordNotes.length; i++) {
-  //     console.log("releasing note " + chordNotes[i] + " at time " + time);
-  //     synths[i].triggerRelease(chordNotes[i], time + (i / 10));
-  //   }
-  //   curPlayingChordNotes.current = [];
-  // }
 
   /**
    * Allows the user to download the lead sheet.
    */
   function downloadChordProgression(chordProgression) {
-    // TODO MAXIME use PDFs instead of TXTs
     /*
      * Code in this snippet adapted from:
      * https://stackoverflow.com/questions/3665115/how-to-create-a-file-in-memory-for-user-to-download-but-
@@ -198,7 +188,6 @@ export default function LeadSheetButtons(props) {
             }}
         />
 
-        {/*TODO MAXIME swap out the .txt for .pdf when you implement that*/}
         <Tooltip
             label="Download your lead sheet as .txt format."
             aria-label="measures tooltip"

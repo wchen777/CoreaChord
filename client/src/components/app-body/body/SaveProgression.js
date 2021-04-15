@@ -6,6 +6,9 @@ import { AuthContext } from '../../../context/AuthContext'
 import { useChordProgContext } from '../../../context/ChordProgContext'
 import { saveSheet } from '../../../api/Firebase'
 
+const colors = ["red.300", "orange.300", "blue.300", "cyan.300", "green.300", 
+"purple.300", "cyan.300", "gray.300", "pink.300", "yellow.300"]
+
 export default function SaveProgression() {
   const labelColor = useColorModeValue('gray.700', 'gray.200')
 
@@ -24,8 +27,9 @@ export default function SaveProgression() {
     if (!user) {
       alert("Please sign in or register for an account to save your chord progression.")
     } else {
+      let r = Math.floor(Math.random() * colors.length)
       setLoadingButton(true)
-      await saveSheet({ chordProg, userID: user.uid, name: chordProgName })
+      await saveSheet({ chordProg, userID: user.uid, name: chordProgName, color: colors[r] })
       setLoadingButton(false)
       setSaveButtonText("Saved!")
       setTimeout(() => setSaveButtonText("Save for Later"), 5000)

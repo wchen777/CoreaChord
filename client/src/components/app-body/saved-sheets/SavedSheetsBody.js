@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useContext } from 'react'
 import {
-  Container, HStack, Center, Button, Tooltip, Box, Text, useColorModeValue, Grid
+  Container, Text, Grid
 } from "@chakra-ui/react"
 import ChordProgCard from './ChordProgCard'
 import firebase from "firebase/app";
@@ -36,16 +36,14 @@ export default function SavedSheetsBody({ setShowSaved }) {
     fetchSheets(user.uid)
   }, [])
 
-  console.log(userSheets)
-
   const chordsList = userSheets.map((sheet, index) => <ChordProgCard key={index} chordProgData={sheet} setShowSaved={setShowSaved} />)
 
   return (
-    <Container className="home-body-container" p={5}>
+    <Container className="home-body-container" p={8} >
       { userSheets.length === 0 ?
         <Text textAlign='center' mx="auto"> You haven't saved any sheets yet!</Text>
         :
-        <Grid templateColumns="repeat(4, 1fr)" gap={6}>
+        <Grid templateColumns="repeat(4, 1fr)" gap={6} pb={12}>
           {chordsList}
         </Grid>
       }

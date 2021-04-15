@@ -1,17 +1,14 @@
 import React from 'react'
 import {
-  Box, IconButton, Tooltip,
+  Box, Tooltip,
   useColorModeValue
 } from "@chakra-ui/react"
 import './LeadSheet.css'
 import {useChordProgContext} from '../../../context/ChordProgContext'
 import {NUM_MEASURES_PER_BAR, CONTINUE_CHORD_REPRESENTATION, getChordTextRepresentation, getBarList, playChord} from '../../../ChordUtils'
-import {DownloadIcon} from "@chakra-ui/icons";
 
 export default function LeadSheet(props) {
   const {chordProg, setChordProg} = useChordProgContext();
-
-  // console.log(chordProg)
 
   const bgColor = useColorModeValue('gray.200', 'gray.700')
 
