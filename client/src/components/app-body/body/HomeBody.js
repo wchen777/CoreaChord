@@ -11,14 +11,18 @@ import { numBars, chordDiversity, chordValues } from '../../../data/GenerateSett
 import ResultsBody from './ResultsBody'
 
 export default function HomeBody({ synths }) {
-  const labelColor = useColorModeValue('gray.700', 'gray.200')
   const { chordProg, setChordProg } = useChordProgContext();
   const [startChordInput, setStartChordInput] = useState("None");
   const [chordDiversityInput, setChordDiversityInput] = useState("Medium");
   const [numBarsInput, setNumBarsInput] = useState(32);
   const [loading, setLoading] = useState(false)
 
+  const labelColor = useColorModeValue('gray.700', 'gray.200')
 
+  /*
+   * The following code is used for styling the react-select Select components, since they aren't
+   * part of the Chakra UI package, and therefore don't get styled automatically.
+   */
   const selectBackgroundColor = useColorModeValue('white', '#1A202C')
   const selectOptionHoverColor = useColorModeValue('#b3d3ff', '#003680')
   const selectBorderColor = useColorModeValue('gray.200', 'gray.700')

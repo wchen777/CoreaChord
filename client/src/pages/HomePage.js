@@ -40,8 +40,11 @@ export default function HomePage() {
 
 
   // ------------- SYNTHS ----------------
-
-
+  /*
+   * The code below this line is used to load the synths that the program uses to play chords.
+   * These synths are passed down the sub components because if they are instantiated in a lower
+   * component that gets unmounted, the synths stop working.
+   */
   const synths = useRef([]);
 
   const pianoSample = {

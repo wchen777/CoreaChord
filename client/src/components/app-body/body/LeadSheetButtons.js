@@ -27,6 +27,7 @@ export default function LeadSheetButtons(props) {
     // check if chordProg exists
     if (chordProgression === {} || chordProgression === undefined) return
 
+    // Start playing the audio
     audioShouldBePlaying.current = true;
     playChordsSetTimeoutLoop(chordProgression, startIndex);
     highlightChordsSetTimeoutLoop(chordProgression, startIndex);
@@ -83,13 +84,16 @@ export default function LeadSheetButtons(props) {
     }
     setTimeout(() => {
       if (audioShouldBePlaying.current && (chordPlayingIndex + 1) < chordProgressionNumMeasures) {
+        // Unhighlight the last chord
         if (chordPlayingIndex > 0) {
           document.getElementById("chordBox" + (chordPlayingIndex - 1))
               .classList.remove("chordHighlighted");
         }
+        // Highlight the currently-playing chord
         document.getElementById("chordBox" + chordPlayingIndex).classList.add("chordHighlighted");
         highlightChordsSetTimeoutLoop(chordProgression, chordPlayingIndex + 1);
       } else {
+        // In the event that we've stopped playing, just unhighlight the last chord
         if (chordPlayingIndex > 0) {
           document.getElementById("chordBox" + (chordPlayingIndex - 1))
               .classList.remove("chordHighlighted");
