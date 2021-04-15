@@ -1,6 +1,5 @@
 package edu.brown.cs.student.coreachord.CoreaApp;
 
-import edu.brown.cs.student.coreachord.REPL.Executable;
 
 import java.util.List;
 import java.util.Random;
@@ -8,8 +7,6 @@ import java.util.ArrayList;
 import java.util.Set;
 import java.util.EnumSet;
 import java.util.Iterator;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 public class CoreaApplication {
   public enum Quality { // 4 possible qualities
@@ -70,6 +67,7 @@ public class CoreaApplication {
    *
    * @param startingchord starting chord
    * @param numbars number of bars
+   * @param diversityLevel between low/mid/high
    *
    */
   public void generateChords(Chord startingchord, int numbars, Diversity diversityLevel) {
@@ -91,9 +89,6 @@ public class CoreaApplication {
   private List<GeneratedChord> markovChain(Chord startingchord, int numbars, TransitionMatrix matrix) {
     ArrayList<GeneratedChord> chordProgression = new ArrayList<>();
     int n = stateSpace.size(); // all possible chord outcomes
-
-    // TODO: need to check the null case for starting chord,
-    //  generate a random chord as starting chord if it is null, this should be handled in front end
 
     // accumulated length to keep track of how much we have generated so far
     int accumulatedLength = 0;

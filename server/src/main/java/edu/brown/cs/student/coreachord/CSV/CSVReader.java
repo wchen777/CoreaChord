@@ -5,19 +5,14 @@ import java.io.FileReader;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Reads in a CSV file and outputs a matrix.
+ */
 public class CSVReader {
-
-
-  public CSVReader() {
-
-  }
-
-//    public void invalidFilePathHandler() {
-//        System.out.println("ERROR: invalid file.");
-//    }
 
   /**.
    * convert a csv file to a list of list of strings
+   * @param filepath - path to the csv file to read
    * @return - list of list of strings of raw CSV data
    */
   public List<String[]> parseCSV(String filepath) {

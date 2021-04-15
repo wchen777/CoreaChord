@@ -1,9 +1,21 @@
 package edu.brown.cs.student.coreachord.CoreaApp;
 
 public class MediumDiversityGenerator implements MatrixGenerator {
+  /**
+   * Transition matrix for Medium Diversity.
+   */
   private TransitionMatrix tmat;
+  /**
+   * Stores.
+   */
   private double[][] matrix2d;
+  /**
+   *
+   */
   private final int numqualities = CoreaApplication.Quality.values().length;
+  /**
+   *
+   */
   private final int numroots = CoreaApplication.Root.values().length;
 
   public MediumDiversityGenerator() {

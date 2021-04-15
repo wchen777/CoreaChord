@@ -21,9 +21,9 @@ public class REPL {
   }
 
 
-  public void addCommand(Executable e) {
-
-  }
+//  public void addCommand(Executable e) {
+//
+//  }
 
   /**
    * Begins the REPL.

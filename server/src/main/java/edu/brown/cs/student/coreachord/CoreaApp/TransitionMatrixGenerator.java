@@ -15,7 +15,11 @@ public class TransitionMatrixGenerator {
   private HighDiversityGenerator highdivgenerator;
   private HashMap<CoreaApplication.Diversity, MatrixGenerator> divmap; // diversity map
 
-  // constructor takes in the user's selected diversity level
+  /**
+   * constructor takes in the user's selected diversity level.
+   * @param diversity
+   */
+  //
   public TransitionMatrixGenerator(CoreaApplication.Diversity diversity) {
     currdiversity = diversity; // set diversity
     divmap = new HashMap<>(); // create map
