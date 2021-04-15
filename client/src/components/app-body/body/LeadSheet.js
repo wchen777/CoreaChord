@@ -57,7 +57,7 @@ export default function LeadSheet(props) {
 
   return (
       <Tooltip
-          label="Click a note to hear what it sounds like!"
+          label="Click a chord to hear what it sounds like!"
           aria-label="measures tooltip"
           fontSize="sm"
           className={"tooltip"}>
