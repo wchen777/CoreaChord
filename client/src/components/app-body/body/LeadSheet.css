@@ -31,3 +31,8 @@
 .chordHighlighted:hover {
     background-color: #00ffff;
 }
+
+.tooltip {
+    top: -5px;
+    left: 110%;
+}

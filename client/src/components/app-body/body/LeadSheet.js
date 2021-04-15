@@ -1,11 +1,12 @@
 import React from 'react'
 import {
-  Box,
+  Box, IconButton, Tooltip,
   useColorModeValue
 } from "@chakra-ui/react"
 import './LeadSheet.css'
 import {useChordProgContext} from '../../../context/ChordProgContext'
 import {NUM_MEASURES_PER_BAR, CONTINUE_CHORD_REPRESENTATION, getChordTextRepresentation, getBarList, playChord} from '../../../ChordUtils'
+import {DownloadIcon} from "@chakra-ui/icons";
 
 export default function LeadSheet(props) {
   const {chordProg, setChordProg} = useChordProgContext();
@@ -55,8 +56,14 @@ export default function LeadSheet(props) {
   }
 
   return (
-    <Box mx={0} className="lead-sheet" backgroundColor={bgColor}>
-      {renderChordProgression(chordProg)}
-    </Box>
+      <Tooltip
+          label="Click a note to hear what it sounds like!"
+          aria-label="measures tooltip"
+          fontSize="sm"
+          className={"tooltip"}>
+        <Box mx={0} className="lead-sheet" backgroundColor={bgColor}>
+          {renderChordProgression(chordProg)}
+        </Box>
+      </Tooltip>
   )
 }
