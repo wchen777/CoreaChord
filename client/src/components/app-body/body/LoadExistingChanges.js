@@ -16,7 +16,7 @@ export default function LoadExistingChanges() {
     setChordProg(changes[rand].value)
   }, [])
 
-  //TODO copy over any changes in HomeBody.js
+  // make sure to always copy over any changes in HomeBody.js
   const selectBackgroundColor = useColorModeValue('white', '#1A202C')
   const selectOptionHoverColor = useColorModeValue('#b3d3ff', '#003680')
   const selectBorderColor = useColorModeValue('gray.200', 'gray.700')
@@ -25,6 +25,7 @@ export default function LoadExistingChanges() {
       ...provided,
       color: labelColor,
       backgroundColor: selectBackgroundColor,
+      fontSize: "medium",
     }),
     option: (provided, state) => ({
       ...provided,
@@ -40,10 +41,12 @@ export default function LoadExistingChanges() {
     singleValue: (provided) => ({
       ...provided,
       color: labelColor,
+      fontSize: "medium",
     }),
-    placeHolder: (provided) => ({
+    placeholder: (provided) => ({
       ...provided,
       color: labelColor,
+      fontSize: "small",
     })
   }
 

@@ -2,7 +2,7 @@ import React, {useState} from 'react'
 import {
   Container, HStack, Center, Button, Tooltip, Box, Text, useColorModeValue
 } from "@chakra-ui/react"
-import Select from 'react-select' // TODO this is why the night mode doesn't work on the Select elements
+import Select from 'react-select'
 import axios from 'axios'
 import {useChordProgContext} from '../../../context/ChordProgContext'
 
@@ -27,6 +27,7 @@ export default function HomeBody() {
       ...provided,
       color: labelColor,
       backgroundColor: selectBackgroundColor,
+      fontSize: "medium",
     }),
     option: (provided, state) => ({
       ...provided,
@@ -45,10 +46,12 @@ export default function HomeBody() {
     singleValue: (provided) => ({
       ...provided,
       color: labelColor,
+      fontSize: "medium",
     }),
-    placeHolder: (provided) => ({
+    placeholder: (provided) => ({
       ...provided,
       color: labelColor,
+      fontSize: "medium",
     })
   }
 
