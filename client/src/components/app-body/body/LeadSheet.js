@@ -5,9 +5,9 @@ import {
 } from "@chakra-ui/react"
 import './LeadSheet.css'
 import {useChordProgContext} from '../../../context/ChordProgContext'
-import {NUM_MEASURES_PER_BAR, getChordTextRepresentation, getBarList} from '../../../ChordUtils'
+import {NUM_MEASURES_PER_BAR, getChordTextRepresentation, getBarList, playChord} from '../../../ChordUtils'
 
-export default function LeadSheet() {
+export default function LeadSheet(props) {
   const {chordProg, setChordProg} = useChordProgContext();
 
   // console.log(chordProg)
@@ -34,7 +34,8 @@ export default function LeadSheet() {
               {/*Iterate over chords in the bar*/}
               {barToRender.map(
                   (chordToRender, chordIndex) => {
-                    return (<div className={"chordTextDiv"} key={chordIndex}>
+                    return (<div className={"chordTextDiv"} key={chordIndex}
+                                 onMouseDown={() => {playChord(props.synths, chordToRender)}}>
                       {getChordTextRepresentation(chordToRender)}
                     </div>);
                   }

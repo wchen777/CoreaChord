@@ -1,4 +1,4 @@
-import React, { useRef } from 'react'
+import React, { useRef, useEffect } from 'react'
 import {
     HStack, Tooltip, IconButton
 } from "@chakra-ui/react"
@@ -6,37 +6,18 @@ import { DownloadIcon } from '@chakra-ui/icons'
 import { FaPlay, FaStop } from 'react-icons/fa'
 import * as Tone from 'tone'
 import { useChordProgContext } from "../../../context/ChordProgContext";
-import { NUM_MEASURES_PER_BAR, getChordTextRepresentation, getChordMeasureLength, getBarList } from '../../../ChordUtils'
-import { voicings } from '../../../data/ChordVoicings'
+import {
+    NUM_MEASURES_PER_BAR, getChordTextRepresentation, getChordMeasureLength, getBarList, playChord
+} from '../../../ChordUtils'
 
-export default function LeadSheetButtons() {
-    const synths = useRef([]);
+export default function LeadSheetButtons(props) {
+    // const synths = useRef([]);
     const audioShouldBePlaying = useRef(false);
-    const curPlayingChordNotes = useRef([]);
+    // const curPlayingChordNotes = useRef([]);
     const DELAY = 1.0;
     const MAX_CHORD_TEXT_REPRESENTATION_LENGTH = 6;
+    const FIRST_CHORD_PLAYING_WAIT_FRAMES = 500;
     const { chordProg, setChordProg } = useChordProgContext();
-
-    const pianoSample = {
-        urls: {
-            "C4": "C4.mp3",
-            "D#4": "Ds4.mp3",
-            "F#4": "Fs4.mp3",
-            "A4": "A4.mp3",
-        },
-        release: 1,
-        baseUrl: "https://tonejs.github.io/audio/salamander/",
-    }
-
-    const casioSample = {
-        urls: {
-            A1: "A1.mp3",
-            A2: "A2.mp3",
-            D2: "D2.mp3",
-            G2: "G2.mp3"
-        },
-        baseUrl: "https://tonejs.github.io/audio/casio/"
-    }
 
     /**
      * Plays the audio for the chord progression.
@@ -47,15 +28,7 @@ export default function LeadSheetButtons() {
 
         // Start up the synths needed to play four-note chords
         audioShouldBePlaying.current = true;
-        curPlayingChordNotes.current = [];
-        if (synths.current.length === 0) {
-            const synth1 = new Tone.Sampler(pianoSample).toDestination();
-            const synth2 = new Tone.Sampler(pianoSample).toDestination();
-            const synth3 = new Tone.Sampler(pianoSample).toDestination();
-            const synth4 = new Tone.Sampler(pianoSample).toDestination();
-            const synth5 = new Tone.Sampler(pianoSample).toDestination();
-            synths.current = [synth1, synth2, synth3, synth4, synth5];
-        }
+        // curPlayingChordNotes.current = [];
         playChordsSetTimeoutLoop(chordProgression, startIndex);
     }
 
@@ -64,54 +37,29 @@ export default function LeadSheetButtons() {
      * play the rest of the chord progression.
      *
      * @param chordProgression - the chord progression to play
-     * @param chordPlaying - the index of the chord that should be played in this step
+     * @param chordPlayingIndex - the index of the chord that should be played in this step
      */
-    function playChordsSetTimeoutLoop(chordProgression, chordPlaying) {
-        const chordToPlay = chordProgression[chordPlaying];
-        const chordNoteNames = getChordNoteNames(chordToPlay);
-        const chordLength = (4 / getChordMeasureLength(chordToPlay)) + "n";
-        const chordForLength = chordProgression[Math.max(0, chordPlaying - 1)];
-        const lengthOfWait = (getChordMeasureLength(chordForLength) * DELAY);
-        const lengthOfWaitFrames = lengthOfWait * 1000;
+    function playChordsSetTimeoutLoop(chordProgression, chordPlayingIndex) {
+        const chordPlaying = chordProgression[chordPlayingIndex];
+        let lengthOfWaitFrames;
+        if (chordPlayingIndex === 0) {
+            lengthOfWaitFrames = FIRST_CHORD_PLAYING_WAIT_FRAMES;
+            // TODO this sometimes causes a "buffer is not set or loaded" glitch
+            //  that is probably worse on slow computers
+        } else {
+            const chordForLength = chordProgression[chordPlayingIndex - 1];
+            const lengthOfWait = (getChordMeasureLength(chordForLength) * DELAY);
+            lengthOfWaitFrames = lengthOfWait * 1000; // 1000 milliseconds per second
+        }
         setTimeout(() => {
             if (audioShouldBePlaying.current) {
-                const now = Tone.now();
-                playChord(synths.current, chordNoteNames, chordLength, now);
+                playChord(props.synths, chordPlaying);
                 // Play the next chord, if there are any left to play!
-                if (chordPlaying + 1 < chordProgression.length) {
-                    playChordsSetTimeoutLoop(chordProgression, chordPlaying + 1);
+                if (chordPlayingIndex + 1 < chordProgression.length) {
+                    playChordsSetTimeoutLoop(chordProgression, chordPlayingIndex + 1);
                 }
             }
         }, lengthOfWaitFrames);
-    }
-
-    function getChordNoteNames(chordPlaying) {
-        const CHORD_QUALITIES = { "DOMINANT7": "7", "MINOR7": "m7", "MAJOR7": "maj7", "MINOR7FLAT5": "m7b5" };
-        const chordQuality = chordPlaying["chorddata"]["quality"];
-        const voicingKey = chordPlaying["chorddata"]["root"] + CHORD_QUALITIES[chordQuality];
-        return voicings[voicingKey];
-    }
-
-    /**
-     * Plays a given chord on a passed list of synths.
-     *
-     * @param synths - list of synth players - expects to be the same length as the number of notes in the chord
-     * @param chordNotes - list of chord notes in note name form
-     * @param length - how long the note should be played for
-     * @param time - when this note should be played
-     */
-    function playChord(synths, chordNotes, length, time) {
-        if (synths.length < chordNotes.length) {
-            throw new Error("ERROR!!! Not enough synths to play the chord correctly");
-        }
-        // if (curPlayingChordNotes.current.length > 0) {
-        //   stopPlayingChord(synths, curPlayingChordNotes.current, time);
-        // }
-        curPlayingChordNotes.current = chordNotes;
-        for (let i = 0; i < chordNotes.length; i++) {
-            // console.log("playing note " + chordNotes[i]);
-            synths[i].triggerAttackRelease(chordNotes[i], length, time);
-        }
     }
 
     /**

@@ -8,6 +8,10 @@
 }
 .chordTextDiv:hover{
     background-color: lightgrey;
+    cursor: pointer;
+}
+.chordTextDiv:active{
+    background-color: darkgrey;
 }
 
 .measureNumberDiv{

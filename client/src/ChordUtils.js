@@ -1,3 +1,6 @@
+import * as Tone from "tone";
+import {voicings} from "./data/ChordVoicings";
+
 export const NUM_MEASURES_PER_BAR = 4;
 const CONTINUE_CHORD_REPRESENTATION = " – ";
 
@@ -26,6 +29,41 @@ export const getChordTextRepresentation = (chordRendering) => {
 export const getChordMeasureLength = (chordData) => {
   return chordData["chordlength"];
 }
+
+/**
+ * When passed synths chord data, calls helper functions to get the information it needs to play
+ * the chord on the passed synths.
+ *
+ * @param synths - an array of five synths to play the chord
+ * @param chordPlaying - all data for a single chord
+ */
+export const playChord = (synths, chordPlaying) => {
+  const chordNoteNames = getChordNoteNames(chordPlaying);
+  const chordLength = (4 / getChordMeasureLength(chordPlaying)) + "n";
+  const now = Tone.now();
+
+  if (synths.length < chordNoteNames.length) {
+    throw new Error("ERROR!!! Not enough synths to play the chord correctly");
+  }
+  for (let i = 0; i < chordNoteNames.length; i++) {
+    synths[i].triggerAttackRelease(chordNoteNames[i], chordLength, now);
+  }
+}
+
+/**
+ * When passed chord data, uses the chord name to look up the voicing of the chord to play,
+ * returning a list of the four or five notes that should be played in the chord.
+ *
+ * @param chordPlaying - all data for a single chord
+ * @returns {*} - a list of String note names such as ["C3", "Bb3", "E4", "A4"]
+ */
+function getChordNoteNames(chordPlaying) {
+  const CHORD_QUALITIES = { "DOMINANT7": "7", "MINOR7": "m7", "MAJOR7": "maj7", "MINOR7FLAT5": "m7b5" };
+  const chordQuality = chordPlaying["chorddata"]["quality"];
+  const voicingKey = chordPlaying["chorddata"]["root"] + CHORD_QUALITIES[chordQuality];
+  return voicings[voicingKey];
+}
+
 
 /**
  * Converts whatever data format the chord progression is stored in into a list of lists of
