@@ -26,8 +26,8 @@
 }
 
 .chordHighlighted {
-    background-color: #ff3a3a;
+    background-color: #7fffd4;
 }
 .chordHighlighted:hover {
-    background-color: #c31313;
+    background-color: #00ffff;
 }
