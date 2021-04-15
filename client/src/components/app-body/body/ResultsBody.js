@@ -1,4 +1,4 @@
-import React, {useRef, useEffect} from 'react'
+import React from 'react'
 import {
   HStack, Center, VStack
 } from "@chakra-ui/react"

@@ -92,7 +92,6 @@ export default function HomeBody({ synths }) {
         return response.data;
       })
       .then((data) => {
-        // console.log(data);
         setChordProg(data);
         setLoading(false)
       })

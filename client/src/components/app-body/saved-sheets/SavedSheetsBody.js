@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useContext } from 'react'
 import {
-  Container, HStack, Center, Button, Tooltip, Box, Text, useColorModeValue, Grid
+  Container, Text, Grid
 } from "@chakra-ui/react"
 import ChordProgCard from './ChordProgCard'
 import firebase from "firebase/app";
@@ -35,8 +35,6 @@ export default function SavedSheetsBody({ setShowSaved }) {
   useEffect(() => {
     fetchSheets(user.uid)
   }, [])
-
-  console.log(userSheets)
 
   const chordsList = userSheets.map((sheet, index) => <ChordProgCard key={index} chordProgData={sheet} setShowSaved={setShowSaved} />)
 
