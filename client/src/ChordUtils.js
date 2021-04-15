@@ -2,7 +2,7 @@ import * as Tone from "tone";
 import {voicings} from "./data/ChordVoicings";
 
 export const NUM_MEASURES_PER_BAR = 4;
-const CONTINUE_CHORD_REPRESENTATION = " – ";
+export const CONTINUE_CHORD_REPRESENTATION = " – ";
 
 /**
  * Returns the text representation of a chord, given the chord data.

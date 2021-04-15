@@ -8,9 +8,12 @@
 }
 .chordTextDiv:hover{
     background-color: lightgrey;
+}
+
+.clickable {
     cursor: pointer;
 }
-.chordTextDiv:active{
+.clickable:active{
     background-color: darkgrey;
 }
 
@@ -20,4 +23,11 @@
     margin-top: 25px;
     margin-right: 8px;
     vertical-align: top;
+}
+
+.chordHighlighted {
+    background-color: #ff3a3a;
+}
+.chordHighlighted:hover {
+    background-color: #c31313;
 }

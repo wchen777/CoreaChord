@@ -5,7 +5,7 @@ import {
 } from "@chakra-ui/react"
 import './LeadSheet.css'
 import {useChordProgContext} from '../../../context/ChordProgContext'
-import {NUM_MEASURES_PER_BAR, getChordTextRepresentation, getBarList, playChord} from '../../../ChordUtils'
+import {NUM_MEASURES_PER_BAR, CONTINUE_CHORD_REPRESENTATION, getChordTextRepresentation, getBarList, playChord} from '../../../ChordUtils'
 
 export default function LeadSheet(props) {
   const {chordProg, setChordProg} = useChordProgContext();
@@ -34,10 +34,18 @@ export default function LeadSheet(props) {
               {/*Iterate over chords in the bar*/}
               {barToRender.map(
                   (chordToRender, chordIndex) => {
-                    return (<div className={"chordTextDiv"} key={chordIndex}
-                                 onMouseDown={() => {playChord(props.synths, chordToRender)}}>
-                      {getChordTextRepresentation(chordToRender)}
-                    </div>);
+                    if (chordToRender !== CONTINUE_CHORD_REPRESENTATION) {
+                      return (<div id={"chordBox" + ((barIndex * NUM_MEASURES_PER_BAR) + chordIndex)}
+                                   className={"chordTextDiv clickable"} key={chordIndex}
+                                   onMouseDown={() => {playChord(props.synths, chordToRender)}}>
+                        {getChordTextRepresentation(chordToRender)}
+                      </div>);
+                    } else {
+                      return (<div id={"chordBox" + ((barIndex * NUM_MEASURES_PER_BAR) + chordIndex)}
+                                   className={"chordTextDiv"} key={chordIndex}>
+                        {getChordTextRepresentation(chordToRender)}
+                      </div>);
+                    }
                   }
               )}
             </div>;
