@@ -37,7 +37,6 @@ export default function LeadSheet(props) {
                                    className={"chordTextDiv clickable"} key={chordIndex}
                                    onMouseDown={() => {playChord(props.synths, chordToRender)}}>
                         {getChordTextRepresentation(chordToRender)}
-                          {console.log(chordProg)}
                       </div>);
                     } else {
                       return (<div id={"chordBox" + ((barIndex * NUM_MEASURES_PER_BAR) + chordIndex)}
