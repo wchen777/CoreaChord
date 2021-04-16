@@ -17,8 +17,11 @@ export default function LeadSheetButtons({synths}) {
   const FIRST_CHORD_PLAYING_WAIT_FRAMES = 500;
   const {chordProg, setChordProg} = useChordProgContext();
   const [BPM, setBPM] = useState(60);
-  const delayLength = 60 / BPM;
+  const measureLengthInSeconds = 60 / BPM;
   const GAP_LENGTH_FACTOR = 1.1;
+  const audioPlayingTimeout = useRef(null);
+  const chordHighlightingTimeout = useRef(null);
+  const lastHighlightedChordIndex = useRef(null);
   /*
    * The above factor determines how much of an audible gap there will be between chords being played.
    * Higher values result in a longer gap, while values closer to 1.0 result in little to no gap.
@@ -88,10 +91,10 @@ export default function LeadSheetButtons({synths}) {
       // this may cause a "buffer is not set or loaded" glitch on slow computers
     } else {
       const chordForLength = chordProgression[chordPlayingIndex - 1];
-      const lengthOfWait = (getChordMeasureLength(chordForLength) * delayLength);
+      const lengthOfWait = (getChordMeasureLength(chordForLength) * measureLengthInSeconds);
       lengthOfWaitFrames = lengthOfWait * 1000; // 1000 milliseconds per second
     }
-    setTimeout(() => {
+    audioPlayingTimeout.current = setTimeout(() => {
       if (audioShouldBePlaying.current) {
         playChord(synths, chordPlaying);
         // Play the next chord, if there are any left to play!
@@ -99,7 +102,7 @@ export default function LeadSheetButtons({synths}) {
           playChordsSetTimeoutLoop(chordProgression, chordPlayingIndex + 1);
         } else {
           // after playing the last chord, wait for a bit, and then officially stop the audio
-          setTimeout(() => {
+          audioPlayingTimeout.current = setTimeout(() => {
             stopAudio()
           }, lengthOfWaitFrames + FIRST_CHORD_PLAYING_WAIT_FRAMES)
         }
@@ -124,39 +127,43 @@ export default function LeadSheetButtons({synths}) {
     if (chordPlayingIndex === 0) {
       lengthOfWaitFrames = FIRST_CHORD_PLAYING_WAIT_FRAMES;
     } else {
-      // We only want to wait one measure, one delayLength in between highlighting chords
-      lengthOfWaitFrames = delayLength * 1000;
+      // We only want to wait one measure in between highlighting chords
+      lengthOfWaitFrames = measureLengthInSeconds * 1000;
     }
-    setTimeout(() => {
+    chordHighlightingTimeout.current = setTimeout(() => {
       if (audioShouldBePlaying.current) {
         // Unhighlight the last chord
-        if (chordPlayingIndex > 0) {
-          document.getElementById("chordBox" + (chordPlayingIndex - 1))
-              .classList.remove("chordHighlighted");
-        }
+        unhighlightPreviousChord();
         // Highlight the currently-playing chord
         document.getElementById("chordBox" + chordPlayingIndex).classList.add("chordHighlighted");
+        lastHighlightedChordIndex.current = chordPlayingIndex;
 
         // Recurse to highlight the next chord, if there are any left to highlight!
         if ((chordPlayingIndex + 1) < chordProgressionNumMeasures) {
           highlightChordsSetTimeoutLoop(chordProgression, chordPlayingIndex + 1);
         } else {
-          // Set the timeout to unhighlight the last chord
-          setTimeout(() => {
+          // We reached the end! Set the timeout to unhighlight the last chord
+          chordHighlightingTimeout.current = setTimeout(() => {
             if (componentMounted.current) {
-              document.getElementById("chordBox" + chordPlayingIndex)
-                  .classList.remove("chordHighlighted");
+              unhighlightPreviousChord();
             }
           }, lengthOfWaitFrames)
         }
       } else {
         // In the event that we've stopped playing, just unhighlight the last chord
-        if (componentMounted.current && chordPlayingIndex > 0) {
-          document.getElementById("chordBox" + (chordPlayingIndex - 1))
-              .classList.remove("chordHighlighted");
+        if (chordPlayingIndex > 0) {
+          unhighlightPreviousChord()
         }
       }
     }, lengthOfWaitFrames);
+  }
+
+  function unhighlightPreviousChord() {
+    if (componentMounted.current && lastHighlightedChordIndex.current !== null) {
+      document.getElementById("chordBox" + lastHighlightedChordIndex.current)
+          .classList.remove("chordHighlighted");
+    }
+    lastHighlightedChordIndex.current = null;
   }
 
   /**
@@ -164,6 +171,9 @@ export default function LeadSheetButtons({synths}) {
    */
   function stopAudio() {
     audioShouldBePlaying.current = false;
+    clearTimeout(audioPlayingTimeout.current);
+    clearTimeout(chordHighlightingTimeout.current);
+    unhighlightPreviousChord();
   }
 
   /**
