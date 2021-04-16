@@ -6,7 +6,7 @@ import java.io.InputStreamReader;
 import java.util.HashMap;
 
 /**
- *
+ * Interactive REPL for testing purposes.
  */
 public class REPL {
   private final HashMap<String, Executable> commands;
@@ -19,11 +19,6 @@ public class REPL {
     this.commands = commands;
     run();
   }
-
-
-//  public void addCommand(Executable e) {
-//
-//  }
 
   /**
    * Begins the REPL.
