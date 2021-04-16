@@ -20,6 +20,8 @@ public class GeneratedChord {
   public int getChordlength() {
     return chordlength;
   }
+  public void setChorddata(Chord c) { chorddata = c; }
+  public void setChordlength(int chordlen) { chordlength = chordlen; }
   @Override
   public String toString() {
     return chorddata + "\nChord Length: " + chordlength;

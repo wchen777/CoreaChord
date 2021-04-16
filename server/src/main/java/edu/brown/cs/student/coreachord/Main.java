@@ -5,6 +5,7 @@ import com.google.gson.JsonElement;
 import com.google.gson.reflect.TypeToken;
 import edu.brown.cs.student.coreachord.CSV.CSVReader;
 import edu.brown.cs.student.coreachord.Commands.GenerateChords;
+import edu.brown.cs.student.coreachord.CoreaApp.Chord;
 import edu.brown.cs.student.coreachord.CoreaApp.CoreaApplication;
 import edu.brown.cs.student.coreachord.CoreaApp.GeneratedChord;
 import edu.brown.cs.student.coreachord.CoreaApp.TransitionMatrix;
@@ -12,6 +13,7 @@ import edu.brown.cs.student.coreachord.REPL.Executable;
 import edu.brown.cs.student.coreachord.REPL.REPL;
 import joptsimple.OptionParser;
 import joptsimple.OptionSet;
+import org.json.JSONArray;
 import org.json.JSONObject;
 import spark.ExceptionHandler;
 import spark.Request;
@@ -19,8 +21,10 @@ import spark.Response;
 import spark.Route;
 import spark.Spark;
 
+import javax.annotation.processing.Generated;
 import java.io.PrintWriter;
 import java.io.StringWriter;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -101,6 +105,7 @@ public final class Main {
 
     // Setup Spark Routes
     Spark.post("/generate", new GenerateChordsHandler());
+    Spark.post("/analyze", new AnalyzeChordsHandler());
   }
 
 
@@ -154,4 +159,30 @@ public final class Main {
     }
   }
 
+  /**
+   * Handles requests for chord progression analyzing
+   * Returns a generated chords list from frontend
+   */
+  private static class AnalyzeChordsHandler implements Route {
+    @Override
+    public Object handle(Request request, Response response) throws Exception {
+      JSONArray data = new JSONArray(request.body()); // get a list of chord progression
+      List<GeneratedChord> genChordList = new ArrayList<>();
+      for (int i = 0; i < data.length(); ++i) {
+        JSONObject curr = data.getJSONObject(i); // get current object
+        JSONArray currArr = data.getJSONArray(i); // for another looping
+        int length = curr.getInt("chordlength"); // get chord length for current entry
+        JSONArray chordInfoArr = curr.getJSONArray("chorddata"); // get another JSON array for chord info.
+        for (int j = 0; j < chordInfoArr.length(); ++j) {
+          JSONObject curr2 = currArr.getJSONObject(j); // get current nested json array containing chord info
+          CoreaApplication.Quality quality = CoreaApplication.Quality.valueOf(curr2.getString("quality"));
+          CoreaApplication.Root root = CoreaApplication.Root.valueOf(curr2.getString("root"));
+          Chord c = new Chord(root, quality);
+          GeneratedChord generatedChord = new GeneratedChord(c, length);
+          genChordList.add(generatedChord); // add to preexisting list of generated chords
+        }
+      }
+      return genChordList; // return a generated list of chords
+    }
+  }
 }
