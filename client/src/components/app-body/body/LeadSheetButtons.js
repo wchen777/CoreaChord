@@ -36,6 +36,19 @@ export default function LeadSheetButtons({synths}) {
       }
   })
 
+  // Play and pause when space bar is pressed
+  document.body.onkeypress = function(e){
+    if(e.keyCode === 32){
+      e.stopPropagation()
+      if (audioShouldBePlaying.current) {
+        stopAudio();
+      } else {
+        playChordProgression(chordProg, 0);
+      }
+      return false;
+    }
+  }
+
   /**
    * Plays the audio for the chord progression.
    */
@@ -84,6 +97,11 @@ export default function LeadSheetButtons({synths}) {
         // Play the next chord, if there are any left to play!
         if (chordPlayingIndex + 1 < chordProgression.length) {
           playChordsSetTimeoutLoop(chordProgression, chordPlayingIndex + 1);
+        } else {
+          // after playing the last chord, wait for a bit, and then officially stop the audio
+          setTimeout(() => {
+            stopAudio()
+          }, lengthOfWaitFrames + FIRST_CHORD_PLAYING_WAIT_FRAMES)
         }
       }
     }, lengthOfWaitFrames);
@@ -110,7 +128,7 @@ export default function LeadSheetButtons({synths}) {
       lengthOfWaitFrames = delayLength * 1000;
     }
     setTimeout(() => {
-      if (audioShouldBePlaying.current && (chordPlayingIndex + 1) < chordProgressionNumMeasures) {
+      if (audioShouldBePlaying.current) {
         // Unhighlight the last chord
         if (chordPlayingIndex > 0) {
           document.getElementById("chordBox" + (chordPlayingIndex - 1))
@@ -118,7 +136,19 @@ export default function LeadSheetButtons({synths}) {
         }
         // Highlight the currently-playing chord
         document.getElementById("chordBox" + chordPlayingIndex).classList.add("chordHighlighted");
-        highlightChordsSetTimeoutLoop(chordProgression, chordPlayingIndex + 1);
+
+        // Recurse to highlight the next chord, if there are any left to highlight!
+        if ((chordPlayingIndex + 1) < chordProgressionNumMeasures) {
+          highlightChordsSetTimeoutLoop(chordProgression, chordPlayingIndex + 1);
+        } else {
+          // Set the timeout to unhighlight the last chord
+          setTimeout(() => {
+            if (componentMounted.current) {
+              document.getElementById("chordBox" + chordPlayingIndex)
+                  .classList.remove("chordHighlighted");
+            }
+          }, lengthOfWaitFrames)
+        }
       } else {
         // In the event that we've stopped playing, just unhighlight the last chord
         if (componentMounted.current && chordPlayingIndex > 0) {
