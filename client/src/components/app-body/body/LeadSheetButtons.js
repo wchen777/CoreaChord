@@ -10,8 +10,9 @@ import {
 } from '../../../ChordUtils'
 import * as Tone from "tone";
 
-export default function LeadSheetButtons(props) {
+export default function LeadSheetButtons({synths}) {
   const audioShouldBePlaying = useRef(false);
+  const componentMounted = useRef(true);
   const MAX_CHORD_TEXT_REPRESENTATION_LENGTH = 6;
   const FIRST_CHORD_PLAYING_WAIT_FRAMES = 500;
   const {chordProg, setChordProg} = useChordProgContext();
@@ -26,6 +27,13 @@ export default function LeadSheetButtons(props) {
 
   useEffect(() => {
       audioShouldBePlaying.current = false;
+      componentMounted.current = true;
+
+      return () => {
+        componentMounted.current = false;
+        // When component unmounts, audio should stop, as well
+        audioShouldBePlaying.current = false;
+      }
   })
 
   /**
@@ -72,7 +80,7 @@ export default function LeadSheetButtons(props) {
     }
     setTimeout(() => {
       if (audioShouldBePlaying.current) {
-        playChord(props.synths, chordPlaying);
+        playChord(synths, chordPlaying);
         // Play the next chord, if there are any left to play!
         if (chordPlayingIndex + 1 < chordProgression.length) {
           playChordsSetTimeoutLoop(chordProgression, chordPlayingIndex + 1);
@@ -113,7 +121,7 @@ export default function LeadSheetButtons(props) {
         highlightChordsSetTimeoutLoop(chordProgression, chordPlayingIndex + 1);
       } else {
         // In the event that we've stopped playing, just unhighlight the last chord
-        if (chordPlayingIndex > 0) {
+        if (componentMounted.current && chordPlayingIndex > 0) {
           document.getElementById("chordBox" + (chordPlayingIndex - 1))
               .classList.remove("chordHighlighted");
         }
