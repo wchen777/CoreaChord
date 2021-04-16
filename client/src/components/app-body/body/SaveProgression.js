@@ -1,12 +1,13 @@
 import React, { useContext, useState } from 'react'
 import {
-  Flex, Button, Text, Input, useColorModeValue
+  Flex, Button, Text, Input, useColorModeValue, IconButton, Tooltip
 } from "@chakra-ui/react"
 import { AuthContext } from '../../../context/AuthContext'
 import { useChordProgContext } from '../../../context/ChordProgContext'
 import { saveSheet } from '../../../api/Firebase'
+import {DownloadIcon} from "@chakra-ui/icons";
 
-const colors = ["red.300", "orange.300", "blue.300", "cyan.300", "green.300", 
+const colors = ["red.300", "orange.300", "blue.300", "cyan.300", "green.300",
 "purple.300", "cyan.300", "gray.300", "pink.300", "yellow.300"]
 
 export default function SaveProgression() {
@@ -22,7 +23,7 @@ export default function SaveProgression() {
 
 
   const onSaveSheet = async () => {
-    
+
     // check for authentication before saving
     if (!user) {
       alert("Please sign in or register for an account to save your chord progression.")
@@ -41,7 +42,14 @@ export default function SaveProgression() {
 
       <Text fontWeight="semibold" my={4} fontSize="lg" color={labelColor}>Progression Name</Text>
 
-      <Input defaultValue="My-Prog-1" placeholder="Progression Name" onChange={(e) => setChordProgName(e.target.value)}/>
+      <Tooltip
+          label="Input the name you would like to save this progression with."
+          aria-label="progression save name"
+          fontSize="sm">
+        <Input defaultValue="My-Prog-1" placeholder="Progression Name"
+               onChange={(e) => setChordProgName(e.target.value)}/>
+      </Tooltip>
+
 
       <Button
         colorScheme="teal"

@@ -1,6 +1,6 @@
-import React, {useRef, useEffect} from 'react'
+import React, {useRef, useEffect, useState} from 'react'
 import {
-  HStack, Tooltip, IconButton
+  HStack, Tooltip, IconButton, Input, Text, useColorModeValue
 } from "@chakra-ui/react"
 import {DownloadIcon} from '@chakra-ui/icons'
 import {FaPlay, FaStop} from 'react-icons/fa'
@@ -8,13 +8,21 @@ import {useChordProgContext} from "../../../context/ChordProgContext";
 import {
   NUM_MEASURES_PER_BAR, getChordTextRepresentation, getChordMeasureLength, getBarList, playChord
 } from '../../../ChordUtils'
+import * as Tone from "tone";
 
 export default function LeadSheetButtons(props) {
   const audioShouldBePlaying = useRef(false);
-  const DELAY = 1.0;
   const MAX_CHORD_TEXT_REPRESENTATION_LENGTH = 6;
   const FIRST_CHORD_PLAYING_WAIT_FRAMES = 500;
   const {chordProg, setChordProg} = useChordProgContext();
+  const [BPM, setBPM] = useState(60);
+  const delayLength = 60 / BPM;
+  const GAP_LENGTH_FACTOR = 1.1;
+  /*
+   * The above factor determines how much of an audible gap there will be between chords being played.
+   * Higher values result in a longer gap, while values closer to 1.0 result in little to no gap.
+   */
+  const labelColor = useColorModeValue('gray.700', 'gray.200')
 
   useEffect(() => {
       audioShouldBePlaying.current = false;
@@ -27,10 +35,21 @@ export default function LeadSheetButtons(props) {
     // check if chordProg exists
     if (chordProgression === {} || chordProgression === undefined) return
 
+    if (isNaN(BPM)) {
+      alert("Please input a number for BPM.");
+      return;
+    } else if (BPM <= 0) {
+      alert("Please input a positive value for BPM.");
+      return;
+    }
+
     // Start playing the audio
-    audioShouldBePlaying.current = true;
-    playChordsSetTimeoutLoop(chordProgression, startIndex);
-    highlightChordsSetTimeoutLoop(chordProgression, startIndex);
+    if (!audioShouldBePlaying.current) {
+      audioShouldBePlaying.current = true;
+      Tone.Transport.bpm.value = Math.floor(BPM * GAP_LENGTH_FACTOR);
+      playChordsSetTimeoutLoop(chordProgression, startIndex);
+      highlightChordsSetTimeoutLoop(chordProgression, startIndex);
+    }
   }
 
   /**
@@ -48,7 +67,7 @@ export default function LeadSheetButtons(props) {
       // this may cause a "buffer is not set or loaded" glitch on slow computers
     } else {
       const chordForLength = chordProgression[chordPlayingIndex - 1];
-      const lengthOfWait = (getChordMeasureLength(chordForLength) * DELAY);
+      const lengthOfWait = (getChordMeasureLength(chordForLength) * delayLength);
       lengthOfWaitFrames = lengthOfWait * 1000; // 1000 milliseconds per second
     }
     setTimeout(() => {
@@ -79,8 +98,8 @@ export default function LeadSheetButtons(props) {
     if (chordPlayingIndex === 0) {
       lengthOfWaitFrames = FIRST_CHORD_PLAYING_WAIT_FRAMES;
     } else {
-      // We only want to wait one measure, one DELAY in between highlighting chords
-      lengthOfWaitFrames = DELAY * 1000;
+      // We only want to wait one measure, one delayLength in between highlighting chords
+      lengthOfWaitFrames = delayLength * 1000;
     }
     setTimeout(() => {
       if (audioShouldBePlaying.current && (chordPlayingIndex + 1) < chordProgressionNumMeasures) {
@@ -170,30 +189,51 @@ export default function LeadSheetButtons(props) {
   return (
       <HStack spacing="70px" mt={12} ml={6}>
 
-        <IconButton
-            colorScheme="green"
+        <Tooltip
+            label="Start audio"
             aria-label="play button"
-            size="md"
-            py={4}
-            icon={<FaPlay/>}
-            onClick={() => {
-              playChordProgression(chordProg, 0)
-            }}
-        />
+            fontSize="sm">
+          <IconButton
+              colorScheme="green"
+              aria-label="play button"
+              size="md"
+              py={4}
+              icon={<FaPlay/>}
+              onClick={() => {
+                playChordProgression(chordProg, 0)
+              }}
+          />
+        </Tooltip>
 
-        <IconButton
-            colorScheme="red"
-            aria-label="stop button"
-            size="md"
-            py={4}
-            icon={<FaStop/>}
-            onClick={() => {
-              stopAudio()
-            }}
-        />
+        <div>
+          <Text as="span" fontWeight="semibold" my={2} fontSize="lg" color={labelColor}>BPM: </Text>
+          <Tooltip
+              label="Input the BPM for playback"
+              aria-label="chord playback BPM"
+              fontSize="sm">
+            <Input defaultValue="60" placeholder="BPM" w="16"
+                   onChange={(e) => setBPM(e.target.value)}/>
+          </Tooltip>
+        </div>
 
         <Tooltip
-            label="Download your lead sheet as .txt format."
+            label="Stop audio"
+            aria-label="stop button"
+            fontSize="sm">
+          <IconButton
+              colorScheme="red"
+              aria-label="stop button"
+              size="md"
+              py={4}
+              icon={<FaStop/>}
+              onClick={() => {
+                stopAudio()
+              }}
+          />
+        </Tooltip>
+
+        <Tooltip
+            label="Download your lead sheet as .txt format"
             aria-label="measures tooltip"
             fontSize="sm">
           <IconButton
