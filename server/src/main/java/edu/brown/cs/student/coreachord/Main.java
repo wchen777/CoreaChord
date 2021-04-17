@@ -3,6 +3,9 @@ package edu.brown.cs.student.coreachord;
 import com.google.gson.Gson;
 import com.google.gson.JsonElement;
 import com.google.gson.reflect.TypeToken;
+import edu.brown.cs.student.coreachord.Analyzer.AnalyzerApplication;
+import edu.brown.cs.student.coreachord.Analyzer.ComplexityScore;
+import edu.brown.cs.student.coreachord.Analyzer.GeneratedCadence;
 import edu.brown.cs.student.coreachord.CSV.CSVReader;
 import edu.brown.cs.student.coreachord.Commands.GenerateChords;
 import edu.brown.cs.student.coreachord.CoreaApp.Chord;
@@ -11,6 +14,7 @@ import edu.brown.cs.student.coreachord.CoreaApp.GeneratedChord;
 import edu.brown.cs.student.coreachord.CoreaApp.TransitionMatrix;
 import edu.brown.cs.student.coreachord.REPL.Executable;
 import edu.brown.cs.student.coreachord.REPL.REPL;
+import edu.brown.cs.student.coreachord.UtilityObjects.Tuple;
 import joptsimple.OptionParser;
 import joptsimple.OptionSet;
 import org.json.JSONArray;
@@ -36,6 +40,7 @@ public final class Main {
   private static Map<String, String> QUALITIES;
   private static GenerateChords generateChordsApp;
   private final String[] args;
+  private static AnalyzerApplication analyzer;
 
   public static void main(String[] args) {
     new Main(args).run();
@@ -84,6 +89,8 @@ public final class Main {
 
     generateChordsApp = new GenerateChords(coreaApp);
     commands.put("generate-chords", generateChordsApp);
+
+    analyzer = new AnalyzerApplication();
 
     REPL repl = new REPL(commands);
 
@@ -190,9 +197,16 @@ public final class Main {
         genChordList.add(generatedChord); // add to preexisting list of generated chords
       }
 
-      System.out.println(genChordList);
+      Tuple<List<ComplexityScore>,List<GeneratedCadence>> results = analyzer.generate(genChordList);
 
-      return genChordList; // return a generated list of chords
+      JsonElement element1 = GSON.toJsonTree(results.getField1(), new TypeToken<List<ComplexityScore>>(){}.getType());
+      JsonElement element2 = GSON.toJsonTree(results.getField2(), new TypeToken<List<GeneratedCadence>>(){}.getType());
+
+      JSONObject toSend = new JSONObject();
+      toSend.put("complexities", element1.getAsJsonArray());
+      toSend.put("cadences", element2.getAsJsonArray());
+
+      return toSend; // return a generated list of chords
     }
   }
 }

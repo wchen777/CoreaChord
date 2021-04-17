@@ -7,37 +7,14 @@ public class GeneratedCadence {
   private int start;
   private int end;
   private CoreaApplication.Root relativeRoot;
+  private String progression;
 
-  public GeneratedCadence (Cadence cadence, int start, int end, CoreaApplication.Root relativeRoot) {
+  public GeneratedCadence (Cadence cadence, int start, int end, CoreaApplication.Root relativeRoot, String progression) {
     this.cadence = cadence;
     this.start = start;
     this.end = end;
     this.relativeRoot = relativeRoot;
+    this.progression = progression;
   }
 
-//  public int getEnd() {
-//    return end;
-//  }
-//
-//  public Cadence getCadence() {
-//    return cadence;
-//  }
-//
-//  public int getStart() {
-//    return start;
-//  }
-//
-//  public CoreaApplication.Root getRelativeRoot() {
-//    return relativeRoot;
-//  }
-
-  @Override
-  public String toString() {
-    return "GeneratedCadence{" +
-            "cadence=" + cadence +
-            ", start=" + start +
-            ", end=" + end +
-            ", relativeRoot=" + relativeRoot +
-            '}';
-  }
 }

@@ -8,6 +8,9 @@ public class ComplexityScore {
   // the secret complexity score from 0 to 1, 0 being least complex and 1 being most complex
   private double y;
 
-  
+  public ComplexityScore(int x, double y) {
+    this.x = x;
+    this.y = y;
+  }
 
 }

@@ -22,6 +22,29 @@ public class Chord {
   public CoreaApplication.Root getRoot() {
     return root;
   }
+
+  public String toFormattedString() {
+    String qualString;
+    switch (quality) {
+      case MAJOR7:
+        qualString = "maj7";
+        break;
+      case MINOR7:
+        qualString = "-7";
+        break;
+      case DOMINANT7:
+        qualString = "7";
+        break;
+      case MINOR7FLAT5:
+        qualString = "-7b5";
+        break;
+      default:
+        qualString = "";
+        break;
+    }
+    return root + qualString;
+  }
+
   @Override
   public String toString() {
     return "Root: " + root + "\nQuality: " + quality;

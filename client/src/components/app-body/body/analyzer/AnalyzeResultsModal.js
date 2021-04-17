@@ -20,24 +20,16 @@ import {
 } from "@chakra-ui/react"
 import AnalyzeTable from './AnalyzeTable'
 
-export default function AnalyzeResultsModal({ finalRef, isOpen, onClose }) {
+export default function AnalyzeResultsModal({ finalRef, isOpen, onClose, analyzedData }) {
 
+  console.log(analyzedData)
 
-
-  // useEffect(() => {
-
-
-
-  // }, [])
   const [zoom, setZoom] = useState({})
 
   const handleZoom = (domain) => {
     setZoom({ ...zoom, selectedDomain: domain });
   }
 
-  // handleBrush(domain) {
-  //   this.setState({zoomDomain: domain});
-  // }
 
   return (
     <Modal finalFocusRef={finalRef} isOpen={isOpen} onClose={onClose} size="2xl">
@@ -63,6 +55,8 @@ export default function AnalyzeResultsModal({ finalRef, isOpen, onClose }) {
               <VictoryChart
                 width={450}
                 height={200}
+                maxDomain={{ y: 1 }}
+                minDomain={{ y: 0 }}
                 containerComponent={
                   <VictoryZoomContainer responsive={false}
                     zoomDimension="y"
@@ -75,22 +69,7 @@ export default function AnalyzeResultsModal({ finalRef, isOpen, onClose }) {
                   style={{
                     data: { stroke: "teal" }
                   }}
-                  data={[
-                    { x: 1, y: 0 },
-                    { x: 3, y: 257 },
-                    { x: 5, y: 345 },
-                    { x: 7, y: 515 },
-                    { x: 9, y: 132 },
-                    { x: 11, y: 305 },
-                    { x: 13, y: 270 },
-                    { x: 15, y: 470 },
-                    { x: 15, y: 470 },
-                    { x: 15, y: 470 },
-                    { x: 15, y: 470 },
-                    { x: 15, y: 470 },
-                    { x: 15, y: 470 },
-                    { x: 15, y: 470 }
-                  ]}
+                  data={analyzedData.complexities}
                 />
 
               </VictoryChart>
@@ -101,25 +80,8 @@ export default function AnalyzeResultsModal({ finalRef, isOpen, onClose }) {
                 fontSize="xs">
                 <Heading color="gray.500" fontSize="15px" my={2}>Jazz Cadences</Heading>
               </Tooltip>
-              <AnalyzeTable />
+              <AnalyzeTable cadences={analyzedData.cadences} />
 
-
-              {/* <ModalBody>
-                <Text>
-                  CoreaChord is a jazz chord progression generator named in honor of the late jazz legend <b>Chick Corea</b>.
-              </Text>
-                <br />
-                <Text>
-                  CoreaChord uses a stochastic process, specifically a <b>random walk on Markov chain</b>, to emulate common jazz chord changes.
-              </Text>
-                <br />
-                <Text>
-                  Built by<b> Ashley, Erick, Maxime, and Will</b> for CS32: Software Engineering @ Brown.
-              </Text>
-
-
-              </ModalBody>
-               */}
               <Button variant="ghost" colorScheme="red" size="lg" onClick={onClose} mt={5}>Close</Button>
             </VStack>
           </Center>

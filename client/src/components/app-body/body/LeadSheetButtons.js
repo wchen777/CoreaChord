@@ -24,7 +24,6 @@ export default function LeadSheetButtons({ synths }) {
   const chordHighlightingTimeout = useRef(null);
   const lastHighlightedChordIndex = useRef(null);
 
-  console.log(chordProg)
 
   /*
    * The above factor determines how much of an audible gap there will be between chords being played.

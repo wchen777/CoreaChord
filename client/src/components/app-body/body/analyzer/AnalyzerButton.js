@@ -41,8 +41,12 @@ export default function AnalyzerButton() {
       chordProg,
       config
     )
-      .then((data) => {
-        console.log(data)
+      .then((response) => {
+        console.log(response)
+        let complexities = JSON.parse(response.data.complexities)
+        let cadences = JSON.parse(response.data.cadences)
+
+        setAnalyzedData({complexities, cadences})
         onOpen()
       }) 
       .catch(err => console.log(err))
@@ -65,7 +69,7 @@ export default function AnalyzerButton() {
         />
       </Tooltip>
 
-      <AnalyzeResultsModal finalRef={finalRef} isOpen={isOpen} onClose={onClose} />
+      <AnalyzeResultsModal finalRef={finalRef} isOpen={isOpen} onClose={onClose} analyzedData={analyzedData}/>
 
     </>
   )

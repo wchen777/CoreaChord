@@ -10,7 +10,19 @@ import {
 
 } from "@chakra-ui/react"
 
-export default function AnalyzeTable() {
+export default function AnalyzeTable({ cadences }) {
+
+
+  const cadenceRows = cadences?.map((c) => {
+    return (
+      <Tr>
+        <Td>{c.start} to {c.end}</Td>
+        <Td>{c.cadence === "Imaj7_Im7" ? "Imaj7 I-7" : c.cadence.split("_").join(" ")}</Td>
+        <Td>{c.progression}</Td>
+        <Td>{c.relativeRoot}</Td>
+      </Tr>
+    )
+  })
   return (
     <div className="analyze-table">
       <Table variant="simple" >
@@ -24,26 +36,7 @@ export default function AnalyzeTable() {
         </Thead>
         <Tbody>
 
-          <Tr>
-            <Td>3 to 5</Td>
-            <Td>II V I</Td>
-            <Td>D-7 G7 Cmaj7</Td>
-            <Td>C major</Td>
-          </Tr>
-
-          <Tr>
-            <Td>3 to 5</Td>
-            <Td>II V I</Td>
-            <Td>D-7 G7 Cmaj7</Td>
-            <Td>C major</Td>
-          </Tr>
-
-          <Tr>
-            <Td>3 to 5</Td>
-            <Td>II V I</Td>
-            <Td>D-7 G7 Cmaj7</Td>
-            <Td>C major</Td>
-          </Tr>
+          {cadenceRows}
 
         </Tbody>
 
