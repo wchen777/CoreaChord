@@ -32,7 +32,7 @@ to help with reducing the eye strain when using our app. Also, we have an info b
 we have a functionality where each chord lights up as the audio is being played, which helps people recognize how fast the music is being played. Also, users can adjust the BPM of the chord progression, which allows them
 to control how fast the audio is played.
 
-## Divison of Labor
+## Division of Labor
 
 • Ashley - Backend coding and design: implementing the Markov Chain chord generation algorithm, designing the general structure of the backend code including interfaces<br>
 • Erick - Backend coding and design: integrating past code, implementing REPL, systems/unit testing, and high-diversity matrix design<br>
