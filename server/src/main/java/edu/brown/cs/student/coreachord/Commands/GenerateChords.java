@@ -10,10 +10,10 @@ import java.util.List;
 
 public class GenerateChords implements Executable {
 
-  private static CoreaApplication callGenerateChords;
+  private CoreaApplication coreaApp;
   private List<GeneratedChord> result;
-  public GenerateChords(TransitionMatrix transitionMatrix) {
-    callGenerateChords = new CoreaApplication(transitionMatrix);
+  public GenerateChords(CoreaApplication c) {
+    this.coreaApp = c;
   }
 
   /**
@@ -31,8 +31,8 @@ public class GenerateChords implements Executable {
     }
     try {
       Chord inputChord = new Chord(CoreaApplication.Root.valueOf(input[1]), CoreaApplication.Quality.valueOf(input[2]));
-      callGenerateChords.generateChords(inputChord, Integer.parseInt(input[3]), CoreaApplication.Diversity.valueOf(input[4]));
-      result = callGenerateChords.getResult();
+      coreaApp.generateChords(inputChord, Integer.parseInt(input[3]), CoreaApplication.Diversity.valueOf(input[4]));
+      result = coreaApp.getResult();
       for (GeneratedChord gChord: result) {
         System.out.println("\n" + gChord);
       }

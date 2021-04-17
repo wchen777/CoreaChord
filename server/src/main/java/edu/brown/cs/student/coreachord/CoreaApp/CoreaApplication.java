@@ -33,10 +33,11 @@ public class CoreaApplication {
   private TransitionMatrix mediumDiversity; // medium,
   private TransitionMatrix highDiversity; // high diversity matrices
 
-  public CoreaApplication(TransitionMatrix lowDiversity) {
+  public CoreaApplication(TransitionMatrix lowDiversity, TransitionMatrix medDiversity, TransitionMatrix highDiversity) {
     // set transition matrices fields
     this.lowDiversity = lowDiversity;
-    // TODO: initialize medium & high diversity matrices
+    this.mediumDiversity = medDiversity;
+    this.highDiversity = highDiversity;
 
     // populating Enum sets with all values in our enum definitions
     Set<Quality> qualityset = EnumSet.allOf(Quality.class);
@@ -79,9 +80,9 @@ public class CoreaApplication {
     if (diversityLevel == Diversity.Low) {
       matrix = lowDiversity;
     } else if (diversityLevel == Diversity.Medium) {
-      matrix = lowDiversity; // open low matrix for now
+      matrix = mediumDiversity; // open low matrix for now
     } else if (diversityLevel == Diversity.High) {
-      matrix = lowDiversity; // open low matrix for now
+      matrix = highDiversity; // open low matrix for now
     }
     result = this.markovChain(startingchord, numbars, matrix); // call helper method
   }

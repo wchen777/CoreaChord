@@ -69,13 +69,20 @@ public final class Main {
 
     List<String[]> lowDivCSV = csv.parseCSV("../scripts/t-mat-low.csv");
     TransitionMatrix lowDiversity = new TransitionMatrix(lowDivCSV);
+    List<String[]> medDivCSV = csv.parseCSV("../scripts/t-mat-med.csv");
+    TransitionMatrix medDiversity = new TransitionMatrix(medDivCSV);
+    List<String[]> highDivCSV = csv.parseCSV("../scripts/t-mat-high.csv");
+    TransitionMatrix highDiversity = new TransitionMatrix(highDivCSV);
 
     System.out.println("Welcome to our REPL\nCurrently we only support "
       + "the following commands:\n"
       + "generate-chords <ROOT> <QUALITY> <NUMBARS> <DIVERSITY>");
+
     HashMap<String, Executable> commands = new HashMap<>();
 
-    generateChordsApp = new GenerateChords(lowDiversity);
+    CoreaApplication coreaApp = new CoreaApplication(lowDiversity, medDiversity, highDiversity);
+
+    generateChordsApp = new GenerateChords(coreaApp);
     commands.put("generate-chords", generateChordsApp);
 
     REPL repl = new REPL(commands);
@@ -175,24 +182,15 @@ public final class Main {
 //        JSONArray currArr = data.getJSONArray(i); // for another looping
         int length = curr.getInt("chordlength"); // get chord length for current entry
 //        JSONArray chordInfoArr = curr.getJSONArray("chorddata"); // get another JSON array for chord info.
-        
-        JSONObject curr2 = curr.getJSONObject(j); // get current nested json array containing chord info
+
+        JSONObject curr2 = curr.getJSONObject("chorddata"); // get current nested json array containing chord info
         CoreaApplication.Quality quality = CoreaApplication.Quality.valueOf(curr2.getString("quality"));
         CoreaApplication.Root root = CoreaApplication.Root.valueOf(curr2.getString("root"));
         Chord c = new Chord(root, quality);
         GeneratedChord generatedChord = new GeneratedChord(c, length);
-
-//        for (int j = 0; j < chordInfoArr.length(); ++j) {
-//          JSONObject curr2 = currArr.getJSONObject(j); // get current nested json array containing chord info
-//          CoreaApplication.Quality quality = CoreaApplication.Quality.valueOf(curr2.getString("quality"));
-//          CoreaApplication.Root root = CoreaApplication.Root.valueOf(curr2.getString("root"));
-//          Chord c = new Chord(root, quality);
-//          GeneratedChord generatedChord = new GeneratedChord(c, length);
-//          genChordList.add(generatedChord); // add to preexisting list of generated chords
-//        }
+        genChordList.add(generatedChord); // add to preexisting list of generated chords
 
       }
-
 
       return genChordList; // return a generated list of chords
     }

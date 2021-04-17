@@ -49,11 +49,17 @@ public class MarkovChainTest {
 
     List<String[]> lowDivCSV = csv.parseCSV("../scripts/t-mat-low.csv");
     TransitionMatrix lowDiversity = new TransitionMatrix(lowDivCSV);
+    List<String[]> medDivCSV = csv.parseCSV("../scripts/t-mat-med.csv");
+    TransitionMatrix medDiversity = new TransitionMatrix(medDivCSV);
+    List<String[]> highDivCSV = csv.parseCSV("../scripts/t-mat-high.csv");
+    TransitionMatrix highDiversity = new TransitionMatrix(highDivCSV);
 
-    coreaapp8bars = new GenerateChords(lowDiversity); // 8-bar app
-    coreaapp16bars = new GenerateChords(lowDiversity); // 16-bar app
-    coreaapp32bars = new GenerateChords(lowDiversity); // 32-bar app
-    coreaappinvalid = new GenerateChords(lowDiversity); // invalid bar param
+    CoreaApplication coreaApp = new CoreaApplication(lowDiversity, medDiversity, highDiversity);
+
+    coreaapp8bars = new GenerateChords(coreaApp); // 8-bar app
+    coreaapp16bars = new GenerateChords(coreaApp); // 16-bar app
+    coreaapp32bars = new GenerateChords(coreaApp); // 32-bar app
+    coreaappinvalid = new GenerateChords(coreaApp); // invalid bar param
 
     coreaapp8bars.execute(new String[]{"generate-chords", "C", "MAJOR7", "8", "Low"});
     coreaapp16bars.execute(new String[]{"generate-chords", "Eb", "MINOR7", "16", "Low"});
