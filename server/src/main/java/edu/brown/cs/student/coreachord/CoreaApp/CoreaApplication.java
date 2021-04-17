@@ -121,9 +121,9 @@ public class CoreaApplication {
     if (diversityLevel == Diversity.Low) {
       matrix = lowDiversity;
     } else if (diversityLevel == Diversity.Medium) {
-      matrix = mediumDiversity; // open low matrix for now
+      matrix = mediumDiversity;
     } else if (diversityLevel == Diversity.High) {
-      matrix = highDiversity; // open low matrix for now
+      matrix = highDiversity;
     }
     result = this.markovChain(startingchord, numbars, matrix); // call helper method
   }
@@ -170,7 +170,6 @@ public class CoreaApplication {
       // update length
       accumulatedLength += generatedLength;
     }
-    System.out.println(accumulatedLength);
     return chordProgression;
   }
 
