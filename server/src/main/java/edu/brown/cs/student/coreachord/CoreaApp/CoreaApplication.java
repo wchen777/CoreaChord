@@ -1,39 +1,80 @@
 package edu.brown.cs.student.coreachord.CoreaApp;
 
-
 import java.util.List;
-import java.util.Random;
 import java.util.ArrayList;
 import java.util.Set;
 import java.util.EnumSet;
 import java.util.Iterator;
 
+/**
+ * The main control center where our command goes to kick starts methods across
+ * our repo to generate random chords of varying diversity levels.
+ */
 public class CoreaApplication {
+  /**
+   * 4 different types of qualities to a chord.
+   */
   public enum Quality { // 4 possible qualities
     MAJOR7, MINOR7, MINOR7FLAT5, DOMINANT7
   }
+  /**
+   * The 12 unique keys of a keyboard make up our Roots.
+   */
   public enum Root { // 12 possible roots
     C, Db, D, Eb, E, F, Gb, G, Ab, A, Bb, B
   }
+  /**
+   * How diverse the random generated chords are.
+   */
   public enum Diversity {
     Low, Medium, High
   }
 
+  /**
+   * 8 bars in a chord progression.
+   */
   private static final int EIGHT_BARS = 8;
+  /**
+   * 16 bars in a chord progression.
+   */
   private static final int SIXTEEN_BARS = 16;
+  /**
+   * 32 bars in a chord progression.
+   */
   private static final int THIRTY_TWO_BARS = 32;
+  /**
+   * The number of qualities.
+   */
+  private static final int NUM_QUALITIES = Quality.values().length;
 
-  private final int numqualities = Quality.values().length;
-
+  /**
+   * The final list of randomly generated chords.
+   */
   private List<GeneratedChord> result;
+  /**
+   * List of very chord given our roots and qualities.
+   */
   private List<Chord> stateSpace;
-  private static final Random RAND = new Random();
-
+  /**
+   * low div transition matrix.
+   */
   private TransitionMatrix lowDiversity;
+  /**
+   * med div transition matrix.
+   */
   private TransitionMatrix mediumDiversity; // medium,
+  /**
+   * high div transition matrix.
+   */
   private TransitionMatrix highDiversity; // high diversity matrices
 
-  public CoreaApplication(TransitionMatrix lowDiversity, TransitionMatrix medDiversity, TransitionMatrix highDiversity) {
+  /**
+   * @param lowDiversity - low div transition matrix
+   * @param medDiversity - med div transition matrix.
+   * @param highDiversity - high div transition matrix.
+   */
+  public CoreaApplication(TransitionMatrix lowDiversity, TransitionMatrix medDiversity,
+                          TransitionMatrix highDiversity) {
     // set transition matrices fields
     this.lowDiversity = lowDiversity;
     this.mediumDiversity = medDiversity;
@@ -87,7 +128,14 @@ public class CoreaApplication {
     result = this.markovChain(startingchord, numbars, matrix); // call helper method
   }
 
-  private List<GeneratedChord> markovChain(Chord startingchord, int numbars, TransitionMatrix matrix) {
+  /**
+   * @param startingchord - The starting chord for the random walk
+   * @param numbars - desired bars for the chord progression
+   * @param matrix - the transition matrix
+   * @return - list of randomly generated chords
+   */
+  private List<GeneratedChord> markovChain(Chord startingchord, int numbars,
+                                           TransitionMatrix matrix) {
     ArrayList<GeneratedChord> chordProgression = new ArrayList<>();
     int n = stateSpace.size(); // all possible chord outcomes
 
@@ -107,13 +155,13 @@ public class CoreaApplication {
       int generatedLength = getNextChordLength(accumulatedLength, numbars);
 
       // number of possible qualities from Quality enum.
-      int currrowstart = currchord.getRoot().ordinal() * numqualities; // start from 0
+      int currrowstart = currchord.getRoot().ordinal() * NUM_QUALITIES; // start from 0
 
       // get the next chord index based on the current chord
       int nextchordindex = this.nextChordFromQualityCase(matrix, currchord, currrowstart);
 
       // update currchord
-      currchord = TransitionMatrix.getCorrespondingChord(nextchordindex, numqualities);
+      currchord = TransitionMatrix.getCorrespondingChord(nextchordindex, NUM_QUALITIES);
       currgenchord = new GeneratedChord(currchord, generatedLength); // update currgenchord
 
       // add to the progression
@@ -134,6 +182,7 @@ public class CoreaApplication {
    * @param numBars - limit of number of bars
    * @return - 1 or 2
    */
+  @SuppressWarnings("checkstyle:MagicNumber")
   public int getNextChordLength(int accumulatedLength, int numBars) {
     // 70% change of length 1 bar chord, 30% of length 2 bar
     double thresholdRange = 0.7;
@@ -158,37 +207,17 @@ public class CoreaApplication {
 
   /**
    * generate the next chord index.
-   * @param tmat
-   * @param currchord
-   * @param currrowstart
-   * @return
+   * @param tmat - the transition matrix
+   * @param currchord - the current chord on our random walk
+   * @param currrowstart - the row this chord lies in thee transition matrix
+   * @return - the next chord index
    */
   private int nextChordFromQualityCase(TransitionMatrix tmat, Chord currchord, int currrowstart) {
     // given current starting chord and its respective root number
     // get the corresponding chord index value
     int currRow = currrowstart + currchord.getQuality().ordinal(); // figure out which row we're on
-    return tmat.getNextChordIndex(currRow, numqualities); // return next chord index
+    return tmat.getNextChordIndex(currRow, NUM_QUALITIES); // return next chord index
   }
-
-  /*
-   * A helper method that randomly selects an index in a
-   * particular given row.
-   * (complete randomness) - initial implementation without weights
-   */
-  private int randomlySelectIndex(double[][] tmat, int row) {
-    int numCols = tmat[row].length; // get number of columns
-    return getRandomInt(numCols);
-  }
-
-
-  /*
-   * Helper method that gets a random integer
-   * in a range. (Uses Math.random())
-   */
-  public static int getRandomInt(int max) {
-    return (int) Math.floor(Math.random() * max);
-  }
-
 
   /**
    * Accessor method for resulting string list.

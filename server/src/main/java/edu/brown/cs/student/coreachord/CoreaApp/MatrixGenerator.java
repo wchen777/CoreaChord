@@ -8,6 +8,7 @@ public interface MatrixGenerator {
   /**
    * A method generators must implement, which
    * returns a custom transition matrix.
+   * @return - a generated transition matrix
    */
   TransitionMatrix generateMatrix();
 }
