@@ -1,4 +1,8 @@
-package edu.brown.cs.student.coreachord.CoreaApp;
+package edu.brown.cs.student.coreachord.MatrixGenerators;
+
+import edu.brown.cs.student.coreachord.CoreaApp.CoreaApplication;
+import edu.brown.cs.student.coreachord.CoreaApp.MatrixGenerator;
+import edu.brown.cs.student.coreachord.CoreaApp.TransitionMatrix;
 
 import java.util.HashMap;
 

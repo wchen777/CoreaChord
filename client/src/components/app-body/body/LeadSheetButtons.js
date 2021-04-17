@@ -1,27 +1,31 @@
-import React, {useRef, useEffect, useState} from 'react'
+import React, { useRef, useEffect, useState } from 'react'
 import {
   HStack, Tooltip, IconButton, Input, Text, useColorModeValue
 } from "@chakra-ui/react"
-import {DownloadIcon} from '@chakra-ui/icons'
-import {FaPlay, FaStop} from 'react-icons/fa'
-import {useChordProgContext} from "../../../context/ChordProgContext";
+import { DownloadIcon } from '@chakra-ui/icons'
+import { FaPlay, FaStop } from 'react-icons/fa'
+import { useChordProgContext } from "../../../context/ChordProgContext";
 import {
   NUM_MEASURES_PER_BAR, getChordTextRepresentation, getChordMeasureLength, getBarList, playChord
 } from '../../../ChordUtils'
 import * as Tone from "tone";
+import AnalyzerButton from './analyzer/AnalyzerButton';
 
-export default function LeadSheetButtons({synths}) {
+export default function LeadSheetButtons({ synths }) {
   const audioShouldBePlaying = useRef(false);
   const componentMounted = useRef(true);
   const MAX_CHORD_TEXT_REPRESENTATION_LENGTH = 6;
   const FIRST_CHORD_PLAYING_WAIT_FRAMES = 500;
-  const {chordProg, setChordProg} = useChordProgContext();
+  const { chordProg } = useChordProgContext();
   const [BPM, setBPM] = useState(60);
   const measureLengthInSeconds = 60 / BPM;
   const GAP_LENGTH_FACTOR = 1.1;
   const audioPlayingTimeout = useRef(null);
   const chordHighlightingTimeout = useRef(null);
   const lastHighlightedChordIndex = useRef(null);
+
+  console.log(chordProg)
+
   /*
    * The above factor determines how much of an audible gap there will be between chords being played.
    * Higher values result in a longer gap, while values closer to 1.0 result in little to no gap.
@@ -29,19 +33,19 @@ export default function LeadSheetButtons({synths}) {
   const labelColor = useColorModeValue('gray.700', 'gray.200')
 
   useEffect(() => {
-      audioShouldBePlaying.current = false;
-      componentMounted.current = true;
+    audioShouldBePlaying.current = false;
+    componentMounted.current = true;
 
-      return () => {
-        componentMounted.current = false;
-        // When component unmounts, audio should stop, as well
-        audioShouldBePlaying.current = false;
-      }
+    return () => {
+      componentMounted.current = false;
+      // When component unmounts, audio should stop, as well
+      audioShouldBePlaying.current = false;
+    }
   })
 
   // Play and pause when space bar is pressed
-  document.body.onkeypress = function(e){
-    if(e.keyCode === 32){
+  document.body.onkeypress = function (e) {
+    if (e.keyCode === 32) {
       e.stopPropagation()
       if (audioShouldBePlaying.current) {
         stopAudio();
@@ -161,7 +165,7 @@ export default function LeadSheetButtons({synths}) {
   function unhighlightPreviousChord() {
     if (componentMounted.current && lastHighlightedChordIndex.current !== null) {
       document.getElementById("chordBox" + lastHighlightedChordIndex.current)
-          .classList.remove("chordHighlighted");
+        .classList.remove("chordHighlighted");
     }
     lastHighlightedChordIndex.current = null;
   }
@@ -235,68 +239,70 @@ export default function LeadSheetButtons({synths}) {
   }
 
   return (
-      <HStack spacing="70px" mt={12} ml={6}>
+    <HStack spacing="70px" mt={12} ml={6}>
 
+      <div>
+        <Text as="span" fontWeight="semibold" my={2} fontSize="lg" color={labelColor}>BPM: </Text>
         <Tooltip
-            label="Start audio"
-            aria-label="play button"
-            fontSize="sm">
-          <IconButton
-              colorScheme="green"
-              aria-label="play button"
-              size="md"
-              py={4}
-              icon={<FaPlay/>}
-              onClick={() => {
-                playChordProgression(chordProg, 0)
-              }}
-          />
+          label="Input the BPM for playback"
+          aria-label="chord playback BPM"
+          fontSize="sm">
+          <Input defaultValue="60" placeholder="BPM" w="16"
+            onChange={(e) => setBPM(e.target.value)} />
         </Tooltip>
+      </div>
+      
+      <Tooltip
+        label="Start audio"
+        aria-label="play button"
+        fontSize="sm">
+        <IconButton
+          colorScheme="green"
+          aria-label="play button"
+          size="md"
+          py={4}
+          icon={<FaPlay />}
+          onClick={() => {
+            playChordProgression(chordProg, 0)
+          }}
+        />
+      </Tooltip>
 
-        <div>
-          <Text as="span" fontWeight="semibold" my={2} fontSize="lg" color={labelColor}>BPM: </Text>
-          <Tooltip
-              label="Input the BPM for playback"
-              aria-label="chord playback BPM"
-              fontSize="sm">
-            <Input defaultValue="60" placeholder="BPM" w="16"
-                   onChange={(e) => setBPM(e.target.value)}/>
-          </Tooltip>
-        </div>
+      <Tooltip
+        label="Stop audio"
+        aria-label="stop button"
+        fontSize="sm">
+        <IconButton
+          colorScheme="red"
+          aria-label="stop button"
+          size="md"
+          py={4}
+          icon={<FaStop />}
+          onClick={() => {
+            stopAudio()
+          }}
+        />
+      </Tooltip>
 
-        <Tooltip
-            label="Stop audio"
-            aria-label="stop button"
-            fontSize="sm">
-          <IconButton
-              colorScheme="red"
-              aria-label="stop button"
-              size="md"
-              py={4}
-              icon={<FaStop/>}
-              onClick={() => {
-                stopAudio()
-              }}
-          />
-        </Tooltip>
+      <Tooltip
+        label="Download your lead sheet as .txt format"
+        aria-label="measures tooltip"
+        fontSize="sm">
+        <IconButton
+          colorScheme="blue"
+          aria-label="download button"
+          size="md"
+          py={4}
+          icon={<DownloadIcon />}
+          onClick={() => {
+            downloadChordProgression(chordProg)
+          }}
+        />
+      </Tooltip>
 
-        <Tooltip
-            label="Download your lead sheet as .txt format"
-            aria-label="measures tooltip"
-            fontSize="sm">
-          <IconButton
-              colorScheme="blue"
-              aria-label="download button"
-              size="md"
-              py={4}
-              icon={<DownloadIcon/>}
-              onClick={() => {
-                downloadChordProgression(chordProg)
-              }}
-          />
-        </Tooltip>
+      <AnalyzerButton />
 
-      </HStack>
+    </HStack>
 
   )
 }
