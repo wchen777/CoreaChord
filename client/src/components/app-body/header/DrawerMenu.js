@@ -50,7 +50,7 @@ export default function DrawerMenu() {
 
             <DrawerBody>
               {!user && <Text> Sign in or create a CoreaChord account to save your chord progressions!</Text>} 
-              {user && <Text> Your account email: <i>{user.email}</i></Text>} 
+              {user && <Text> Your account email:<br/> <i>{user.email}</i></Text>} 
             </DrawerBody>
 
             <DrawerFooter>

@@ -168,20 +168,32 @@ public final class Main {
     public Object handle(Request request, Response response) throws Exception {
       JSONArray data = new JSONArray(request.body()); // get a list of chord progression
       List<GeneratedChord> genChordList = new ArrayList<>();
+
+
       for (int i = 0; i < data.length(); ++i) {
         JSONObject curr = data.getJSONObject(i); // get current object
-        JSONArray currArr = data.getJSONArray(i); // for another looping
+//        JSONArray currArr = data.getJSONArray(i); // for another looping
         int length = curr.getInt("chordlength"); // get chord length for current entry
-        JSONArray chordInfoArr = curr.getJSONArray("chorddata"); // get another JSON array for chord info.
-        for (int j = 0; j < chordInfoArr.length(); ++j) {
-          JSONObject curr2 = currArr.getJSONObject(j); // get current nested json array containing chord info
-          CoreaApplication.Quality quality = CoreaApplication.Quality.valueOf(curr2.getString("quality"));
-          CoreaApplication.Root root = CoreaApplication.Root.valueOf(curr2.getString("root"));
-          Chord c = new Chord(root, quality);
-          GeneratedChord generatedChord = new GeneratedChord(c, length);
-          genChordList.add(generatedChord); // add to preexisting list of generated chords
-        }
+//        JSONArray chordInfoArr = curr.getJSONArray("chorddata"); // get another JSON array for chord info.
+        
+        JSONObject curr2 = curr.getJSONObject(j); // get current nested json array containing chord info
+        CoreaApplication.Quality quality = CoreaApplication.Quality.valueOf(curr2.getString("quality"));
+        CoreaApplication.Root root = CoreaApplication.Root.valueOf(curr2.getString("root"));
+        Chord c = new Chord(root, quality);
+        GeneratedChord generatedChord = new GeneratedChord(c, length);
+
+//        for (int j = 0; j < chordInfoArr.length(); ++j) {
+//          JSONObject curr2 = currArr.getJSONObject(j); // get current nested json array containing chord info
+//          CoreaApplication.Quality quality = CoreaApplication.Quality.valueOf(curr2.getString("quality"));
+//          CoreaApplication.Root root = CoreaApplication.Root.valueOf(curr2.getString("root"));
+//          Chord c = new Chord(root, quality);
+//          GeneratedChord generatedChord = new GeneratedChord(c, length);
+//          genChordList.add(generatedChord); // add to preexisting list of generated chords
+//        }
+
       }
+
+
       return genChordList; // return a generated list of chords
     }
   }
