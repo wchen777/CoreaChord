@@ -16,10 +16,10 @@ export default function AnalyzeTable({ cadences }) {
   const cadenceRows = cadences?.map((c) => {
     return (
       <Tr>
-        <Td>{c.start} to {c.end}</Td>
-        <Td>{c.cadence === "Imaj7_Im7" ? "Imaj7 I-7" : c.cadence.split("_").join(" ")}</Td>
-        <Td>{c.progression}</Td>
-        <Td>{c.relativeRoot}</Td>
+        <Td>{c?.start} to {c.end}</Td>
+        <Td>{c?.cadence === "Imaj7_Im7" ? "Imaj7 I-7" : c?.cadence.split("_").join(" ")}</Td>
+        <Td>{c?.progression}</Td>
+        <Td>{c?.relativeRoot}</Td>
       </Tr>
     )
   })

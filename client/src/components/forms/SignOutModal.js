@@ -14,7 +14,7 @@ import {
 } from '@chakra-ui/react';
 import { signOut } from '../../api/Firebase'
 
-export default function SignOutModal() {
+export default function SignOutModal( { setShowSaved } ) {
 
   const { isOpen, onOpen, onClose } = useDisclosure()
   const finalRef = useRef()
@@ -44,7 +44,13 @@ export default function SignOutModal() {
           <Box my={8}>
             <Center>
               <VStack>
-                <Button colorScheme="teal" size="lg" onClick={() => signOut()}>
+                <Button
+                  colorScheme="teal"
+                  size="lg"
+                  onClick={() => {
+                    signOut()
+                    setShowSaved(false)
+                  }}>
                   Sign me out!
                 </Button>
                 <Button variant="ghost" colorScheme="red" size="lg" onClick={onClose}>No, go back.</Button>

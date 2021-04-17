@@ -61,7 +61,7 @@ export default function AnalyzeResultsModal({ finalRef, isOpen, onClose, analyze
                   style={{
                     data: { stroke: "teal" }
                   }}
-                  data={analyzedData.complexities}
+                  data={analyzedData?.complexities}
                 />
 
               </VictoryChart>
@@ -72,7 +72,7 @@ export default function AnalyzeResultsModal({ finalRef, isOpen, onClose, analyze
                 fontSize="xs">
                 <Heading color="gray.500" fontSize="15px" my={2}>Jazz Cadences</Heading>
               </Tooltip>
-              <AnalyzeTable cadences={analyzedData.cadences} />
+              <AnalyzeTable cadences={analyzedData?.cadences} />
 
               <Button variant="ghost" colorScheme="red" size="lg" onClick={onClose} mt={5}>Close</Button>
             </VStack>

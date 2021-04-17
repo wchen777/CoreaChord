@@ -46,7 +46,7 @@ export default function HeaderBar( { showSaved, setShowSaved } ) {
           {user && <SavedSheetsButton showSaved={showSaved} setShowSaved={setShowSaved}/> }
 
           {/* if user, display signout button */}
-          {user && <SignOutModal />}
+          {user && <SignOutModal setShowSaved={setShowSaved}/>}
 
           <InfoModal/>
 
