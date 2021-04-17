@@ -29,7 +29,7 @@ export default function HeaderBar( { showSaved, setShowSaved } ) {
 
           <DrawerMenu />
 
-          <Heading color="teal.500" ml={7} pl={4} fontSize="44px" onClick={() => !setShowSaved()}> CoreaChord </Heading>
+          <Heading color="teal.500" ml={7} pl={4} fontSize="44px" onClick={() => setShowSaved(false)} role="button"> CoreaChord </Heading>
 
         </HStack>
         <Spacer />
