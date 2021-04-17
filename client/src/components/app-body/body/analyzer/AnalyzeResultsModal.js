@@ -1,12 +1,8 @@
-import React, { useRef, useEffect, useState } from 'react'
-import { VictoryChart, VictoryLine, VictoryZoomContainer, VictoryLabel } from 'victory'
+import React, { useState } from 'react'
+import { VictoryChart, VictoryLine, VictoryZoomContainer } from 'victory'
 import {
-  HStack,
   Tooltip,
-  IconButton,
   Button,
-  Input,
-  Text,
   useColorModeValue,
   Modal,
   ModalOverlay,
@@ -14,7 +10,6 @@ import {
   VStack,
   ModalCloseButton,
   ModalContent,
-  ModalBody,
   Heading,
   Box
 } from "@chakra-ui/react"
@@ -22,14 +17,11 @@ import AnalyzeTable from './AnalyzeTable'
 
 export default function AnalyzeResultsModal({ finalRef, isOpen, onClose, analyzedData }) {
 
-  console.log(analyzedData)
-
   const [zoom, setZoom] = useState({})
 
   const handleZoom = (domain) => {
     setZoom({ ...zoom, selectedDomain: domain });
   }
-
 
   return (
     <Modal finalFocusRef={finalRef} isOpen={isOpen} onClose={onClose} size="2xl">
@@ -39,19 +31,19 @@ export default function AnalyzeResultsModal({ finalRef, isOpen, onClose, analyze
 
         <Center> <Heading color="teal.500" fontSize="25px" mt={12} mx={3} mb={4}>
           Analyzer Results </Heading> </Center>
-        {/* <ModalHeader w="200">Register for an account:</ModalHeader>  */}
         <ModalCloseButton />
 
         <Box mb={8} mt={4}>
           <Center>
             <VStack>
               <Tooltip
-                label="A secret complexity score that we track throughout the chord progression."
+                label="A secret complexity score ranging from 0 to 1 that we track throughout the chord progression.
+                (0 = least complex, 1 = most complex)"
                 aria-label="progression complexity tooltip"
                 fontSize="xs">
                 <Heading color="gray.500" fontSize="15px">Progression Complexity</Heading>
               </Tooltip>
-              {/* <VictoryLabel text="Progression Complexity" textAnchor="middle"/> */}
+
               <VictoryChart
                 width={450}
                 height={200}

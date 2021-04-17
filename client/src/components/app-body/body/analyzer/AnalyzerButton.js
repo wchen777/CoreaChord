@@ -1,18 +1,9 @@
-import React, { useRef, useEffect, useState } from 'react'
+import React, { useRef, useState } from 'react'
 import axios from 'axios'
 import {
-  HStack,
   Tooltip,
   IconButton,
-  Button,
-  Input,
-  Text,
-  useColorModeValue,
-  Center,
-  VStack,
   useDisclosure,
-  Heading,
-  Box
 } from "@chakra-ui/react"
 import { BsGraphUp } from "react-icons/bs";
 import AnalyzeResultsModal from './AnalyzeResultsModal';
