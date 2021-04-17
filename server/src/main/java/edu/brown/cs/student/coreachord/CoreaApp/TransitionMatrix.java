@@ -5,18 +5,30 @@ import edu.brown.cs.student.coreachord.UtilityObjects.Tuple;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * A representation of a transition matrix. Supports methods to randomly pick
+ * out the next chord in the transition matrix.
+ */
 public class TransitionMatrix {
+  /**
+   * transition matrix.
+   */
   private double[][] tmat;
 
+  /**
+   * @param probabilities the transition matrix read in from the csv file
+   */
   public TransitionMatrix(List<String[]> probabilities) {
     this.fillTransitionMatrix(probabilities);
   }
 
   // for dynamic transition matrix, different constructor
   public TransitionMatrix() {
-
   }
 
+  /**
+   * @param probabilities - transition matrix
+   */
   /*
    * Method for filling transition matrix.
    * It'll take in a list of array of strings that contain
@@ -49,9 +61,9 @@ public class TransitionMatrix {
    * (Handles chord-index correspondence in the transition
    * matrix)
    *
-   * @param index
+   * @param index - index of the chord in its 2d transition matrix
    * @param numqualities - Number of qualities a chord can have
-   * @return corresponding Chord
+   * @return - corresponding Chord at that index
    */
   public static Chord getCorrespondingChord(int index, int numqualities) {
     // Root order: C, Db, D, Eb, E, F, Gb, G, Ab, A, Bb, B
@@ -63,6 +75,12 @@ public class TransitionMatrix {
     return new Chord(root, quality);
   }
 
+  /**
+   * @param row - row of the current chord with its associated probabilities
+   *            to the next chord
+   * @param numQualities - the number of qualities applied in this project
+   * @return - index oof thee next randomly generated chord
+   */
   /*
    * Explanation:
    *
@@ -82,6 +100,7 @@ public class TransitionMatrix {
    * Then, we look for that probability value in our original row in transition matrix.
    * The column index that contains that probability value will be indicating
    * our next chord to go to.
+   *
    */
   public int getNextChordIndex(int row, int numQualities) {
     if (this.tmat == null) {
@@ -133,14 +152,17 @@ public class TransitionMatrix {
   }
 
   /**
-   * return 0 if tmat is uninitialized, otherwise return tmat's length (how many rows).
+   * return 0 if tMat is uninitialized, otherwise return tMat's length (how many rows).
    *
-   * @return
+   * @return - length of tMat.
    */
   public int getNumChords() {
     return this.tmat == null ? 0 : tmat.length;
   }
 
+  /**
+   * @return - the instance variable tMat.
+   */
   public double[][] getTransitionMatrix() {
     return this.tmat;
   }

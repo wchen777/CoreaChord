@@ -21,7 +21,7 @@ public class REPL {
   }
 
   /**
-   * Begins the REPL.
+   * Begins the REPL
    */
   public void run() {
     String line = "";
