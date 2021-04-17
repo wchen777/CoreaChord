@@ -12,16 +12,35 @@ import java.util.HashMap;
  * It takes in a parameter of
  */
 public class TransitionMatrixGenerator {
+  /**
+   * custom matrix based off of the key center.
+   */
   private TransitionMatrix custommat;
+  /**
+   * diversity between low, medium, and high.
+   */
   private CoreaApplication.Diversity currdiversity;
+  /**
+   * low transition matrix generator with a key center.
+   */
   private LowDiversityGenerator lowdivgenerator;
+  /**
+   * medium transition matrix generator with a key center.
+   */
   private MediumDiversityGenerator meddivgenerator;
+  /**
+   * high transition matrix generator with a key center.
+   */
   private HighDiversityGenerator highdivgenerator;
-  private HashMap<CoreaApplication.Diversity, MatrixGenerator> divmap; // diversity map
+  /**
+   * Map of Diversity level to their matrix genrators.
+   */
+  private HashMap<CoreaApplication.Diversity, MatrixGenerator> divmap;
 
   /**
    * constructor takes in the user's selected diversity level.
-   * @param diversity
+   * @param diversity - How diverse the chords should be on a scale of low medium
+   *                  and high
    */
   //
   public TransitionMatrixGenerator(CoreaApplication.Diversity diversity) {
@@ -33,13 +52,18 @@ public class TransitionMatrixGenerator {
     divmap.put(CoreaApplication.Diversity.High, highdivgenerator);
   }
 
-  // call the corresponding matrix generator's generateMatrix() method.
+  /**
+   * call the corresponding matrix generator's generateMatrix() method.
+   * @return - the generated custom matrix
+   */
   public TransitionMatrix createCustomMatrix() {
     TransitionMatrix outputmatrix = divmap.get(currdiversity).generateMatrix();
-    return outputmatrix; // return the generated custom matrix
+    return outputmatrix;
   }
 
-  // helper method initializes all the matrix generators.
+  /**
+   * helper method initializes all the matrix generators.
+   */
   private void setUpGenerators() {
     lowdivgenerator = new LowDiversityGenerator();
     meddivgenerator = new MediumDiversityGenerator();

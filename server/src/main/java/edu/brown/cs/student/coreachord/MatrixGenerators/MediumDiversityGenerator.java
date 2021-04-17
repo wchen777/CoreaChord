@@ -4,21 +4,24 @@ import edu.brown.cs.student.coreachord.CoreaApp.CoreaApplication;
 import edu.brown.cs.student.coreachord.CoreaApp.MatrixGenerator;
 import edu.brown.cs.student.coreachord.CoreaApp.TransitionMatrix;
 
+/**
+ * Generates medium diversity matrix with a key center.
+ */
 public class MediumDiversityGenerator implements MatrixGenerator {
   /**
    * Transition matrix for Medium Diversity.
    */
   private TransitionMatrix tmat;
   /**
-   * Stores.
+   * Stores the probabilities of the transition matrix.
    */
   private double[][] matrix2d;
   /**
-   *
+   * Total number of Qualities, ie., 4.
    */
   private final int numqualities = CoreaApplication.Quality.values().length;
   /**
-   *
+   * Total number of Roots, ie., 12.
    */
   private final int numroots = CoreaApplication.Root.values().length;
 
