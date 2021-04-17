@@ -1,12 +1,28 @@
-package edu.brown.cs.student.coreachord.CoreaApp;
+package edu.brown.cs.student.coreachord.MatrixGenerators;
 
-public class LowDiversityGenerator implements MatrixGenerator {
+import edu.brown.cs.student.coreachord.CoreaApp.CoreaApplication;
+import edu.brown.cs.student.coreachord.CoreaApp.MatrixGenerator;
+import edu.brown.cs.student.coreachord.CoreaApp.TransitionMatrix;
+
+public class MediumDiversityGenerator implements MatrixGenerator {
+  /**
+   * Transition matrix for Medium Diversity.
+   */
   private TransitionMatrix tmat;
+  /**
+   * Stores.
+   */
   private double[][] matrix2d;
+  /**
+   *
+   */
   private final int numqualities = CoreaApplication.Quality.values().length;
+  /**
+   *
+   */
   private final int numroots = CoreaApplication.Root.values().length;
 
-  public LowDiversityGenerator() {
+  public MediumDiversityGenerator() {
     tmat = new TransitionMatrix();
     matrix2d = tmat.getTransitionMatrix();
   }

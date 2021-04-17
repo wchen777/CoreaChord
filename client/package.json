@@ -24,6 +24,7 @@
     "react-select": "^4.3.0",
     "tone": "^14.7.77",
     "uuid": "^8.3.2",
+    "victory": "^35.5.1",
     "web-vitals": "^0.2.4"
   },
   "scripts": {

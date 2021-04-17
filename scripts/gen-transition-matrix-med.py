@@ -117,6 +117,9 @@ def dom7_rule(chord_num, row):
 def maj7_rule(chord_num, row):
     chord_name_num = chord_num // quals
 
+    # to minor same
+    row[chord_name_num * quals + 1 + 1] = 0.055
+
     # if we are at Cmaj7,
 
     # F
@@ -124,7 +127,7 @@ def maj7_rule(chord_num, row):
 
     # TOTAL 0.075
     # Fmaj7
-    row[(d5 * quals) + 1] = 0.05
+    row[(d5 * quals) + 1] = 0.04
     # F-7
     row[(d5 * quals) + 1 + 1] = 0.025
 
@@ -132,15 +135,15 @@ def maj7_rule(chord_num, row):
     # D
     u1 = up1(chord_name_num)
     # D-7
-    row[(u1 * quals) + 1 + 1] = 0.4
+    row[(u1 * quals) + 1 + 1] = 0.39
     # D7
-    row[(u1 * quals) + 3 + 1] = 0.1
+    row[(u1 * quals) + 3 + 1] = 0.09
 
     # 0.025
     # Ab
     d2h = down2half(chord_name_num)
     # Abmaj7
-    row[(d2h * quals) + 1] = 0.025
+    row[(d2h * quals) + 1] = 0.02
 
     # TOTAL 0.15
     # A
@@ -162,7 +165,7 @@ def maj7_rule(chord_num, row):
     # B-7b5
     row[(d1 * quals) + 2 + 1] = 0.05
     # B-7
-    row[(d1 * quals) + 1 + 1] = 0.025
+    row[(d1 * quals) + 1 + 1] = 0.01
 
     # 0.15 left
 
@@ -176,7 +179,7 @@ def maj7_rule(chord_num, row):
     # 0.025 left
     # E-7
     u2 = up2(chord_name_num)
-    row[(d1 * quals) + 1 + 1] = 0.025
+    row[(d1 * quals) + 1 + 1] = 0.02
 
 
 def min7_rule(chord_num, row):

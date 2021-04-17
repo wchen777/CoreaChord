@@ -182,15 +182,15 @@ public final class Main {
 //        JSONArray currArr = data.getJSONArray(i); // for another looping
         int length = curr.getInt("chordlength"); // get chord length for current entry
 //        JSONArray chordInfoArr = curr.getJSONArray("chorddata"); // get another JSON array for chord info.
-
         JSONObject curr2 = curr.getJSONObject("chorddata"); // get current nested json array containing chord info
         CoreaApplication.Quality quality = CoreaApplication.Quality.valueOf(curr2.getString("quality"));
         CoreaApplication.Root root = CoreaApplication.Root.valueOf(curr2.getString("root"));
         Chord c = new Chord(root, quality);
         GeneratedChord generatedChord = new GeneratedChord(c, length);
         genChordList.add(generatedChord); // add to preexisting list of generated chords
-
       }
+
+      System.out.println(genChordList);
 
       return genChordList; // return a generated list of chords
     }

@@ -20,7 +20,7 @@ export default function DrawerMenu() {
   const { isOpen, onOpen, onClose } = useDisclosure()
   const btnRef = useRef()
 
-  const {user, _} = useContext(AuthContext)
+  const { user } = useContext(AuthContext)
 
   const bgColor = useColorModeValue("white", "")
   return (
