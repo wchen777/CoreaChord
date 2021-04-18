@@ -20,38 +20,38 @@ export default function SaveProgression() {
   const [chordProgName, setChordProgName] = useState("My-Prog-1")
 
   const { chordProg } = useChordProgContext();
-  const { isTyping } = useChordProgContext();
+  const { isTyping, setIsTyping } = useChordProgContext();
 
-  /*
-   * Logic for preventing space bar click when typing in the text area input
-   */
-  let timer, // using "let" here just for the space bar key detection/differentiation
-      timeoutVal = 1000; // normally, we would not use "let" keyword for good practice.
-  const status = document.getElementById('status'); // pointers to simple DOM elements
-  const typer = document.getElementById('typer');
+  // /*
+  //  * Logic for preventing space bar click when typing in the text area input
+  //  */
+  // let timer, // using "let" here just for the space bar key detection/differentiation
+  //     timeoutVal = 1000; // normally, we would not use "let" keyword for good practice.
+  // const status = document.getElementById('status'); // pointers to simple DOM elements
+  // const typer = document.getElementById('typer');
 
-  if (typer) {
-    typer.addEventListener('keypress', handleKeyPress); // call functions
-    typer.addEventListener('keyup', handleKeyUp);
-  }
+  // if (typer) {
+  //   typer.addEventListener('keypress', handleKeyPress); // call functions
+  //   typer.addEventListener('keyup', handleKeyUp);
+  // }
 
-  // create a timeout on keyup event (to detect that the user has finished typing)
-  function handleKeyUp(e) {
-    window.clearTimeout(timer);
-    timer = window.setTimeout(() => {
-      {console.log('User has finished typing.')}
-      // ChordProgContextProvider(isTyping) = false; // set boolean to false
-      {console.log(isTyping)}
-    }, timeoutVal);
-  }
+  // // create a timeout on keyup event (to detect that the user has finished typing)
+  // function handleKeyUp(e) {
+  //   window.clearTimeout(timer);
+  //   timer = window.setTimeout(() => {
+  //     {console.log('User has finished typing.')}
+  //     // ChordProgContextProvider(isTyping) = false; // set boolean to false
+  //     {console.log(isTyping)}
+  //   }, timeoutVal);
+  // }
 
-  // clear the timeout object on keypress
-  function handleKeyPress(e) {
-    window.clearTimeout(timer);
-    {console.log('User is typing...')}
-    // isTyping = true; // set boolean to true
-    {console.log(isTyping)}
-  }
+  // // clear the timeout object on keypress
+  // function handleKeyPress(e) {
+  //   window.clearTimeout(timer);
+  //   {console.log('User is typing...')}
+  //   // isTyping = true; // set boolean to true
+  //   {console.log(isTyping)}
+  // }
 
   const onSaveSheet = async () => {
 
@@ -78,7 +78,7 @@ export default function SaveProgression() {
           aria-label="progression save name"
           fontSize="sm">
         <Input defaultValue="My-Prog-1" placeholder="Progression Name" type="textbox" id="typer"
-               onChange={(e) => setChordProgName(e.target.value)}/>
+               onChange={(e) => setChordProgName(e.target.value)} onFocus={() => setIsTyping(true)} onBlur={() => setIsTyping(false)}/>
       </Tooltip>
 
 

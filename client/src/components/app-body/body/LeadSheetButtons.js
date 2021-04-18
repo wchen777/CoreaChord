@@ -44,11 +44,12 @@ export default function LeadSheetButtons({ synths }) {
 
   // Play and pause when space bar is pressed
   document.body.onkeypress = function (e) {
-    if (e.keyCode === 32) {
+    if (isTyping) {
+      return 
+    } else if (e.keyCode === 32) {
       e.preventDefault()
-      e.stopPropagation()
-      // {console.log(isTyping)}
-      if (audioShouldBePlaying.current && isTyping === false) {
+      // e.stopPropagation()
+      if (audioShouldBePlaying.current) {
         stopAudio();
       } else {
         playChordProgression(chordProg, 0);
@@ -252,7 +253,7 @@ export default function LeadSheetButtons({ synths }) {
             onChange={(e) => setBPM(e.target.value)} />
         </Tooltip>
       </div>
-      
+
       <Tooltip
         label="Start audio"
         aria-label="play button"
