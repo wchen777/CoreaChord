@@ -6,7 +6,7 @@ import Select from 'react-select'
 import axios from 'axios'
 import { useChordProgContext } from '../../../context/ChordProgContext'
 
-import { numBars, chordDiversity, chordValues } from '../../../data/GenerateSettings'
+import { numBars, chordDiversity, chordValues, brightness } from '../../../data/GenerateSettings'
 
 import ResultsBody from './ResultsBody'
 
@@ -15,7 +15,8 @@ export default function HomeBody({ synths }) {
   const [startChordInput, setStartChordInput] = useState("None");
   const [chordDiversityInput, setChordDiversityInput] = useState("Medium");
   const [numBarsInput, setNumBarsInput] = useState(32);
-  const [loading, setLoading] = useState(false)
+  const [loading, setLoading] = useState(false);
+  const [ chordBrightness, setChordBrightness ] = useState("Regular");
 
   const labelColor = useColorModeValue('gray.700', 'gray.200')
 
@@ -79,7 +80,8 @@ export default function HomeBody({ synths }) {
     const toSend = {
       startChord: chordToSend,
       chordDiversity: chordDiversityInput,
-      numBars: numBarsInput
+      numBars: numBarsInput,
+      chordBrightness: chordBrightness
     };
     const config = {
       headers: {
@@ -113,11 +115,11 @@ export default function HomeBody({ synths }) {
 
           {/* REFACTOR THIS???? */}
 
-          <HStack spacing="80px" w="150">
+          <HStack spacing="75px" w="150">
 
             {/* fix these colors to be teal, fix night mode colors, fix default values? */}
 
-            <Box w="60">
+            <Box w="40">
               <Tooltip
                 label="How many bars or measures to generate."
                 aria-label="measures tooltip"
@@ -128,7 +130,7 @@ export default function HomeBody({ synths }) {
                 isSearchable={false} onChange={(event) => { setNumBarsInput(event.value) }} />
             </Box>
 
-            <Box w="60">
+            <Box w="40">
               <Tooltip
                 label="Choose a starting chord to generate from."
                 aria-label="starting chord tooltip"
@@ -139,7 +141,18 @@ export default function HomeBody({ synths }) {
                 isSearchable={false} onChange={(event) => { setStartChordInput(event.value) }} defaultValue={{label: "None", value: "None"}} />
             </Box>
 
-            <Box w="60">
+            <Box w="40">
+              <Tooltip
+                  label="Select the brightness of the new chord progression."
+                  aria-label="measures tooltip"
+                  fontSize="sm">
+                <Text fontWeight="semibold" my={2} fontSize="lg" color={labelColor}>Brightness</Text>
+              </Tooltip>
+              <Select styles={customSelectStyles} options={brightness} placeholder="Brightness" defaultValue={{label: "Regular", value: "Regular"}}
+                      isSearchable={false} onChange={(event) => { setChordBrightness(event.value) }} />
+            </Box>
+
+            <Box w="40">
               <Tooltip
                 label="Generate chord progressions with varying levels of complexity and variety."
                 aria-label="diversity tooltip"

@@ -151,7 +151,8 @@ public final class Main {
       String startChord = data.getString("startChord");
       String chordDiversity = data.getString("chordDiversity");
       int numBars = data.getInt("numBars");
-      // System.out.println("data received from frontend: " + startChord + " " + chordDiversity + " " + numBars);
+      String progBrightness = data.getString("chordBrightness"); // light or dark
+      // System.out.println("data received from frontend: " + startChord + " " + chordDiversity + " " + numBars + " " + progTheme);
       String progRoot = startChord.substring(0,1);
       String progQuality = startChord.substring(1);
       if (startChord.charAt(1) == 'b'){
@@ -161,7 +162,7 @@ public final class Main {
       // Convert the progQuality to enum
       progQuality = QUALITIES.get(progQuality);
 
-      String[] command = {"generate-chords", progRoot, progQuality, Integer.toString(numBars), chordDiversity};
+      String[] command = {"generate-chords", progRoot, progQuality, Integer.toString(numBars), chordDiversity, progBrightness};
 
       // Call the app to generate the chords
       generateChordsApp.execute(command);

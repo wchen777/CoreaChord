@@ -166,4 +166,10 @@ public class TransitionMatrix {
   public double[][] getTransitionMatrix() {
     return this.tmat;
   }
+
+  /**
+   * Mutator (setter) method for the matrix member variable.
+   * @param newmat
+   */
+  public void setTransitionMatrix(double[][] newmat) { this.tmat = newmat; }
 }

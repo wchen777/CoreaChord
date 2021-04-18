@@ -21,3 +21,5 @@ export const chordValues = [{value: 'None', label: 'None'}, {value: 'Cmaj7', lab
   {value: 'Bbmaj7', label: 'Bbmaj7'}, {value: 'Bb-7', label: 'Bbm7'}, {value: 'Bb7', label: 'Bb7'},
   {value: 'Bb-7b5', label: 'Bbm7b5'}, {value: 'Bmaj7', label: 'Bmaj7'}, {value: 'B-7', label: 'Bm7'},
   {value: 'B7', label: 'B7'}, {value: 'B-7b5', label: 'Bm7b5'}]
+
+export const brightness = [{value: "Light", label: "Light"}, {value: "Regular", label: "Regular"}, {value: "Dark", label: "Dark"}]

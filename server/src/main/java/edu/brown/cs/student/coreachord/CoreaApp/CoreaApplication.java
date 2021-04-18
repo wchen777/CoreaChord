@@ -31,6 +31,13 @@ public class CoreaApplication {
   }
 
   /**
+   * How bright or dark the chord progression sounds.
+   */
+  public enum Brightness {
+    Light, Regular, Dark
+  }
+
+  /**
    * 8 bars in a chord progression.
    */
   private static final int EIGHT_BARS = 8;
@@ -112,7 +119,7 @@ public class CoreaApplication {
    * @param diversityLevel between low/mid/high
    *
    */
-  public void generateChords(Chord startingchord, int numbars, Diversity diversityLevel) {
+  public void generateChords(Chord startingchord, int numbars, Diversity diversityLevel, Brightness brightness) {
     if (!(numbars == EIGHT_BARS) && !(numbars == SIXTEEN_BARS) && !(numbars == THIRTY_TWO_BARS)) {
       result = new ArrayList<>();
       return; // check for specific inputs, if not one of those, return null.
@@ -124,6 +131,9 @@ public class CoreaApplication {
       matrix = mediumDiversity;
     } else if (diversityLevel == Diversity.High) {
       matrix = highDiversity;
+    }
+    if (brightness == Brightness.Light || brightness == Brightness.Dark) {
+      this.adjustMatrixForBrightness(matrix, brightness); // adjust matrix weights if the theme is either light or dark.
     }
     result = this.markovChain(startingchord, numbars, matrix); // call helper method
   }
@@ -200,6 +210,70 @@ public class CoreaApplication {
 
   }
 
+  /**
+   * Helper method for adjusting matrix weights based on the "brightness" of the chord progression
+   * @param matrix
+   */
+  private void adjustMatrixForBrightness(TransitionMatrix matrix, Brightness brightness) {
+    double[][] transitionMat = matrix.getTransitionMatrix();
+    int n = transitionMat.length; // square matrix, get one dimension.
+    if (brightness == Brightness.Light) {
+      for (int i = 0; i < n; ++i) {
+        for (int j = 0; j < n; ++j) {
+          if (isBrightChord(j)) { // if it IS a bright chord
+            transitionMat[i][j] += 0.7;
+          }
+        }
+        this.normalize(transitionMat[i]); // normalize if we're done with one row.
+      }
+    } else if (brightness == Brightness.Dark) {
+      for (int i = 0; i < n; ++i) {
+        for (int j = 0; j < n; ++j) {
+          if (!isBrightChord(j)) { // if it IS a bright chord
+            transitionMat[i][j] += 0.7;
+          }
+        }
+        this.normalize(transitionMat[i]); // normalize if we're done with one row.
+      }
+    }
+    matrix.setTransitionMatrix(transitionMat);
+  }
+  /**
+   * Helper method that normalizes the values of a row.
+   * It just mutates the inputted row, so nothing is returned.
+   * @param row
+   */
+  private void normalize(double[] row) {
+    int sum = 0;
+    for (int i = 0; i < row.length; ++i) {
+      sum += row[i];
+    }
+    float inverse = 1;
+    if (sum > 1) {
+      float floatsum = (float) sum;
+      inverse = 1/floatsum;
+    }
+    for (int i = 0; i < row.length; ++i) {
+      row[i] = row[i]/inverse;
+    }
+  }
+
+  /**
+   * Helper method that determines rather or not a column index
+   * of the row is a bright chord or not.
+   * @param index
+   * @return boolean
+   */
+  private boolean isBrightChord(int index) {
+    if (index == 8 || index == 9 || index == 10 || index == 11 // D "bright" chords
+        || index == 16 || index == 17 || index == 18 || index == 19 // E
+        || index == 28 || index == 29 || index == 30 || index == 31 // G
+        || index == 36 || index == 37 || index == 38 || index == 39 // A
+        || index == 44 || index == 45 || index == 46 || index == 47) { // B
+        return true;
+    }
+    return false; // if not, return false
+  }
   /*
    * Below are some helper methods for handling the random walk on markov chain.
    */

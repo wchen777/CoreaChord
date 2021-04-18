@@ -61,10 +61,10 @@ public class MarkovChainTest {
     coreaapp32bars = new GenerateChords(coreaApp); // 32-bar app
     coreaappinvalid = new GenerateChords(coreaApp); // invalid bar param
 
-    coreaapp8bars.execute(new String[]{"generate-chords", "C", "MAJOR7", "8", "Low"});
-    coreaapp16bars.execute(new String[]{"generate-chords", "Eb", "MINOR7", "16", "Low"});
-    coreaapp32bars.execute(new String[]{"generate-chords", "G", "MINOR7FLAT5", "32", "Low"});
-    coreaappinvalid.execute(new String[]{"generate-chords", "Bb", "DOMINANT7", "5", "Low"});
+    coreaapp8bars.execute(new String[]{"generate-chords", "C", "MAJOR7", "8", "Low", "Regular"});
+    coreaapp16bars.execute(new String[]{"generate-chords", "Eb", "MINOR7", "16", "Low", "Regular"});
+    coreaapp32bars.execute(new String[]{"generate-chords", "G", "MINOR7FLAT5", "32", "Low", "Regular"});
+    coreaappinvalid.execute(new String[]{"generate-chords", "Bb", "DOMINANT7", "5", "Low", "Regular"});
 
     // checking the contents of 8-bar corea app
     System.out.println("8-bar corea app chords: ");
