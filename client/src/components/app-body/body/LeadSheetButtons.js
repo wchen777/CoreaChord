@@ -17,13 +17,13 @@ export default function LeadSheetButtons({ synths }) {
   const MAX_CHORD_TEXT_REPRESENTATION_LENGTH = 6;
   const FIRST_CHORD_PLAYING_WAIT_FRAMES = 500;
   const { chordProg } = useChordProgContext();
+  const { isTyping } = useChordProgContext();
   const [BPM, setBPM] = useState(60);
   const measureLengthInSeconds = 60 / BPM;
   const GAP_LENGTH_FACTOR = 1.1;
   const audioPlayingTimeout = useRef(null);
   const chordHighlightingTimeout = useRef(null);
   const lastHighlightedChordIndex = useRef(null);
-
 
   /*
    * The above factor determines how much of an audible gap there will be between chords being played.
@@ -45,8 +45,10 @@ export default function LeadSheetButtons({ synths }) {
   // Play and pause when space bar is pressed
   document.body.onkeypress = function (e) {
     if (e.keyCode === 32) {
+      e.preventDefault()
       e.stopPropagation()
-      if (audioShouldBePlaying.current) {
+      // {console.log(isTyping)}
+      if (audioShouldBePlaying.current && isTyping === false) {
         stopAudio();
       } else {
         playChordProgression(chordProg, 0);
