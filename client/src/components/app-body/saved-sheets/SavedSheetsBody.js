@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useContext } from 'react'
+import React, { useState, useEffect, useContext, useCallback } from 'react'
 import {
   Container, Text, Grid, Spinner, Input, InputGroup, InputLeftElement
 } from "@chakra-ui/react"
@@ -12,11 +12,14 @@ import { useChordProgContext } from '../../../context/ChordProgContext'
 
 export default function SavedSheetsBody({ setShowSaved }) {
 
+  const [reload, updateState] = useState(0);
+  const forceUpdate = useCallback(() => updateState({}), []);
+
   const [loading, setLoading] = useState(true)
 
   const [search, setSearch] = useState('')
 
-  const { isTyping, setIsTyping } = useChordProgContext()
+  const { setIsTyping } = useChordProgContext()
 
   const [userSheets, setUserSheets] = useState([])
 
@@ -39,17 +42,23 @@ export default function SavedSheetsBody({ setShowSaved }) {
     } catch (err) {
       alert('Error in fetching sheets.' + err.message);
     }
+    setLoading(false)
+  }
+
+  const refresh = () => {
+    fetchSheets(user.uid)
   }
 
   useEffect(() => {
-    fetchSheets(user.uid)
-  }, [])
+    refresh()
+  }, [forceUpdate, updateState, reload])
+
+
 
   const filtered = search === '' ? userSheets : userSheets.filter(s => s.name.toLowerCase().indexOf(search) >= 0)
 
-  const chordsList = filtered.map((sheet, index) => <ChordProgCard key={index} chordProgData={sheet} setShowSaved={setShowSaved} />)
+  const chordsList = filtered.map((sheet, index) => <ChordProgCard forceUpdate={forceUpdate} reload={reload} updateState={updateState} key={index} chordProgData={sheet} setShowSaved={setShowSaved} />)
   
-  console.log(isTyping)
 
   return (
     <Container className="home-body-container" p={8} >

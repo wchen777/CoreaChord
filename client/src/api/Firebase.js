@@ -32,16 +32,18 @@ export async function signOut() {
 
 export async function saveSheet({ chordProg, userID, name, color }) {
   try {
+    let id = uuidv4()
     await firebase
       .firestore()
       .collection("sheets")
-      .doc(uuidv4())
+      .doc(id)
       .set({
         chordProg,
         userID,
         createdAt: new Date().toDateString(),
         name,
-        color
+        color,
+        id
       })
 
 
@@ -49,5 +51,19 @@ export async function saveSheet({ chordProg, userID, name, color }) {
     alert('Error in save sheets.' + err.message);
   }
 }
+
+export async function deleteSheet(id ) {
+  try {
+    await firebase
+      .firestore()
+      .collection("sheets")
+      .doc(id)
+      .delete()
+
+  } catch (err) {
+    alert('Error in delete sheets.' + err.message);
+  }
+}
+
 
 

@@ -4,8 +4,9 @@ import {
 } from "@chakra-ui/react"
 import clefImg from './clef-transparent.png'
 import { useChordProgContext } from '../../../context/ChordProgContext'
+import DeleteButton from './DeleteButton'
 
-export default function ChordProgCard({ chordProgData, setShowSaved }) {
+export default function ChordProgCard({ chordProgData, setShowSaved, forceUpdate, reload, updateState }) {
 
   const { setChordProg } = useChordProgContext()
 
@@ -16,14 +17,14 @@ export default function ChordProgCard({ chordProgData, setShowSaved }) {
 
   return (
     <div role="button">
-      <Box maxW="sm" borderWidth="1px" borderRadius="lg" overflow="hidden" onClick={() => onChordProgSelect()}>
+      <Box maxW="sm" borderWidth="1px" borderRadius="lg" overflow="hidden">
 
-        <Box backgroundColor={chordProgData.color ?? "gray.300"} py={3}>
+        <Box backgroundColor={chordProgData.color ?? "gray.300"} py={3} onClick={() => onChordProgSelect()}>
           <Image src={clefImg} alt="img display" height={150} mx="auto" />
         </Box>
 
         <Box p="6">
-          <Box d="flex" alignItems="baseline">
+          <Box d="flex" alignItems="baseline" onClick={() => onChordProgSelect()}>
             <Badge borderRadius="full" px="2" colorScheme="teal" ml={2} my={1}>
               Chord Progression
           </Badge>
@@ -32,6 +33,7 @@ export default function ChordProgCard({ chordProgData, setShowSaved }) {
 
           <Box
             mt="1"
+            onClick={() => onChordProgSelect()}
             fontWeight="semibold"
             as="h4"
             lineHeight="tight"
@@ -42,9 +44,10 @@ export default function ChordProgCard({ chordProgData, setShowSaved }) {
             {chordProgData.name}
           </Box>
 
-          <Box d="flex" mt="2" alignItems="center">
+          <Box d="flex" mt="2" alignItems="center" justifyContent='space-between'>
 
             <Box
+              onClick={() => onChordProgSelect()}
               as="span"
               ml="2"
               color="gray.500"
@@ -54,6 +57,8 @@ export default function ChordProgCard({ chordProgData, setShowSaved }) {
               textTransform="uppercase">
               {chordProgData.createdAt}
             </Box>
+
+            <DeleteButton id={chordProgData.id} forceUpdate={forceUpdate} reload={reload} updateState={updateState} setShowSaved={setShowSaved}/>
           </Box>
         </Box>
       </Box>
