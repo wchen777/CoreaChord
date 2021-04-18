@@ -12,12 +12,12 @@ import * as Tone from "tone";
 import AnalyzerButton from './analyzer/AnalyzerButton';
 
 export default function LeadSheetButtons({ synths }) {
+  const mounted = useRef(false);
   const audioShouldBePlaying = useRef(false);
   const componentMounted = useRef(true);
   const MAX_CHORD_TEXT_REPRESENTATION_LENGTH = 6;
   const FIRST_CHORD_PLAYING_WAIT_FRAMES = 500;
-  const { chordProg } = useChordProgContext();
-  const { isTyping } = useChordProgContext();
+  const { chordProg, isTyping } = useChordProgContext();
   const [BPM, setBPM] = useState(60);
   const measureLengthInSeconds = 60 / BPM;
   const GAP_LENGTH_FACTOR = 1.1;
@@ -42,13 +42,20 @@ export default function LeadSheetButtons({ synths }) {
     }
   })
 
+  // check if the current component is mounted
+  useEffect(() => {
+    mounted.current = true;
+    return () => (mounted.current = false);
+  });
+
   // Play and pause when space bar is pressed
   document.body.onkeypress = function (e) {
-    if (isTyping) {
+    // if this component is not mounted, ignore the spacebar
+    if (isTyping || !mounted.current) {
       return 
-    } else if (e.keyCode === 32) {
-      e.preventDefault()
-      // e.stopPropagation()
+    } else if (e.keyCode === 32) { 
+      e.preventDefault()  
+      e.stopPropagation()
       if (audioShouldBePlaying.current) {
         stopAudio();
       } else {

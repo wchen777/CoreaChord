@@ -1,16 +1,22 @@
 import React, { useState, useEffect, useContext } from 'react'
 import {
-  Container, Text, Grid, Spinner
+  Container, Text, Grid, Spinner, Input, InputGroup, InputLeftElement
 } from "@chakra-ui/react"
+import { SearchIcon } from '@chakra-ui/icons'
 import ChordProgCard from './ChordProgCard'
 import firebase from "firebase/app";
 import "firebase/firestore";
 import { AuthContext } from '../../../context/AuthContext'
+import { useChordProgContext } from '../../../context/ChordProgContext'
 
 
 export default function SavedSheetsBody({ setShowSaved }) {
 
   const [loading, setLoading] = useState(true)
+
+  const [search, setSearch] = useState('')
+
+  const { isTyping, setIsTyping } = useChordProgContext()
 
   const [userSheets, setUserSheets] = useState([])
 
@@ -39,7 +45,11 @@ export default function SavedSheetsBody({ setShowSaved }) {
     fetchSheets(user.uid)
   }, [])
 
-  const chordsList = userSheets.map((sheet, index) => <ChordProgCard key={index} chordProgData={sheet} setShowSaved={setShowSaved} />)
+  const filtered = search === '' ? userSheets : userSheets.filter(s => s.name.toLowerCase().indexOf(search) >= 0)
+
+  const chordsList = filtered.map((sheet, index) => <ChordProgCard key={index} chordProgData={sheet} setShowSaved={setShowSaved} />)
+  
+  console.log(isTyping)
 
   return (
     <Container className="home-body-container" p={8} >
@@ -55,9 +65,24 @@ export default function SavedSheetsBody({ setShowSaved }) {
         userSheets.length === 0 ?
           <Text textAlign='center' mx="auto"> You haven't saved any sheets yet!</Text>
           :
-          <Grid templateColumns="repeat(4, 1fr)" gap={6} pb={12}>
-            {chordsList}
-          </Grid>
+          <>
+            <InputGroup mx='auto' width="50%" mb={7}>
+              <InputLeftElement
+                pointerEvents="none"
+                children={<SearchIcon color="gray.300" />}
+              />
+              <Input
+                placeholder="Search for a sheet name"
+                onChange={(e) => setSearch(e.target.value.toLowerCase())}
+                onFocus={() => setIsTyping(true)}
+                onBlur={() => setIsTyping(false)}
+              />
+            </InputGroup>
+
+            <Grid templateColumns="repeat(4, 1fr)" gap={6} pb={12}>
+              {chordsList}
+            </Grid>
+          </>
       }
 
     </Container>
