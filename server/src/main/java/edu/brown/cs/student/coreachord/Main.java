@@ -101,7 +101,7 @@ public final class Main {
    */
   private void runSparkServer(int port) {
     Spark.port(port);
-    Spark.externalStaticFileLocation("src/main/resources/static");
+    Spark.externalStaticFileLocation("build");
 
     // TODO Code below copied from other projects, to handle the CORS error stuff
     Spark.options("/*", (request, response) -> {
@@ -120,6 +120,16 @@ public final class Main {
     // Setup Spark Routes
     Spark.post("/generate", new GenerateChordsHandler());
     Spark.post("/analyze", new AnalyzeChordsHandler());
+
+    // return static build directory's index.html file for server side rendering
+    Spark.get("/", (request, response) -> {
+      response.redirect("index.html");
+      return null;
+    });
+    Spark.notFound(((request, response) -> {
+      response.redirect("index.html");
+      return null;
+    }));
   }
 
 
