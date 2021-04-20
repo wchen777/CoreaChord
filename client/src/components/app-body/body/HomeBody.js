@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useRef } from 'react'
 import {
   Container, HStack, Center, Button, Tooltip, Box, Text, useColorModeValue
 } from "@chakra-ui/react"
@@ -17,6 +17,7 @@ export default function HomeBody({ synths }) {
   const [numBarsInput, setNumBarsInput] = useState(32);
   const [loading, setLoading] = useState(false);
   const [ chordBrightness, setChordBrightness ] = useState("Regular");
+  const oldProgs = useRef([])
 
   const labelColor = useColorModeValue('gray.700', 'gray.200')
 
@@ -61,6 +62,21 @@ export default function HomeBody({ synths }) {
   }
 
   /**
+   * Resets the chordProg to the chord progression generated prior to this one.
+   * If run multiple times, can go all the way back to the chord progression that was loaded in
+   * when the page was loaded.
+   * Unfortunately, this process cannot itself be undone (so chord progressions that are lost by
+   * undoing cannot be recovered).
+   * It also loses its saved history when switching to the Saved Sheets page and returning to
+   * the homepage.
+   */
+  function undoGenerate() {
+    if (oldProgs.current.length > 0) {
+      setChordProg(oldProgs.current.pop());
+    }
+  }
+
+  /**
    * Makes an axios request to generate a set of chords based on the current settings.
    */
   function generateChords() {
@@ -98,6 +114,7 @@ export default function HomeBody({ synths }) {
         return response.data;
       })
       .then((data) => {
+        oldProgs.current.push(chordProg);
         setChordProg(data);
         setLoading(false)
       })
@@ -111,11 +128,11 @@ export default function HomeBody({ synths }) {
   return (
     <Container className="home-body-container">
       <Center>
-        <HStack spacing="160px" my={4}>
+        <HStack my={4} spacing="80px">
 
           {/* REFACTOR THIS???? */}
 
-          <HStack spacing="75px" w="150">
+          <HStack spacing="60px" w="150" mx={39}>
 
             {/* fix these colors to be teal, fix night mode colors, fix default values? */}
 
@@ -165,9 +182,15 @@ export default function HomeBody({ synths }) {
 
           </HStack>
 
-          <Button colorScheme="teal" px={10} mx={5} size="lg" onClick={() => { generateChords() }} isLoading={loading}>
-            Generate!
-          </Button>
+          <HStack spacing="20px">
+            <Button colorScheme="teal" px={10} size="lg" onClick={() => { generateChords() }} isLoading={loading}>
+              Generate!
+            </Button>
+
+            <Button colorScheme="teal" px={10} size="lg" onClick={() => { undoGenerate() }}>
+              Undo
+            </Button>
+          </HStack>
 
         </HStack>
       </Center>
