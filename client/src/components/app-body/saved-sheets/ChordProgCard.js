@@ -6,7 +6,7 @@ import clefImg from './clef-transparent.png'
 import { useChordProgContext } from '../../../context/ChordProgContext'
 import DeleteButton from './DeleteButton'
 
-export default function ChordProgCard({ chordProgData, setShowSaved, forceUpdate, reload, updateState }) {
+export default function ChordProgCard({ chordProgData, setShowSaved, reload, updateState }) {
 
   const { setChordProg } = useChordProgContext()
 
@@ -58,7 +58,7 @@ export default function ChordProgCard({ chordProgData, setShowSaved, forceUpdate
               {chordProgData.createdAt}
             </Box>
 
-            <DeleteButton id={chordProgData.id} forceUpdate={forceUpdate} reload={reload} updateState={updateState} setShowSaved={setShowSaved}/>
+            <DeleteButton id={chordProgData.id} reload={reload} updateState={updateState}/>
           </Box>
         </Box>
       </Box>
