@@ -41,3 +41,9 @@ to control how fast the audio is played.
 • Maxime - Frontend design: including rendering, playing, and downloading chord progressions on the webpage<br>
 • Will - Frontend design: including general logic, Firebase authentication and database connection, creating transition matrices and chord voicing mappings, and additional features in the backend<br>
 
+## How to Run
+1. Open two shell windows and navigate to the ``server`` subdirectory in one and the ``client`` subdirectory in the other.
+2. In the ``server`` directory, run ``mvn package``
+3. In the ``client`` directory, run ``npm install``
+4. In the ``server`` directory, run ``./run --gui`` to start the server
+5. In the ``client`` directory, run ``npm start`` to start the frontend at ``localhost:3000``
