@@ -16,7 +16,23 @@ import {
 import AnalyzeTable from './AnalyzeTable'
 
 export default function AnalyzeResultsModal({ finalRef, isOpen, onClose, analyzedData }) {
-
+  const labelColor = useColorModeValue('#000000', '#FFFFFF')
+  const chartTheme = {
+    axis: {
+      style: {
+        tickLabels: {
+          padding: 10,
+          fill: labelColor,
+        },
+        axis: {
+          stroke: labelColor,
+        },
+        grid: {
+          stroke: "transparent",
+        }
+      }
+    }
+  }
   const [zoom, setZoom] = useState({})
 
   const handleZoom = (domain) => {
@@ -49,6 +65,7 @@ export default function AnalyzeResultsModal({ finalRef, isOpen, onClose, analyze
                 height={200}
                 maxDomain={{ y: 1 }}
                 minDomain={{ y: 0 }}
+                theme={chartTheme}
                 containerComponent={
                   <VictoryZoomContainer responsive={false}
                     zoomDimension="y"

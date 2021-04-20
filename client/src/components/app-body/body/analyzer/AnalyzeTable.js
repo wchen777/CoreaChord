@@ -13,9 +13,9 @@ import {
 export default function AnalyzeTable({ cadences }) {
 
 
-  const cadenceRows = cadences?.map((c) => {
+  const cadenceRows = cadences?.map((c, index) => {
     return (
-      <Tr>
+      <Tr key={index}>
         <Td>{c?.start} to {c.end}</Td>
         <Td>{c?.cadence === "Imaj7_Im7" ? "Imaj7 I-7" : c?.cadence.split("_").join(" ")}</Td>
         <Td>{c?.progression}</Td>

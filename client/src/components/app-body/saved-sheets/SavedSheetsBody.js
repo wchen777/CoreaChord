@@ -13,7 +13,6 @@ import { useChordProgContext } from '../../../context/ChordProgContext'
 export default function SavedSheetsBody({ setShowSaved }) {
 
   const [reload, updateState] = useState(0);
-  const forceUpdate = useCallback(() => updateState({}), []);
 
   const [loading, setLoading] = useState(true)
 
@@ -51,13 +50,16 @@ export default function SavedSheetsBody({ setShowSaved }) {
 
   useEffect(() => {
     refresh()
-  }, [forceUpdate, updateState, reload])
+  }, [updateState, reload])
 
 
 
   const filtered = search === '' ? userSheets : userSheets.filter(s => s.name.toLowerCase().indexOf(search) >= 0)
 
-  const chordsList = filtered.map((sheet, index) => <ChordProgCard forceUpdate={forceUpdate} reload={reload} updateState={updateState} key={index} chordProgData={sheet} setShowSaved={setShowSaved} />)
+  const chordsList = filtered.map(
+      (sheet, index) => <ChordProgCard key={index} reload={reload} updateState={updateState}
+      chordProgData={sheet} setShowSaved={setShowSaved}
+  />)
   
 
   return (

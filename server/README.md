@@ -1,5 +1,7 @@
 # cs0320 Term Project 2021
 
+## *(Initial Project Outline: official README for our finalized project is in the main repo directory)* 
+
 ### Team Members: *(including Strengths and Weaknesses)*
 
 **Ashley Chung** *(CS Login hchung21; Github achung695; intro sequence: CS15/16)*<br>
@@ -172,16 +174,16 @@ TA Approval (dlichen): Rejected, not enough algorithmic complexity.
 No need to resubmit.
 <br>
 
-**Mentor TA:** _Put your mentor TA's name and email here once you're assigned one!_
+**Mentor TA:** Prithu Dasgupta (prithu_dasgupta@brown.edu)
 
 ## Meetings
 _On your first meeting with your mentor TA, you should plan dates for at least the following meetings:_
 
-**Specs, Mockup, and Design Meeting:** _(Schedule for on or before March 15)_
+**Specs, Mockup, and Design Meeting:** March 15, 6pm
 
-**4-Way Checkpoint:** _(Schedule for on or before April 5)_
+**4-Way Checkpoint:** April 5, 6pm
 
-**Adversary Checkpoint:** _(Schedule for on or before April 12 once you are assigned an adversary TA)_
+**Adversary Checkpoint:** April 12, 8:30pm, with Nick Young
 
 ## How to Build and Run
-_A necessary part of any README!_
+_See the "How to Run" section in the README in the main repo directory!_

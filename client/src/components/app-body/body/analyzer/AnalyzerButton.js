@@ -33,7 +33,7 @@ export default function AnalyzerButton() {
       config
     )
       .then((response) => {
-        console.log(response)
+        // console.log(response)
         let complexities = JSON.parse(response.data.complexities)
         let cadences = JSON.parse(response.data.cadences)
 

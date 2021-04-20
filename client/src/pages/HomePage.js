@@ -13,7 +13,7 @@ export default function HomePage() {
 
   useEffect(() => {
     // init firebase
-    console.log("firebase initialized")
+    // console.log("firebase initialized")
     firebase.initializeApp(firebaseConfig)
   }, [])
 
