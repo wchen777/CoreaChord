@@ -1,4 +1,4 @@
-# CoreaChord<br>
+# CoreaChord (backup for CS32 term project)<br>
 Term Project for cs0320: Introduction to Software Engineering @ Brown University (2021 Spring)
 
 ### Team Members: Ashley Hee Won Chung, Erick Lerena, Maxime Hendrikse Liu, and Will Chen
