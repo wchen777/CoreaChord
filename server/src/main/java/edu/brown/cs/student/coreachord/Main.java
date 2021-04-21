@@ -71,11 +71,11 @@ public final class Main {
     // read in transition matrix csvs
     CSVReader csv = new CSVReader();
 
-    List<String[]> lowDivCSV = csv.parseCSV("../scripts/t-mat-low.csv");
+    List<String[]> lowDivCSV = csv.parseCSV("./CSV/t-mat-low.csv");
     TransitionMatrix lowDiversity = new TransitionMatrix(lowDivCSV);
-    List<String[]> medDivCSV = csv.parseCSV("../scripts/t-mat-med.csv");
+    List<String[]> medDivCSV = csv.parseCSV("./CSV/t-mat-med.csv");
     TransitionMatrix medDiversity = new TransitionMatrix(medDivCSV);
-    List<String[]> highDivCSV = csv.parseCSV("../scripts/t-mat-high.csv");
+    List<String[]> highDivCSV = csv.parseCSV("./CSV/t-mat-high.csv");
     TransitionMatrix highDiversity = new TransitionMatrix(highDivCSV);
 
     System.out.println("Welcome to our REPL\nCurrently we only support "
