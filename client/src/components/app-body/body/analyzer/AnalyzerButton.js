@@ -28,7 +28,7 @@ export default function AnalyzerButton() {
     }
 
     axios.post(
-      "http://localhost:4567/analyze",
+      "/analyze",
       chordProg,
       config
     )
