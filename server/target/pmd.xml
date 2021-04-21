@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<pmd xmlns="http://pmd.sourceforge.net/report/2.0.0"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://pmd.sourceforge.net/report/2.0.0 http://pmd.sourceforge.net/report_2_0_0.xsd"
+    version="6.13.0" timestamp="2021-04-15T20:02:30.987">
+<file name="/Users/maxime/Desktop/brown/spring-2021-brown/cs32/term-project-elerena-hchung21-mhendrik-wchen77/server/src/main/java/edu/brown/cs/student/coreachord/CoreaApp/CoreaApplication.java">
+<violation beginline="30" endline="30" begincolumn="31" endcolumn="34" rule="UnusedPrivateField" ruleset="Best Practices" package="edu.brown.cs.student.coreachord.CoreaApp" class="CoreaApplication" variable="RAND" externalInfoUrl="https://pmd.github.io/pmd-6.13.0/pmd_rules_java_bestpractices.html#unusedprivatefield" priority="3">
+Avoid unused private fields such as 'RAND'.
+</violation>
+<violation beginline="33" endline="33" begincolumn="28" endcolumn="42" rule="UnusedPrivateField" ruleset="Best Practices" package="edu.brown.cs.student.coreachord.CoreaApp" class="CoreaApplication" variable="mediumDiversity" externalInfoUrl="https://pmd.github.io/pmd-6.13.0/pmd_rules_java_bestpractices.html#unusedprivatefield" priority="3">
+Avoid unused private fields such as 'mediumDiversity'.
+</violation>
+<violation beginline="34" endline="34" begincolumn="28" endcolumn="40" rule="UnusedPrivateField" ruleset="Best Practices" package="edu.brown.cs.student.coreachord.CoreaApp" class="CoreaApplication" variable="highDiversity" externalInfoUrl="https://pmd.github.io/pmd-6.13.0/pmd_rules_java_bestpractices.html#unusedprivatefield" priority="3">
+Avoid unused private fields such as 'highDiversity'.
+</violation>
+<violation beginline="91" endline="91" begincolumn="9" endcolumn="9" rule="UnusedLocalVariable" ruleset="Best Practices" package="edu.brown.cs.student.coreachord.CoreaApp" class="CoreaApplication" method="markovChain" variable="n" externalInfoUrl="https://pmd.github.io/pmd-6.13.0/pmd_rules_java_bestpractices.html#unusedlocalvariable" priority="3">
+Avoid unused local variables such as 'n'.
+</violation>
+<violation beginline="177" endline="177" begincolumn="15" endcolumn="59" rule="UnusedPrivateMethod" ruleset="Best Practices" package="edu.brown.cs.student.coreachord.CoreaApp" class="CoreaApplication" method="randomlySelectIndex" externalInfoUrl="https://pmd.github.io/pmd-6.13.0/pmd_rules_java_bestpractices.html#unusedprivatemethod" priority="3">
+Avoid unused private methods such as 'randomlySelectIndex(double,int)'.
+</violation>
+</file>
+<file name="/Users/maxime/Desktop/brown/spring-2021-brown/cs32/term-project-elerena-hchung21-mhendrik-wchen77/server/src/main/java/edu/brown/cs/student/coreachord/CoreaApp/HighDiversityGenerator.java">
+<violation beginline="18" endline="21" begincolumn="7" endcolumn="7" rule="JumbledIncrementer" ruleset="Error Prone" package="edu.brown.cs.student.coreachord.CoreaApp" class="HighDiversityGenerator" method="generateMatrix" externalInfoUrl="https://pmd.github.io/pmd-6.13.0/pmd_rules_java_errorprone.html#jumbledincrementer" priority="3">
+Avoid modifying an outer loop incrementer in an inner loop for update expression
+</violation>
+<violation beginline="19" endline="19" begincolumn="16" endcolumn="24" rule="UnusedLocalVariable" ruleset="Best Practices" package="edu.brown.cs.student.coreachord.CoreaApp" class="HighDiversityGenerator" method="generateMatrix" variable="currentry" externalInfoUrl="https://pmd.github.io/pmd-6.13.0/pmd_rules_java_bestpractices.html#unusedlocalvariable" priority="3">
+Avoid unused local variables such as 'currentry'.
+</violation>
+</file>
+<file name="/Users/maxime/Desktop/brown/spring-2021-brown/cs32/term-project-elerena-hchung21-mhendrik-wchen77/server/src/main/java/edu/brown/cs/student/coreachord/CoreaApp/LowDiversityGenerator.java">
+<violation beginline="18" endline="21" begincolumn="7" endcolumn="7" rule="JumbledIncrementer" ruleset="Error Prone" package="edu.brown.cs.student.coreachord.CoreaApp" class="LowDiversityGenerator" method="generateMatrix" externalInfoUrl="https://pmd.github.io/pmd-6.13.0/pmd_rules_java_errorprone.html#jumbledincrementer" priority="3">
+Avoid modifying an outer loop incrementer in an inner loop for update expression
+</violation>
+<violation beginline="19" endline="19" begincolumn="16" endcolumn="24" rule="UnusedLocalVariable" ruleset="Best Practices" package="edu.brown.cs.student.coreachord.CoreaApp" class="LowDiversityGenerator" method="generateMatrix" variable="currentry" externalInfoUrl="https://pmd.github.io/pmd-6.13.0/pmd_rules_java_bestpractices.html#unusedlocalvariable" priority="3">
+Avoid unused local variables such as 'currentry'.
+</violation>
+</file>
+<file name="/Users/maxime/Desktop/brown/spring-2021-brown/cs32/term-project-elerena-hchung21-mhendrik-wchen77/server/src/main/java/edu/brown/cs/student/coreachord/CoreaApp/MediumDiversityGenerator.java">
+<violation beginline="30" endline="33" begincolumn="7" endcolumn="7" rule="JumbledIncrementer" ruleset="Error Prone" package="edu.brown.cs.student.coreachord.CoreaApp" class="MediumDiversityGenerator" method="generateMatrix" externalInfoUrl="https://pmd.github.io/pmd-6.13.0/pmd_rules_java_errorprone.html#jumbledincrementer" priority="3">
+Avoid modifying an outer loop incrementer in an inner loop for update expression
+</violation>
+<violation beginline="31" endline="31" begincolumn="16" endcolumn="24" rule="UnusedLocalVariable" ruleset="Best Practices" package="edu.brown.cs.student.coreachord.CoreaApp" class="MediumDiversityGenerator" method="generateMatrix" variable="currentry" externalInfoUrl="https://pmd.github.io/pmd-6.13.0/pmd_rules_java_bestpractices.html#unusedlocalvariable" priority="3">
+Avoid unused local variables such as 'currentry'.
+</violation>
+</file>
+<file name="/Users/maxime/Desktop/brown/spring-2021-brown/cs32/term-project-elerena-hchung21-mhendrik-wchen77/server/src/main/java/edu/brown/cs/student/coreachord/CoreaApp/TransitionMatrix.java">
+<violation beginline="91" endline="91" begincolumn="11" endcolumn="19" rule="UnusedLocalVariable" ruleset="Best Practices" package="edu.brown.cs.student.coreachord.CoreaApp" class="TransitionMatrix" method="getNextChordIndex" variable="currchord" externalInfoUrl="https://pmd.github.io/pmd-6.13.0/pmd_rules_java_bestpractices.html#unusedlocalvariable" priority="3">
+Avoid unused local variables such as 'currchord'.
+</violation>
+</file>
+<file name="/Users/maxime/Desktop/brown/spring-2021-brown/cs32/term-project-elerena-hchung21-mhendrik-wchen77/server/src/main/java/edu/brown/cs/student/coreachord/CoreaApp/TransitionMatrixGenerator.java">
+<violation beginline="11" endline="11" begincolumn="28" endcolumn="36" rule="UnusedPrivateField" ruleset="Best Practices" package="edu.brown.cs.student.coreachord.CoreaApp" class="TransitionMatrixGenerator" variable="custommat" externalInfoUrl="https://pmd.github.io/pmd-6.13.0/pmd_rules_java_bestpractices.html#unusedprivatefield" priority="3">
+Avoid unused private fields such as 'custommat'.
+</violation>
+</file>
+<file name="/Users/maxime/Desktop/brown/spring-2021-brown/cs32/term-project-elerena-hchung21-mhendrik-wchen77/server/src/main/java/edu/brown/cs/student/coreachord/Main.java">
+<violation beginline="8" endline="8" begincolumn="1" endcolumn="65" rule="UnusedImports" ruleset="Best Practices" package="edu.brown.cs.student.coreachord" class="Main" externalInfoUrl="https://pmd.github.io/pmd-6.13.0/pmd_rules_java_bestpractices.html#unusedimports" priority="4">
+Avoid unused imports such as 'edu.brown.cs.student.coreachord.CoreaApp.CoreaApplication'
+</violation>
+<violation beginline="77" endline="77" begincolumn="10" endcolumn="13" rule="UnusedLocalVariable" ruleset="Best Practices" package="edu.brown.cs.student.coreachord" class="Main" method="run" variable="repl" externalInfoUrl="https://pmd.github.io/pmd-6.13.0/pmd_rules_java_bestpractices.html#unusedlocalvariable" priority="3">
+Avoid unused local variables such as 'repl'.
+</violation>
+</file>
+</pmd>

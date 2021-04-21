@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>GenerateChords.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">coreachord</a> &gt; <a href="index.source.html" class="el_package">edu.brown.cs.student.coreachord.Commands</a> &gt; <span class="el_source">GenerateChords.java</span></div><h1>GenerateChords.java</h1><pre class="source lang-java linenums">package edu.brown.cs.student.coreachord.Commands;
+
+import edu.brown.cs.student.coreachord.CoreaApp.Chord;
+import edu.brown.cs.student.coreachord.CoreaApp.CoreaApplication;
+import edu.brown.cs.student.coreachord.CoreaApp.GeneratedChord;
+import edu.brown.cs.student.coreachord.CoreaApp.TransitionMatrix;
+import edu.brown.cs.student.coreachord.REPL.Executable;
+
+import java.util.List;
+
+public class GenerateChords implements Executable {
+
+  private static CoreaApplication callGenerateChords;
+  private List&lt;GeneratedChord&gt; result;
+<span class="fc" id="L15">  public GenerateChords(TransitionMatrix transitionMatrix) {</span>
+<span class="fc" id="L16">    callGenerateChords = new CoreaApplication(transitionMatrix);</span>
+<span class="fc" id="L17">  }</span>
+
+  /**
+   * Simple getter method
+   * @return results
+   */
+  public List&lt;GeneratedChord&gt; getResult() {
+<span class="fc" id="L24">    return result;</span>
+  }
+  @Override
+  public void execute(String[] input) {
+<span class="pc bpc" id="L28" title="1 of 2 branches missed.">    if (input.length != 5) {</span>
+<span class="nc" id="L29">      System.out.println(&quot;ERROR: Incorrect number of arguments for generate-chords&quot;);</span>
+<span class="nc" id="L30">      return;</span>
+    }
+    try {
+<span class="fc" id="L33">      Chord inputChord = new Chord(CoreaApplication.Root.valueOf(input[1]), CoreaApplication.Quality.valueOf(input[2]));</span>
+<span class="fc" id="L34">      callGenerateChords.generateChords(inputChord, Integer.parseInt(input[3]), CoreaApplication.Diversity.valueOf(input[4]));</span>
+<span class="fc" id="L35">      result = callGenerateChords.getResult();</span>
+<span class="fc bfc" id="L36" title="All 2 branches covered.">      for (GeneratedChord gChord: result) {</span>
+<span class="fc" id="L37">        System.out.println(&quot;\n&quot; + gChord);</span>
+<span class="fc" id="L38">      }</span>
+
+<span class="nc" id="L40">    } catch (IndexOutOfBoundsException i) {</span>
+<span class="nc" id="L41">      System.out.println(&quot;ERROR: incorrect input arguments for generate-chords command&quot;);</span>
+<span class="nc" id="L42">    } catch (IllegalArgumentException e) {</span>
+<span class="nc" id="L43">      System.out.println(&quot;ERROR: inappropriate root or quality&quot;);</span>
+<span class="pc" id="L44">    }</span>
+<span class="fc" id="L45">  }</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.5.201910111838</span></div></body></html>

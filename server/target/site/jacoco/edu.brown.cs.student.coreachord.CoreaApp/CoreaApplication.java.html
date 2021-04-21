@@ -1,0 +1,200 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>CoreaApplication.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">coreachord</a> &gt; <a href="index.source.html" class="el_package">edu.brown.cs.student.coreachord.CoreaApp</a> &gt; <span class="el_source">CoreaApplication.java</span></div><h1>CoreaApplication.java</h1><pre class="source lang-java linenums">package edu.brown.cs.student.coreachord.CoreaApp;
+
+
+import java.util.List;
+import java.util.Random;
+import java.util.ArrayList;
+import java.util.Set;
+import java.util.EnumSet;
+import java.util.Iterator;
+
+public class CoreaApplication {
+<span class="fc" id="L12">  public enum Quality { // 4 possible qualities</span>
+<span class="fc" id="L13">    MAJOR7, MINOR7, MINOR7FLAT5, DOMINANT7</span>
+  }
+<span class="fc" id="L15">  public enum Root { // 12 possible roots</span>
+<span class="fc" id="L16">    C, Db, D, Eb, E, F, Gb, G, Ab, A, Bb, B</span>
+  }
+<span class="fc" id="L18">  public enum Diversity {</span>
+<span class="fc" id="L19">    Low, Medium, High</span>
+  }
+
+  private static final int EIGHT_BARS = 8;
+  private static final int SIXTEEN_BARS = 16;
+  private static final int THIRTY_TWO_BARS = 32;
+
+<span class="fc" id="L26">  private final int numqualities = Quality.values().length;</span>
+
+  private List&lt;GeneratedChord&gt; result;
+  private List&lt;Chord&gt; stateSpace;
+<span class="fc" id="L30">  private static final Random RAND = new Random();</span>
+
+  private TransitionMatrix lowDiversity;
+  private TransitionMatrix mediumDiversity; // medium,
+  private TransitionMatrix highDiversity; // high diversity matrices
+
+<span class="fc" id="L36">  public CoreaApplication(TransitionMatrix lowDiversity) {</span>
+    // set transition matrices fields
+<span class="fc" id="L38">    this.lowDiversity = lowDiversity;</span>
+    // TODO: initialize medium &amp; high diversity matrices
+
+    // populating Enum sets with all values in our enum definitions
+<span class="fc" id="L42">    Set&lt;Quality&gt; qualityset = EnumSet.allOf(Quality.class);</span>
+<span class="fc" id="L43">    Set&lt;Root&gt; rootset = EnumSet.allOf(Root.class);</span>
+    // loop through sets, and add all possible chords to our state space
+<span class="fc" id="L45">    Iterator&lt;Quality&gt; itr1 = qualityset.iterator();</span>
+<span class="fc" id="L46">    Iterator&lt;Root&gt; itr2 = rootset.iterator();</span>
+<span class="fc" id="L47">    List&lt;Quality&gt; qualities = new ArrayList&lt;&gt;();</span>
+<span class="fc" id="L48">    List&lt;Root&gt; roots = new ArrayList&lt;&gt;();</span>
+<span class="fc bfc" id="L49" title="All 2 branches covered.">    while (itr2.hasNext()) { // root (c, d, etc.)</span>
+<span class="fc" id="L50">      roots.add(itr2.next()); // add all elements to list</span>
+    }
+<span class="fc bfc" id="L52" title="All 2 branches covered.">    while (itr1.hasNext()) { // quality (major, minor...)</span>
+<span class="fc" id="L53">      qualities.add(itr1.next());</span>
+    }
+<span class="fc" id="L55">    stateSpace = new ArrayList&lt;&gt;();</span>
+    // ... now add everything to state space using a double for loop!
+<span class="fc bfc" id="L57" title="All 2 branches covered.">    for (Root nextroot : roots) { // root</span>
+<span class="fc bfc" id="L58" title="All 2 branches covered.">      for (Quality nextquality : qualities) { // quality</span>
+<span class="fc" id="L59">        stateSpace.add(new Chord(nextroot, nextquality));</span>
+<span class="fc" id="L60">      }</span>
+<span class="fc" id="L61">    }</span>
+<span class="fc" id="L62">  }</span>
+
+  /**
+   * An algorithmic method that will generate a random set of chords
+   * using a random walk on the Markov Chain.
+   *
+   * @param startingchord starting chord
+   * @param numbars number of bars
+   * @param diversityLevel between low/mid/high
+   *
+   */
+  public void generateChords(Chord startingchord, int numbars, Diversity diversityLevel) {
+<span class="fc bfc" id="L74" title="All 6 branches covered.">    if (!(numbars == EIGHT_BARS) &amp;&amp; !(numbars == SIXTEEN_BARS) &amp;&amp; !(numbars == THIRTY_TWO_BARS)) {</span>
+<span class="fc" id="L75">      result = new ArrayList&lt;&gt;();</span>
+<span class="fc" id="L76">      return; // check for specific inputs, if not one of those, return null.</span>
+    }
+<span class="fc" id="L78">    TransitionMatrix matrix = lowDiversity;</span>
+<span class="pc bpc" id="L79" title="1 of 2 branches missed.">    if (diversityLevel == Diversity.Low) {</span>
+<span class="fc" id="L80">      matrix = lowDiversity;</span>
+<span class="nc bnc" id="L81" title="All 2 branches missed.">    } else if (diversityLevel == Diversity.Medium) {</span>
+<span class="nc" id="L82">      matrix = lowDiversity; // open low matrix for now</span>
+<span class="nc bnc" id="L83" title="All 2 branches missed.">    } else if (diversityLevel == Diversity.High) {</span>
+<span class="nc" id="L84">      matrix = lowDiversity; // open low matrix for now</span>
+    }
+<span class="fc" id="L86">    result = this.markovChain(startingchord, numbars, matrix); // call helper method</span>
+<span class="fc" id="L87">  }</span>
+
+  private List&lt;GeneratedChord&gt; markovChain(Chord startingchord, int numbars, TransitionMatrix matrix) {
+<span class="fc" id="L90">    ArrayList&lt;GeneratedChord&gt; chordProgression = new ArrayList&lt;&gt;();</span>
+<span class="fc" id="L91">    int n = stateSpace.size(); // all possible chord outcomes</span>
+
+    // accumulated length to keep track of how much we have generated so far
+<span class="fc" id="L94">    int accumulatedLength = 0;</span>
+
+    // first iteration with specified chord
+<span class="fc" id="L97">    Chord currchord = startingchord;</span>
+<span class="fc" id="L98">    int currlength = getNextChordLength(accumulatedLength, numbars);</span>
+<span class="fc" id="L99">    GeneratedChord currgenchord = new GeneratedChord(currchord, currlength);</span>
+<span class="fc" id="L100">    accumulatedLength += currlength;</span>
+<span class="fc" id="L101">    chordProgression.add(currgenchord);</span>
+
+    // random walk on markov chain with weights
+<span class="fc bfc" id="L104" title="All 2 branches covered.">    while (accumulatedLength &lt; numbars) {</span>
+
+<span class="fc" id="L106">      int generatedLength = getNextChordLength(accumulatedLength, numbars);</span>
+
+      // number of possible qualities from Quality enum.
+<span class="fc" id="L109">      int currrowstart = currchord.getRoot().ordinal() * numqualities; // start from 0</span>
+
+      // get the next chord index based on the current chord
+<span class="fc" id="L112">      int nextchordindex = this.nextChordFromQualityCase(matrix, currchord, currrowstart);</span>
+
+      // update currchord
+<span class="fc" id="L115">      currchord = TransitionMatrix.getCorrespondingChord(nextchordindex, numqualities);</span>
+<span class="fc" id="L116">      currgenchord = new GeneratedChord(currchord, generatedLength); // update currgenchord</span>
+
+      // add to the progression
+<span class="fc" id="L119">      chordProgression.add(currgenchord);</span>
+
+      // update length
+<span class="fc" id="L122">      accumulatedLength += generatedLength;</span>
+<span class="fc" id="L123">    }</span>
+<span class="fc" id="L124">    System.out.println(accumulatedLength);</span>
+<span class="fc" id="L125">    return chordProgression;</span>
+  }
+
+  /**
+   * helper function to get the random length of either 1 or 2 bars,
+   * taking into account what is left to generated,
+   * weighting 1 bar higher than 2 bars (1 bar chords occur more frequently).
+   * @param accumulatedLength - how many bars we have already generated
+   * @param numBars - limit of number of bars
+   * @return - 1 or 2
+   */
+  public int getNextChordLength(int accumulatedLength, int numBars) {
+    // 70% change of length 1 bar chord, 30% of length 2 bar
+<span class="fc" id="L138">    double thresholdRange = 0.7;</span>
+
+<span class="fc bfc" id="L140" title="All 2 branches covered.">    if (accumulatedLength == numBars - 2) {</span>
+      // if we are 2 away from the max value generate a length of 2 to fill in the rest
+<span class="fc" id="L142">      return 2;</span>
+<span class="fc bfc" id="L143" title="All 2 branches covered.">    } else if (accumulatedLength == numBars - 1) {</span>
+      // if we are 1 away from the max value generate a length of 1 to fill in the rest
+<span class="fc" id="L145">      return 1;</span>
+    } else {
+      // otherwise generate either 1 or 2 measures,
+      // weighted prob based on threshold
+<span class="fc bfc" id="L149" title="All 2 branches covered.">      return Math.random() &gt; thresholdRange ? 2 : 1;</span>
+    }
+
+  }
+
+  /*
+   * Below are some helper methods for handling the random walk on markov chain.
+   */
+
+  /**
+   * generate the next chord index.
+   * @param tmat
+   * @param currchord
+   * @param currrowstart
+   * @return
+   */
+  private int nextChordFromQualityCase(TransitionMatrix tmat, Chord currchord, int currrowstart) {
+    // given current starting chord and its respective root number
+    // get the corresponding chord index value
+<span class="fc" id="L168">    int currRow = currrowstart + currchord.getQuality().ordinal(); // figure out which row we're on</span>
+<span class="fc" id="L169">    return tmat.getNextChordIndex(currRow, numqualities); // return next chord index</span>
+  }
+
+  /*
+   * A helper method that randomly selects an index in a
+   * particular given row.
+   * (complete randomness) - initial implementation without weights
+   */
+  private int randomlySelectIndex(double[][] tmat, int row) {
+<span class="nc" id="L178">    int numCols = tmat[row].length; // get number of columns</span>
+<span class="nc" id="L179">    return getRandomInt(numCols);</span>
+  }
+
+
+  /*
+   * Helper method that gets a random integer
+   * in a range. (Uses Math.random())
+   */
+  public static int getRandomInt(int max) {
+<span class="nc" id="L188">    return (int) Math.floor(Math.random() * max);</span>
+  }
+
+
+  /**
+   * Accessor method for resulting string list.
+   * @return result (list of generated chords)
+   */
+  public List&lt;GeneratedChord&gt; getResult() {
+<span class="fc" id="L197">    return result;</span>
+  }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.5.201910111838</span></div></body></html>
