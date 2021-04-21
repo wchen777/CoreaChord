@@ -235,7 +235,7 @@ public class CoreaApplication {
             System.out.println("bright - j: "+j);
           }
         }
-        this.normalize(newMat[i]); // normalize if we're done with one row.
+        newMat[i] = this.normalize(newMat[i]); // normalize if we're done with one row.
       }
     } else if (brightness == Brightness.Dark) {
       for (int i = 0; i < n; ++i) {
@@ -245,7 +245,7 @@ public class CoreaApplication {
             System.out.println("dark - j: "+j);
           }
         }
-        this.normalize(newMat[i]); // normalize if we're done with one row.
+        newMat[i] = this.normalize(newMat[i]); // normalize if we're done with one row.
       }
     }
     for (int i = 0; i < n; ++i) {
@@ -263,8 +263,10 @@ public class CoreaApplication {
    * It just mutates the inputted row, so nothing is returned.
    * @param row
    */
-  private void normalize(double[] row) {
+  private double[] normalize(double[] row) {
     int sum = 0;
+    int resultlen = row.length;
+    double[] result = new double[resultlen];
     for (int i = 0; i < row.length; ++i) {
       sum += row[i];
     }
@@ -274,8 +276,9 @@ public class CoreaApplication {
       inverse = 1/floatsum;
     }
     for (int i = 0; i < row.length; ++i) {
-      row[i] = row[i]/inverse;
+      result[i] = row[i]/inverse;
     }
+    return result;
   }
 
   /**
