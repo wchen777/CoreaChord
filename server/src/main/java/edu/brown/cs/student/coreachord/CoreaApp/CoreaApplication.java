@@ -133,7 +133,7 @@ public class CoreaApplication {
       matrix = highDiversity;
     }
     if (brightness == Brightness.Light || brightness == Brightness.Dark) {
-      this.adjustMatrixForBrightness(matrix, brightness); // adjust matrix weights if the theme is either light or dark.
+      matrix = this.adjustMatrixForBrightness(matrix, brightness); // adjust matrix weights if the theme is either light or dark.
     }
     result = this.markovChain(startingchord, numbars, matrix); // call helper method
   }
@@ -214,32 +214,42 @@ public class CoreaApplication {
    * Helper method for adjusting matrix weights based on the "brightness" of the chord progression
    * @param matrix
    */
-  private void adjustMatrixForBrightness(TransitionMatrix matrix, Brightness brightness) {
+  private TransitionMatrix adjustMatrixForBrightness(TransitionMatrix matrix, Brightness brightness) {
     double[][] transitionMat = matrix.getTransitionMatrix();
     int n = transitionMat.length; // square matrix, get one dimension.
+    double[][] newMat = new double[n][n];
+    // first pass, copy over weight values from original matrix
+    for (int i = 0; i < n; ++i) {
+      for (int j = 0; j < n; ++j) {
+        newMat[i][j] = transitionMat[i][j]; // copy weight(s)
+      }
+    }
+
     if (brightness == Brightness.Light) {
       for (int i = 0; i < n; ++i) {
         for (int j = 0; j < n; ++j) {
           if (isBrightChord(j)) { // if it IS a bright chord
-            transitionMat[i][j] += 0.7;
+            newMat[i][j] = transitionMat[i][j] + 0.7;
           }
         }
-        this.normalize(transitionMat[i]); // normalize if we're done with one row.
+        this.normalize(newMat[i]); // normalize if we're done with one row.
       }
     } else if (brightness == Brightness.Dark) {
       for (int i = 0; i < n; ++i) {
         for (int j = 0; j < n; ++j) {
           if (!isBrightChord(j)) { // if it IS a bright chord
-            transitionMat[i][j] += 0.7;
+            newMat[i][j] = transitionMat[i][j] + 0.7;
           }
         }
-        this.normalize(transitionMat[i]); // normalize if we're done with one row.
+        this.normalize(newMat[i]); // normalize if we're done with one row.
       }
     }
-    matrix.setTransitionMatrix(transitionMat);
+    TransitionMatrix newtmat = new TransitionMatrix();
+    newtmat.setTransitionMatrix(newMat);
+    return newtmat;
   }
   /**
-   * Helper method that normalizes the values of a row.
+   * Helper method that normalizes the values of a ro.
    * It just mutates the inputted row, so nothing is returned.
    * @param row
    */
