@@ -73,30 +73,27 @@ public final class Main {
     // read in transition matrix csvs
     CSVReader csv = new CSVReader();
 
-    File lowcsv = new File("t-mat-low.csv");
-    File medcsv = new File("t-mat-med.csv");
-    File highcsv = new File("t-mat-high.csv");
-    TransitionMatrix lowDiversity;
-    TransitionMatrix medDiversity;
-    TransitionMatrix highDiversity;
-    if (!lowcsv.exists()) {
-      throw new InvalidObjectException("ERROR: The csv file does not exist.");
-    } else {
-      List<String[]> lowDivCSV = csv.parseCSV("t-mat-low.csv");
-      lowDiversity = new TransitionMatrix(lowDivCSV);
-    }
-    if (!medcsv.exists()) {
-      throw new InvalidObjectException("ERROR: The csv file does not exist.");
-    } else {
-      List<String[]> medDivCSV = csv.parseCSV("t-mat-med.csv");
-      medDiversity = new TransitionMatrix(medDivCSV);
-    }
-    if (!highcsv.exists()) {
-      throw new InvalidObjectException("ERROR: The csv file does not exist.");
-    } else {
-      List<String[]> highDivCSV = csv.parseCSV("t-mat-high.csv");
-      highDiversity = new TransitionMatrix(highDivCSV);
-    }
+//    File lowcsv = new File("t-mat-low.csv");
+//    File medcsv = new File("t-mat-med.csv");
+//    File highcsv = new File("t-mat-high.csv");
+//    if (!lowcsv.exists()) {
+//      throw new InvalidObjectException("ERROR: The csv file does not exist.");
+//    } else {
+    List<String[]> lowDivCSV = csv.parseCSV("t-mat-low.csv");
+    TransitionMatrix lowDiversity = new TransitionMatrix(lowDivCSV);
+//    }
+//    if (!medcsv.exists()) {
+//      throw new InvalidObjectException("ERROR: The csv file does not exist.");
+//    } else {
+    List<String[]> medDivCSV = csv.parseCSV("t-mat-med.csv");
+    TransitionMatrix medDiversity = new TransitionMatrix(medDivCSV);
+//    }
+//    if (!highcsv.exists()) {
+//      throw new InvalidObjectException("ERROR: The csv file does not exist.");
+//    } else {
+    List<String[]> highDivCSV = csv.parseCSV("t-mat-high.csv");
+    TransitionMatrix highDiversity = new TransitionMatrix(highDivCSV);
+//    }
 
     System.out.println("Welcome to our REPL\nCurrently we only support "
       + "the following commands:\n"
