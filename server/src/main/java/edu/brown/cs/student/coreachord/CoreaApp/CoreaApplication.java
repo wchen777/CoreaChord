@@ -232,7 +232,6 @@ public class CoreaApplication {
         for (int j = 0; j < n; ++j) {
           if (isBrightChord(j)) { // if it IS a bright chord
             newMat[i][j] = transitionMat[i][j] + 0.7;
-            System.out.println("bright - j: "+j);
           }
         }
         newMat[i] = this.normalize(newMat[i]); // normalize if we're done with one row.
@@ -242,15 +241,9 @@ public class CoreaApplication {
         for (int j = 0; j < n; ++j) {
           if (!isBrightChord(j)) { // if it is NOT a bright chord
             newMat[i][j] = transitionMat[i][j] + 0.7;
-            System.out.println("dark - j: "+j);
           }
         }
         newMat[i] = this.normalize(newMat[i]); // normalize if we're done with one row.
-      }
-    }
-    for (int i = 0; i < n; ++i) {
-      for (int j = 0; j < n; ++j) {
-        System.out.println("New matrix weight at " + i + ", " + j + ": " + newMat[i][j]);// copy weight(s)
       }
     }
 
@@ -271,7 +264,6 @@ public class CoreaApplication {
     for (int i = 0; i < row.length; ++i) {
       sum += row[i];
     }
-    System.out.println("sum: "+sum);
     float inverse = 1;
     if (sum > 1) {
       float floatsum = (float) sum;
