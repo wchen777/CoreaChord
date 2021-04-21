@@ -276,7 +276,7 @@ public class CoreaApplication {
       inverse = 1/floatsum;
     }
     for (int i = 0; i < row.length; ++i) {
-      result[i] = row[i]/inverse;
+      result[i] = row[i]*inverse;
     }
     return result;
   }
