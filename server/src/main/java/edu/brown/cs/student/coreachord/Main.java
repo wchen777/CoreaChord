@@ -66,9 +66,9 @@ public final class Main {
       .defaultsTo(DEFAULT_PORT);
     OptionSet options = parser.parse(args);
 
-    if (options.has("gui")) {
+//    if (options.has("gui")) {
       runSparkServer((int) options.valueOf("port"));
-    }
+//    }
 
     // read in transition matrix csvs
     CSVReader csv = new CSVReader();
@@ -113,6 +113,7 @@ public final class Main {
 
     REPL repl = new REPL(commands);
 
+    System.out.println("hiiii debug log!!");
   }
 
   /*
