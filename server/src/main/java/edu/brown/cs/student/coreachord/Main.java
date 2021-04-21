@@ -25,6 +25,8 @@ import spark.Response;
 import spark.Route;
 import spark.Spark;
 
+import java.io.File;
+import java.io.InvalidObjectException;
 import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.util.ArrayList;
@@ -41,7 +43,7 @@ public final class Main {
   private final String[] args;
   private static AnalyzerApplication analyzer;
 
-  public static void main(String[] args) {
+  public static void main(String[] args) throws InvalidObjectException {
     new Main(args).run();
   }
 
@@ -49,7 +51,7 @@ public final class Main {
     this.args = args;
   }
 
-  private void run() {
+  private void run() throws InvalidObjectException {
     // Setup the QUALITIES map
     QUALITIES = new HashMap<>();
     QUALITIES.put("7", "DOMINANT7");
@@ -71,12 +73,30 @@ public final class Main {
     // read in transition matrix csvs
     CSVReader csv = new CSVReader();
 
-    List<String[]> lowDivCSV = csv.parseCSV("CSV/t-mat-low.csv");
-    TransitionMatrix lowDiversity = new TransitionMatrix(lowDivCSV);
-    List<String[]> medDivCSV = csv.parseCSV("CSV/t-mat-med.csv");
-    TransitionMatrix medDiversity = new TransitionMatrix(medDivCSV);
-    List<String[]> highDivCSV = csv.parseCSV("CSV/t-mat-high.csv");
-    TransitionMatrix highDiversity = new TransitionMatrix(highDivCSV);
+    File lowcsv = new File("t-mat-low.csv");
+    File medcsv = new File("t-mat-med.csv");
+    File highcsv = new File("t-mat-high.csv");
+    TransitionMatrix lowDiversity;
+    TransitionMatrix medDiversity;
+    TransitionMatrix highDiversity;
+    if (!lowcsv.exists()) {
+      throw new InvalidObjectException("ERROR: The csv file does not exist.");
+    } else {
+      List<String[]> lowDivCSV = csv.parseCSV("t-mat-low.csv");
+      lowDiversity = new TransitionMatrix(lowDivCSV);
+    }
+    if (!medcsv.exists()) {
+      throw new InvalidObjectException("ERROR: The csv file does not exist.");
+    } else {
+      List<String[]> medDivCSV = csv.parseCSV("t-mat-med.csv");
+      medDiversity = new TransitionMatrix(medDivCSV);
+    }
+    if (!highcsv.exists()) {
+      throw new InvalidObjectException("ERROR: The csv file does not exist.");
+    } else {
+      List<String[]> highDivCSV = csv.parseCSV("t-mat-high.csv");
+      highDiversity = new TransitionMatrix(highDivCSV);
+    }
 
     System.out.println("Welcome to our REPL\nCurrently we only support "
       + "the following commands:\n"
