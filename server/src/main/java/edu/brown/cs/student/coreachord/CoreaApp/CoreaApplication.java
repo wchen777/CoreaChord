@@ -1,5 +1,7 @@
 package edu.brown.cs.student.coreachord.CoreaApp;
 
+import java.lang.reflect.Array;
+import java.util.Arrays;
 import java.util.List;
 import java.util.ArrayList;
 import java.util.Set;
@@ -237,7 +239,7 @@ public class CoreaApplication {
     } else if (brightness == Brightness.Dark) {
       for (int i = 0; i < n; ++i) {
         for (int j = 0; j < n; ++j) {
-          if (!isBrightChord(j)) { // if it IS a bright chord
+          if (!isBrightChord(j)) { // if it is NOT a bright chord
             newMat[i][j] = transitionMat[i][j] + 0.7;
           }
         }
@@ -275,14 +277,10 @@ public class CoreaApplication {
    * @return boolean
    */
   private boolean isBrightChord(int index) {
-    if (index == 8 || index == 9 || index == 10 || index == 11 // D "bright" chords
-        || index == 16 || index == 17 || index == 18 || index == 19 // E
-        || index == 28 || index == 29 || index == 30 || index == 31 // G
-        || index == 36 || index == 37 || index == 38 || index == 39 // A
-        || index == 44 || index == 45 || index == 46 || index == 47) { // B
-        return true;
-    }
-    return false; // if not, return false
+    Integer[] brightchordarr = new Integer[] {8, 9, 10, 11, 16, 17, 18, 19, 28, 29, 30, 31,
+    36, 37, 38, 39, 44, 45, 46, 47};
+    List<Integer> brightchordarraylist = new ArrayList<>(Arrays.asList(brightchordarr));
+    return brightchordarraylist.contains(index);
   }
   /*
    * Below are some helper methods for handling the random walk on markov chain.
