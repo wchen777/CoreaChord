@@ -30,4 +30,8 @@ public class ComplexityScore {
   public double getY() {
     return y;
   }
+  @Override
+  public String toString() {
+    return "X: " + x + "\nY: " + y;
+  }
 }

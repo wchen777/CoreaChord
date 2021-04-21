@@ -2,16 +2,13 @@ package edu.brown.cs.student.coreachord;
 
 import edu.brown.cs.student.coreachord.CSV.CSVReader;
 import edu.brown.cs.student.coreachord.Commands.GenerateChords;
-import edu.brown.cs.student.coreachord.CoreaApp.Chord;
 import edu.brown.cs.student.coreachord.CoreaApp.CoreaApplication;
 import edu.brown.cs.student.coreachord.CoreaApp.GeneratedChord;
 import edu.brown.cs.student.coreachord.CoreaApp.TransitionMatrix;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
-import org.junit.Assert;
 
-import java.util.Arrays;
 import java.util.List;
 
 public class MarkovChainTest {
@@ -79,6 +76,15 @@ public class MarkovChainTest {
     System.out.println("16-bar corea app chords: ");
     for (int i = 0; i < coreaapp16bars.getResult().size(); i++) {
       List<GeneratedChord> result = coreaapp16bars.getResult();
+      System.out.println("element " + i + " root: "+result.get(i).getChorddata().getRoot());
+      System.out.println("element " + i + " quality: "+result.get(i).getChorddata().getQuality());
+    }
+    System.out.println(" ");
+    System.out.println(" ");
+    // checking the contents of 16-bar corea app
+    System.out.println("32-bar corea app chords: ");
+    for (int i = 0; i < coreaapp32bars.getResult().size(); i++) {
+      List<GeneratedChord> result = coreaapp32bars.getResult();
       System.out.println("element " + i + " root: "+result.get(i).getChorddata().getRoot());
       System.out.println("element " + i + " quality: "+result.get(i).getChorddata().getQuality());
     }

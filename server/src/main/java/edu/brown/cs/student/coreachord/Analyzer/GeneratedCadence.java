@@ -42,5 +42,15 @@ public class GeneratedCadence {
     this.relativeRoot = relativeRoot;
     this.progression = progression;
   }
-
+  @Override
+  public String toString() {
+    return "Cadence: " + cadence + "\nStart: " + start + "\nEnd: " + end
+            + "\nRoot: " + relativeRoot + "\nProgression: " + progression;
+  }
+  public Cadence getCadence() {
+    return cadence;
+  }
+  public String getProgression() {
+    return progression;
+  }
 }
