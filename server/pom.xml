@@ -297,6 +297,20 @@
         </configuration>
       </plugin>
 
+      <plugin>
+        <groupId>com.heroku.sdk</groupId>
+        <artifactId>heroku-maven-plugin</artifactId>
+        <version>1.1.3</version>
+        <configuration>
+          <jdkVersion>11.0.1</jdkVersion>
+          <appName>learnoflegends</appName>
+          <processTypes>
+            <!-- Tell Heroku how to launch your application -->
+            <web>java -jar ./target/javalin-heroku-example-1.0-jar-with-dependencies.jar</web>
+          </processTypes>
+        </configuration>
+      </plugin>
+
       <!--
           jacoco creates a "coverage" report, so you can see what
           lines of codes and bracnhes your tests exercise.
