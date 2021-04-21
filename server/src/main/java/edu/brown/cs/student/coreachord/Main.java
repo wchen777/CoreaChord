@@ -113,7 +113,6 @@ public final class Main {
 
     REPL repl = new REPL(commands);
 
-    System.out.println("hiiii debug log!!");
   }
 
   /*
