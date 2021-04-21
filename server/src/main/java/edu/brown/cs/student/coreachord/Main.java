@@ -100,7 +100,7 @@ public final class Main {
    * Setting up spark server with GET requests
    */
   private void runSparkServer(int port) {
-    Spark.port(port);
+    Spark.port(getHerokuAssignedPort());
     Spark.externalStaticFileLocation("build");
 
     // TODO Code below copied from other projects, to handle the CORS error stuff
@@ -130,6 +130,14 @@ public final class Main {
       response.redirect("index.html");
       return null;
     }));
+  }
+
+  static int getHerokuAssignedPort() {
+    ProcessBuilder processBuilder = new ProcessBuilder();
+    if (processBuilder.environment().get("PORT") != null) {
+      return Integer.parseInt(processBuilder.environment().get("PORT"));
+    }
+    return DEFAULT_PORT;
   }
 
 
