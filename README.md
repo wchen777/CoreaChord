@@ -22,6 +22,8 @@ In addition, the "brightness" parameter controls the probabilities of sharp-frie
 For selecting the next chord to go to, we used a concept called cumulative probability distribution, and implemented a binning method similar to that of numpy.digitize() in Python.
 In this way, we take into account the probabilities of the previous chord's row in the matrix and select the next chord to go to accordingly.
 
+The analyzer feature utilizes a circular array implementation for its two parts: the complexity score tracker and the jazz cadence detector. For the complexity score, it uses a sliding window to calculate a complexity score based on the circle of fifths for each window. The distance between each chord in the window is calculated using the distances from indices of the roots using a circular array representation of the circle of fifths. The jazz cadence detector similarly uses a sliding window to detect certain jazz cadences using the generated chord list and the numerical representation of the chords enums.
+
 ## Testing
 
 For testing, due to the randomness of our outputs, we have used the Monte-Carlo simulation: repeated random sampling to generalize the ground truth probability.
