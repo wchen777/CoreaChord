@@ -258,18 +258,20 @@ public class CoreaApplication {
     newtmat.setTransitionMatrix(newMat);
     return newtmat;
   }
+
   /**
    * Helper method that normalizes the values of a ro.
    * It just mutates the inputted row, so nothing is returned.
    * @param row
    */
   private double[] normalize(double[] row) {
-    int sum = 0;
+    double sum = 0;
     int resultlen = row.length;
     double[] result = new double[resultlen];
     for (int i = 0; i < row.length; ++i) {
       sum += row[i];
     }
+    System.out.println("sum: "+sum);
     float inverse = 1;
     if (sum > 1) {
       float floatsum = (float) sum;
