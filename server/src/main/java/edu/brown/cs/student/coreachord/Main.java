@@ -25,7 +25,8 @@ import spark.Response;
 import spark.Route;
 import spark.Spark;
 
-import javax.annotation.processing.Generated;
+import java.io.File;
+import java.io.InvalidObjectException;
 import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.util.ArrayList;
@@ -42,7 +43,7 @@ public final class Main {
   private final String[] args;
   private static AnalyzerApplication analyzer;
 
-  public static void main(String[] args) {
+  public static void main(String[] args) throws InvalidObjectException {
     new Main(args).run();
   }
 
@@ -50,7 +51,7 @@ public final class Main {
     this.args = args;
   }
 
-  private void run() {
+  private void run() throws InvalidObjectException {
     // Setup the QUALITIES map
     QUALITIES = new HashMap<>();
     QUALITIES.put("7", "DOMINANT7");
@@ -65,19 +66,34 @@ public final class Main {
       .defaultsTo(DEFAULT_PORT);
     OptionSet options = parser.parse(args);
 
-    if (options.has("gui")) {
+//    if (options.has("gui")) {
       runSparkServer((int) options.valueOf("port"));
-    }
+//    }
 
     // read in transition matrix csvs
     CSVReader csv = new CSVReader();
 
-    List<String[]> lowDivCSV = csv.parseCSV("../scripts/t-mat-low.csv");
+//    File lowcsv = new File("t-mat-low.csv");
+//    File medcsv = new File("t-mat-med.csv");
+//    File highcsv = new File("t-mat-high.csv");
+//    if (!lowcsv.exists()) {
+//      throw new InvalidObjectException("ERROR: The csv file does not exist.");
+//    } else {
+    List<String[]> lowDivCSV = csv.parseCSV("t-mat-low.csv");
     TransitionMatrix lowDiversity = new TransitionMatrix(lowDivCSV);
-    List<String[]> medDivCSV = csv.parseCSV("../scripts/t-mat-med.csv");
+//    }
+//    if (!medcsv.exists()) {
+//      throw new InvalidObjectException("ERROR: The csv file does not exist.");
+//    } else {
+    List<String[]> medDivCSV = csv.parseCSV("t-mat-med.csv");
     TransitionMatrix medDiversity = new TransitionMatrix(medDivCSV);
-    List<String[]> highDivCSV = csv.parseCSV("../scripts/t-mat-high.csv");
+//    }
+//    if (!highcsv.exists()) {
+//      throw new InvalidObjectException("ERROR: The csv file does not exist.");
+//    } else {
+    List<String[]> highDivCSV = csv.parseCSV("t-mat-high.csv");
     TransitionMatrix highDiversity = new TransitionMatrix(highDivCSV);
+//    }
 
     System.out.println("Welcome to our REPL\nCurrently we only support "
       + "the following commands:\n"
@@ -100,7 +116,7 @@ public final class Main {
    * Setting up spark server with GET requests
    */
   private void runSparkServer(int port) {
-    Spark.port(port);
+    Spark.port(getHerokuAssignedPort());
     Spark.externalStaticFileLocation("build");
 
     // TODO Code below copied from other projects, to handle the CORS error stuff
@@ -130,6 +146,14 @@ public final class Main {
       response.redirect("index.html");
       return null;
     }));
+  }
+
+  static int getHerokuAssignedPort() {
+    ProcessBuilder processBuilder = new ProcessBuilder();
+    if (processBuilder.environment().get("PORT") != null) {
+      return Integer.parseInt(processBuilder.environment().get("PORT"));
+    }
+    return DEFAULT_PORT;
   }
 
 

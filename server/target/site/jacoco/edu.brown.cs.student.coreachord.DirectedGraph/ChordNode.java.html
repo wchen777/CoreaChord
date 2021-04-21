@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>ChordNode.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">coreachord</a> &gt; <a href="index.source.html" class="el_package">edu.brown.cs.student.coreachord.DirectedGraph</a> &gt; <span class="el_source">ChordNode.java</span></div><h1>ChordNode.java</h1><pre class="source lang-java linenums">package edu.brown.cs.student.coreachord.DirectedGraph;
+
+import edu.brown.cs.student.coreachord.CoreaApp.Chord;
+
+import java.util.ArrayList;
+import java.util.List;
+
+public class ChordNode implements IGraphNode {
+  private final Chord chord;
+  private List&lt;IEdge&gt; outgoingedges;
+<span class="nc" id="L11">  public ChordNode(Chord inputchord) {</span>
+<span class="nc" id="L12">    chord = inputchord;</span>
+<span class="nc" id="L13">    outgoingedges = new ArrayList&lt;&gt;();</span>
+<span class="nc" id="L14">  }</span>
+  @Override
+  public List&lt;IEdge&gt; getEdges() {
+<span class="nc" id="L17">    return outgoingedges;</span>
+  }
+  @Override
+  public void addEdge(IGraphNode target, double weight) {
+<span class="nc" id="L21">    outgoingedges.add(new Edge(this, target, weight));</span>
+<span class="nc" id="L22">  }</span>
+  @Override
+  public Chord getNode() {
+<span class="nc" id="L25">    return chord;</span>
+  }
+  @Override
+  public IEdge findEdgeTo(IGraphNode node) {
+<span class="nc bnc" id="L29" title="All 2 branches missed.">    for (IEdge e : outgoingedges) {</span>
+<span class="nc bnc" id="L30" title="All 2 branches missed.">      if (e.to().equals(node)) {</span>
+<span class="nc" id="L31">        return e;</span>
+      }
+<span class="nc" id="L33">    }</span>
+<span class="nc" id="L34">    return null;</span>
+  }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.5.201910111838</span></div></body></html>

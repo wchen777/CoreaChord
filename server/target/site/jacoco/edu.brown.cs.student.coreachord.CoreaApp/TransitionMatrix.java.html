@@ -1,0 +1,148 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>TransitionMatrix.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">coreachord</a> &gt; <a href="index.source.html" class="el_package">edu.brown.cs.student.coreachord.CoreaApp</a> &gt; <span class="el_source">TransitionMatrix.java</span></div><h1>TransitionMatrix.java</h1><pre class="source lang-java linenums">package edu.brown.cs.student.coreachord.CoreaApp;
+
+import edu.brown.cs.student.coreachord.UtilityObjects.Tuple;
+
+import java.util.ArrayList;
+import java.util.List;
+
+public class TransitionMatrix {
+  private double[][] tmat;
+
+<span class="fc" id="L11">  public TransitionMatrix(List&lt;String[]&gt; probabilities) {</span>
+<span class="fc" id="L12">    this.fillTransitionMatrix(probabilities);</span>
+<span class="fc" id="L13">  }</span>
+
+  // for dynamic transition matrix, different constructor
+<span class="fc" id="L16">  public TransitionMatrix() {</span>
+
+<span class="fc" id="L18">  }</span>
+
+  /*
+   * Method for filling transition matrix.
+   * It'll take in a list of array of strings that contain
+   * probability data for each row of the transition matrix.
+   * The probabilities list of string arrays come from
+   * csv parsing.
+   * @param
+   */
+  private void fillTransitionMatrix(List&lt;String[]&gt; probabilities) {
+    // get lengths of dimensions of probability matrix
+<span class="fc" id="L30">    int horizontallen = probabilities.get(0).length;</span>
+<span class="fc" id="L31">    int verticallen = probabilities.size();</span>
+    // initialize transition matrix
+<span class="fc" id="L33">    this.tmat = new double[verticallen - 1][horizontallen - 1];</span>
+
+<span class="fc bfc" id="L35" title="All 2 branches covered.">    for (int i = 1; i &lt; verticallen; i++) {</span>
+<span class="fc bfc" id="L36" title="All 2 branches covered.">      for (int j = 1; j &lt; horizontallen; j++) {</span>
+        // get individual probability
+<span class="fc" id="L38">        String currprobstring = probabilities.get(i)[j];</span>
+        // store into each index of tmat
+<span class="fc" id="L40">        this.tmat[i - 1][j - 1] = Double.parseDouble(currprobstring);</span>
+      }
+    }
+<span class="fc" id="L43">  }</span>
+
+
+  /**
+   * Helper method that gives you corresponding chord
+   * based on the index in transition matrix.
+   * (Handles chord-index correspondence in the transition
+   * matrix)
+   *
+   * @param index
+   * @param numqualities - Number of qualities a chord can have
+   * @return corresponding Chord
+   */
+  public static Chord getCorrespondingChord(int index, int numqualities) {
+    // Root order: C, Db, D, Eb, E, F, Gb, G, Ab, A, Bb, B
+    // Quality order: MAJOR7, MINOR7, MINOR7FLAT5, DOMINANT7
+<span class="fc" id="L59">    int rootordinal = index / numqualities; // integer division to get root ordinal</span>
+<span class="fc" id="L60">    int qualityordinal = index % numqualities; // mod to get quality ordinal (get remainder)</span>
+<span class="fc" id="L61">    CoreaApplication.Root root = CoreaApplication.Root.values()[rootordinal];</span>
+<span class="fc" id="L62">    CoreaApplication.Quality quality = CoreaApplication.Quality.values()[qualityordinal];</span>
+<span class="fc" id="L63">    return new Chord(root, quality);</span>
+  }
+
+  /*
+   * Explanation:
+   *
+   * This selection method is a helper method that selects the
+   * next chord to go to (selects the column in the transition matrix)
+   * while taking into account the probability distribution for a given row.
+   *
+   * The way this method is implemented is that it makes use of the concept of
+   * &quot;cumulative probability distribution&quot; in probability theory, which
+   * weighs the higher probability index more than the other ones.
+   *
+   * We first initialize a cumulative probability distribution array,
+   * populate the array with the current row's probability information,
+   * and index into that array using a randomly initialized double in [0,1)
+   * (the result of this search will be our newly selected chord value).
+   *
+   * Then, we look for that probability value in our original row in transition matrix.
+   * The column index that contains that probability value will be indicating
+   * our next chord to go to.
+   */
+  public int getNextChordIndex(int row, int numQualities) {
+<span class="fc bfc" id="L87" title="All 2 branches covered.">    if (this.tmat == null) {</span>
+<span class="fc" id="L88">      return -1;</span>
+    }
+
+<span class="fc" id="L91">    Chord currchord = TransitionMatrix.getCorrespondingChord(row, numQualities);</span>
+    // cumulative probability distribution matrix
+<span class="fc" id="L93">    int rowlen = this.tmat[0].length; // row's length</span>
+<span class="fc" id="L94">    double[] currrow = this.tmat[row]; // get current row (current chord).</span>
+
+<span class="fc" id="L96">    List&lt;Tuple&lt;Double, Integer&gt;&gt; cumulativeDist = new ArrayList&lt;&gt;();</span>
+
+<span class="fc" id="L98">    double cumulative = 0;</span>
+<span class="fc bfc" id="L99" title="All 2 branches covered.">    for (int i = 0; i &lt; rowlen; i++) {</span>
+<span class="fc" id="L100">      double curr = tmat[row][i];</span>
+      // skips zero probabilities
+<span class="fc bfc" id="L102" title="All 2 branches covered.">      if (curr &gt; 0) {</span>
+<span class="fc" id="L103">        cumulative += curr; // sum up as we iterate through the current row.</span>
+        // double cumulative distribution to row index
+<span class="fc" id="L105">        cumulativeDist.add(new Tuple&lt;&gt;(cumulative, i));</span>
+      }
+    }
+
+    // get index from probability distribution
+<span class="fc" id="L110">    return digitize(cumulativeDist, 1.0);</span>
+  }
+
+  /**
+   * binning with a cumulative distribution array.
+   *
+   * @param cumulativeDist - monotonically increasing array where the final
+   *                       value should equal 1, representing cumulative distribution
+   * @param sumOfProbabbilities -
+   * @return - the random index given the weights of the array
+   */
+  public int digitize(List&lt;Tuple&lt;Double, Integer&gt;&gt; cumulativeDist, double sumOfProbabbilities) {
+<span class="fc" id="L122">    double rand = Math.random() * sumOfProbabbilities;</span>
+
+<span class="fc bfc" id="L124" title="All 2 branches covered.">    for (Tuple&lt;Double, Integer&gt; probToIndex : cumulativeDist) {</span>
+      // if generated value is less than the probability cumulative distribution
+<span class="fc bfc" id="L126" title="All 2 branches covered.">      if (rand &lt;= probToIndex.getField1()) {</span>
+        // return index of that
+<span class="fc" id="L128">        return probToIndex.getField2();</span>
+      }
+<span class="fc" id="L130">    }</span>
+    // error, we reached the end of the list without return indices
+<span class="fc" id="L132">    return -1;</span>
+  }
+
+  /**
+   * return 0 if tmat is uninitialized, otherwise return tmat's length (how many rows).
+   *
+   * @return
+   */
+  public int getNumChords() {
+<span class="fc bfc" id="L141" title="All 2 branches covered.">    return this.tmat == null ? 0 : tmat.length;</span>
+  }
+
+  public double[][] getTransitionMatrix() {
+<span class="fc" id="L145">    return this.tmat;</span>
+  }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.5.201910111838</span></div></body></html>

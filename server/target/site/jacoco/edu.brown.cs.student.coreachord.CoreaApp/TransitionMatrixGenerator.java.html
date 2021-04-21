@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>TransitionMatrixGenerator.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">coreachord</a> &gt; <a href="index.source.html" class="el_package">edu.brown.cs.student.coreachord.CoreaApp</a> &gt; <span class="el_source">TransitionMatrixGenerator.java</span></div><h1>TransitionMatrixGenerator.java</h1><pre class="source lang-java linenums">package edu.brown.cs.student.coreachord.CoreaApp;
+
+import java.util.HashMap;
+
+/*
+ * Our TransitionMatrixGenerator class, which creates custom matrices
+ * according to the key center that the user decides.
+ * It takes in a parameter of
+ */
+public class TransitionMatrixGenerator {
+  private TransitionMatrix custommat;
+  private CoreaApplication.Diversity currdiversity;
+  private LowDiversityGenerator lowdivgenerator;
+  private MediumDiversityGenerator meddivgenerator;
+  private HighDiversityGenerator highdivgenerator;
+  private HashMap&lt;CoreaApplication.Diversity, MatrixGenerator&gt; divmap; // diversity map
+
+  /**
+   * constructor takes in the user's selected diversity level.
+   * @param diversity
+   */
+  //
+<span class="nc" id="L23">  public TransitionMatrixGenerator(CoreaApplication.Diversity diversity) {</span>
+<span class="nc" id="L24">    currdiversity = diversity; // set diversity</span>
+<span class="nc" id="L25">    divmap = new HashMap&lt;&gt;(); // create map</span>
+<span class="nc" id="L26">    setUpGenerators();</span>
+<span class="nc" id="L27">    divmap.put(CoreaApplication.Diversity.Low, lowdivgenerator); // map diversity to generator</span>
+<span class="nc" id="L28">    divmap.put(CoreaApplication.Diversity.Medium, meddivgenerator);</span>
+<span class="nc" id="L29">    divmap.put(CoreaApplication.Diversity.High, highdivgenerator);</span>
+<span class="nc" id="L30">  }</span>
+
+  // call the corresponding matrix generator's generateMatrix() method.
+  public TransitionMatrix createCustomMatrix() {
+<span class="nc" id="L34">    TransitionMatrix outputmatrix = divmap.get(currdiversity).generateMatrix();</span>
+<span class="nc" id="L35">    return outputmatrix; // return the generated custom matrix</span>
+  }
+
+  // helper method initializes all the matrix generators.
+  private void setUpGenerators() {
+<span class="nc" id="L40">    lowdivgenerator = new LowDiversityGenerator();</span>
+<span class="nc" id="L41">    meddivgenerator = new MediumDiversityGenerator();</span>
+<span class="nc" id="L42">    highdivgenerator = new HighDiversityGenerator();</span>
+<span class="nc" id="L43">  }</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.5.201910111838</span></div></body></html>

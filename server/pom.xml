@@ -142,6 +142,40 @@
         </configuration>
       </plugin>
       <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-dependency-plugin</artifactId>
+        <version>2.4</version>
+        <executions>
+          <execution>
+            <id>copy-dependencies</id>
+            <phase>package</phase>
+            <goals><goal>copy-dependencies</goal></goals>
+          </execution>
+        </executions>
+      </plugin>
+      <plugin>
+        <artifactId>maven-assembly-plugin</artifactId>
+        <executions>
+          <execution>
+            <phase>package</phase>
+            <goals>
+              <goal>single</goal>
+            </goals>
+          </execution>
+        </executions>
+        <configuration>
+          <descriptorRefs>
+            <!-- This tells Maven to include all dependencies -->
+            <descriptorRef>jar-with-dependencies</descriptorRef>
+          </descriptorRefs>
+          <archive>
+            <manifest>
+              <mainClass>Main</mainClass>
+            </manifest>
+          </archive>
+        </configuration>
+      </plugin>
+      <plugin>
         <groupId>org.jacoco</groupId>
         <artifactId>jacoco-maven-plugin</artifactId>
         <version>0.8.5</version>
@@ -294,6 +328,20 @@
           <effort>Max</effort>
           <!-- Report all bugs (other values are medium and max) -->
           <threshold>Low</threshold>
+        </configuration>
+      </plugin>
+
+      <plugin>
+        <groupId>com.heroku.sdk</groupId>
+        <artifactId>heroku-maven-plugin</artifactId>
+        <version>1.1.3</version>
+        <configuration>
+          <jdkVersion>11.0.1</jdkVersion>
+          <appName>learnoflegends</appName>
+          <processTypes>
+            <!-- Tell Heroku how to launch your application -->
+            <web>java -jar ./target/javalin-heroku-example-1.0-jar-with-dependencies.jar</web>
+          </processTypes>
         </configuration>
       </plugin>
 

@@ -1,0 +1,158 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>Main.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">coreachord</a> &gt; <a href="index.source.html" class="el_package">edu.brown.cs.student.coreachord</a> &gt; <span class="el_source">Main.java</span></div><h1>Main.java</h1><pre class="source lang-java linenums">package edu.brown.cs.student.coreachord;
+
+import com.google.gson.Gson;
+import com.google.gson.JsonElement;
+import com.google.gson.reflect.TypeToken;
+import edu.brown.cs.student.coreachord.CSV.CSVReader;
+import edu.brown.cs.student.coreachord.Commands.GenerateChords;
+import edu.brown.cs.student.coreachord.CoreaApp.CoreaApplication;
+import edu.brown.cs.student.coreachord.CoreaApp.GeneratedChord;
+import edu.brown.cs.student.coreachord.CoreaApp.TransitionMatrix;
+import edu.brown.cs.student.coreachord.REPL.Executable;
+import edu.brown.cs.student.coreachord.REPL.REPL;
+import joptsimple.OptionParser;
+import joptsimple.OptionSet;
+import org.json.JSONObject;
+import spark.ExceptionHandler;
+import spark.Request;
+import spark.Response;
+import spark.Route;
+import spark.Spark;
+
+import java.io.PrintWriter;
+import java.io.StringWriter;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+public final class Main {
+
+  private static final int DEFAULT_PORT = 4567;
+<span class="nc" id="L31">  private static final Gson GSON = new Gson();</span>
+  private static Map&lt;String, String&gt; QUALITIES;
+  private static GenerateChords generateChordsApp;
+  private final String[] args;
+
+  public static void main(String[] args) {
+<span class="nc" id="L37">    new Main(args).run();</span>
+<span class="nc" id="L38">  }</span>
+
+<span class="nc" id="L40">  private Main(String[] args) {</span>
+<span class="nc" id="L41">    this.args = args;</span>
+<span class="nc" id="L42">  }</span>
+
+  private void run() {
+    // Setup the QUALITIES map
+<span class="nc" id="L46">    QUALITIES = new HashMap&lt;&gt;();</span>
+<span class="nc" id="L47">    QUALITIES.put(&quot;7&quot;, &quot;DOMINANT7&quot;);</span>
+<span class="nc" id="L48">    QUALITIES.put(&quot;-7&quot;, &quot;MINOR7&quot;);</span>
+<span class="nc" id="L49">    QUALITIES.put(&quot;maj7&quot;, &quot;MAJOR7&quot;);</span>
+<span class="nc" id="L50">    QUALITIES.put(&quot;-7b5&quot;, &quot;MINOR7FLAT5&quot;);</span>
+
+    // Parse command line arguments
+<span class="nc" id="L53">    OptionParser parser = new OptionParser();</span>
+<span class="nc" id="L54">    parser.accepts(&quot;gui&quot;);</span>
+<span class="nc" id="L55">    parser.accepts(&quot;port&quot;).withRequiredArg().ofType(Integer.class)</span>
+<span class="nc" id="L56">      .defaultsTo(DEFAULT_PORT);</span>
+<span class="nc" id="L57">    OptionSet options = parser.parse(args);</span>
+
+<span class="nc bnc" id="L59" title="All 2 branches missed.">    if (options.has(&quot;gui&quot;)) {</span>
+<span class="nc" id="L60">      runSparkServer((int) options.valueOf(&quot;port&quot;));</span>
+    }
+
+    // read in transition matrix csvs
+<span class="nc" id="L64">    CSVReader csv = new CSVReader();</span>
+
+<span class="nc" id="L66">    List&lt;String[]&gt; lowDivCSV = csv.parseCSV(&quot;../scripts/t-mat-low.csv&quot;);</span>
+<span class="nc" id="L67">    TransitionMatrix lowDiversity = new TransitionMatrix(lowDivCSV);</span>
+
+<span class="nc" id="L69">    System.out.println(&quot;Welcome to our REPL\nCurrently we only support &quot;</span>
+      + &quot;the following commands:\n&quot;
+      + &quot;generate-chords &lt;ROOT&gt; &lt;QUALITY&gt; &lt;NUMBARS&gt; &lt;DIVERSITY&gt;&quot;);
+<span class="nc" id="L72">    HashMap&lt;String, Executable&gt; commands = new HashMap&lt;&gt;();</span>
+
+<span class="nc" id="L74">    generateChordsApp = new GenerateChords(lowDiversity);</span>
+<span class="nc" id="L75">    commands.put(&quot;generate-chords&quot;, generateChordsApp);</span>
+
+<span class="nc" id="L77">    REPL repl = new REPL(commands);</span>
+
+<span class="nc" id="L79">  }</span>
+
+  /*
+   * Setting up spark server with GET requests
+   */
+  private void runSparkServer(int port) {
+<span class="nc" id="L85">    Spark.port(port);</span>
+<span class="nc" id="L86">    Spark.externalStaticFileLocation(&quot;src/main/resources/static&quot;);</span>
+
+    // TODO Code below copied from other projects, to handle the CORS error stuff
+<span class="nc" id="L89">    Spark.options(&quot;/*&quot;, (request, response) -&gt; {</span>
+<span class="nc" id="L90">      String accessControlRequestHeaders = request.headers(&quot;Access-Control-Request-Headers&quot;);</span>
+<span class="nc bnc" id="L91" title="All 2 branches missed.">      if (accessControlRequestHeaders != null) {</span>
+<span class="nc" id="L92">        response.header(&quot;Access-Control-Allow-Headers&quot;, accessControlRequestHeaders);</span>
+      }
+<span class="nc" id="L94">      return &quot;OK&quot;;</span>
+    });
+
+<span class="nc" id="L97">    Spark.before((request, response) -&gt; response.header(&quot;Access-Control-Allow-Origin&quot;, &quot;*&quot;));</span>
+<span class="nc" id="L98">    Spark.exception(Exception.class, new ExceptionPrinter());</span>
+
+    // TODO: CORS STUFF (Maxime: I think I handled this in the above code?)
+
+    // Setup Spark Routes
+<span class="nc" id="L103">    Spark.post(&quot;/generate&quot;, new GenerateChordsHandler());</span>
+<span class="nc" id="L104">  }</span>
+
+
+  /**
+   * Display an error page when an exception occurs in the server.
+   */
+  private static class ExceptionPrinter implements ExceptionHandler {
+    @Override
+    public void handle(Exception e, Request req, Response res) {
+<span class="nc" id="L113">      res.status(500);</span>
+<span class="nc" id="L114">      StringWriter stacktrace = new StringWriter();</span>
+<span class="nc" id="L115">      try (PrintWriter pw = new PrintWriter(stacktrace)) {</span>
+<span class="nc" id="L116">        pw.println(&quot;&lt;pre&gt;&quot;);</span>
+<span class="nc" id="L117">        e.printStackTrace(pw);</span>
+<span class="nc" id="L118">        pw.println(&quot;&lt;/pre&gt;&quot;);</span>
+      }
+<span class="nc" id="L120">      res.body(stacktrace.toString());</span>
+<span class="nc" id="L121">    }</span>
+  }
+
+
+  /**
+   * Handles requests made for a route.
+   */
+  private static class GenerateChordsHandler implements Route {
+    @Override
+    public Object handle(Request request, Response response) throws Exception {
+<span class="nc" id="L131">      JSONObject data = new JSONObject(request.body());</span>
+<span class="nc" id="L132">      String startChord = data.getString(&quot;startChord&quot;);</span>
+<span class="nc" id="L133">      String chordDiversity = data.getString(&quot;chordDiversity&quot;);</span>
+<span class="nc" id="L134">      int numBars = data.getInt(&quot;numBars&quot;);</span>
+      // System.out.println(&quot;data received from frontend: &quot; + startChord + &quot; &quot; + chordDiversity + &quot; &quot; + numBars);
+<span class="nc" id="L136">      String progRoot = startChord.substring(0,1);</span>
+<span class="nc" id="L137">      String progQuality = startChord.substring(1);</span>
+<span class="nc bnc" id="L138" title="All 2 branches missed.">      if (startChord.charAt(1) == 'b'){</span>
+<span class="nc" id="L139">        progRoot = startChord.substring(0,2);</span>
+<span class="nc" id="L140">        progQuality = startChord.substring(2);</span>
+      }
+      // Convert the progQuality to enum
+<span class="nc" id="L143">      progQuality = QUALITIES.get(progQuality);</span>
+
+<span class="nc" id="L145">      String[] command = {&quot;generate-chords&quot;, progRoot, progQuality, Integer.toString(numBars), chordDiversity};</span>
+
+      // Call the app to generate the chords
+<span class="nc" id="L148">      generateChordsApp.execute(command);</span>
+<span class="nc" id="L149">      List&lt;GeneratedChord&gt; results = generateChordsApp.getResult();</span>
+
+      // Convert the GeneratedChord List into JSON
+<span class="nc" id="L152">      JsonElement element = GSON.toJsonTree(results, new TypeToken&lt;List&lt;GeneratedChord&gt;&gt;(){}.getType());</span>
+<span class="nc" id="L153">      return element.getAsJsonArray();</span>
+    }
+  }
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.5.201910111838</span></div></body></html>

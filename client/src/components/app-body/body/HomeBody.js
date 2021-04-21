@@ -106,7 +106,7 @@ export default function HomeBody({ synths }) {
       }
     }
     axios.post(
-      "http://localhost:4567/generate",
+      "/generate",
       toSend,
       config
     )

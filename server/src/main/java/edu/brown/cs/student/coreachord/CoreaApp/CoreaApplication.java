@@ -1,5 +1,7 @@
 package edu.brown.cs.student.coreachord.CoreaApp;
 
+import java.lang.reflect.Array;
+import java.util.Arrays;
 import java.util.List;
 import java.util.ArrayList;
 import java.util.Set;
@@ -133,7 +135,7 @@ public class CoreaApplication {
       matrix = highDiversity;
     }
     if (brightness == Brightness.Light || brightness == Brightness.Dark) {
-      this.adjustMatrixForBrightness(matrix, brightness); // adjust matrix weights if the theme is either light or dark.
+      matrix = this.adjustMatrixForBrightness(matrix, brightness); // adjust matrix weights if the theme is either light or dark.
     }
     result = this.markovChain(startingchord, numbars, matrix); // call helper method
   }
@@ -214,37 +216,51 @@ public class CoreaApplication {
    * Helper method for adjusting matrix weights based on the "brightness" of the chord progression
    * @param matrix
    */
-  private void adjustMatrixForBrightness(TransitionMatrix matrix, Brightness brightness) {
+  private TransitionMatrix adjustMatrixForBrightness(TransitionMatrix matrix, Brightness brightness) {
     double[][] transitionMat = matrix.getTransitionMatrix();
     int n = transitionMat.length; // square matrix, get one dimension.
+    double[][] newMat = new double[n][n];
+    // first pass, copy over weight values from original matrix
+    for (int i = 0; i < n; ++i) {
+      for (int j = 0; j < n; ++j) {
+        newMat[i][j] = transitionMat[i][j]; // copy weight(s)
+      }
+    }
+
     if (brightness == Brightness.Light) {
       for (int i = 0; i < n; ++i) {
         for (int j = 0; j < n; ++j) {
           if (isBrightChord(j)) { // if it IS a bright chord
-            transitionMat[i][j] += 0.7;
+            newMat[i][j] = transitionMat[i][j] + 0.7;
           }
         }
-        this.normalize(transitionMat[i]); // normalize if we're done with one row.
+        newMat[i] = this.normalize(newMat[i]); // normalize if we're done with one row.
       }
     } else if (brightness == Brightness.Dark) {
       for (int i = 0; i < n; ++i) {
         for (int j = 0; j < n; ++j) {
-          if (!isBrightChord(j)) { // if it IS a bright chord
-            transitionMat[i][j] += 0.7;
+          if (!isBrightChord(j)) { // if it is NOT a bright chord
+            newMat[i][j] = transitionMat[i][j] + 0.7;
           }
         }
-        this.normalize(transitionMat[i]); // normalize if we're done with one row.
+        newMat[i] = this.normalize(newMat[i]); // normalize if we're done with one row.
       }
     }
-    matrix.setTransitionMatrix(transitionMat);
+
+    TransitionMatrix newtmat = new TransitionMatrix();
+    newtmat.setTransitionMatrix(newMat);
+    return newtmat;
   }
+
   /**
-   * Helper method that normalizes the values of a row.
+   * Helper method that normalizes the values of a ro.
    * It just mutates the inputted row, so nothing is returned.
    * @param row
    */
-  private void normalize(double[] row) {
-    int sum = 0;
+  private double[] normalize(double[] row) {
+    double sum = 0;
+    int resultlen = row.length;
+    double[] result = new double[resultlen];
     for (int i = 0; i < row.length; ++i) {
       sum += row[i];
     }
@@ -254,8 +270,9 @@ public class CoreaApplication {
       inverse = 1/floatsum;
     }
     for (int i = 0; i < row.length; ++i) {
-      row[i] = row[i]/inverse;
+      result[i] = row[i]*inverse;
     }
+    return result;
   }
 
   /**
@@ -265,14 +282,10 @@ public class CoreaApplication {
    * @return boolean
    */
   private boolean isBrightChord(int index) {
-    if (index == 8 || index == 9 || index == 10 || index == 11 // D "bright" chords
-        || index == 16 || index == 17 || index == 18 || index == 19 // E
-        || index == 28 || index == 29 || index == 30 || index == 31 // G
-        || index == 36 || index == 37 || index == 38 || index == 39 // A
-        || index == 44 || index == 45 || index == 46 || index == 47) { // B
-        return true;
-    }
-    return false; // if not, return false
+    Integer[] brightchordarr = new Integer[] {8, 9, 10, 11, 16, 17, 18, 19, 28, 29, 30, 31,
+    36, 37, 38, 39, 44, 45, 46, 47};
+    List<Integer> brightchordarraylist = new ArrayList<>(Arrays.asList(brightchordarr));
+    return brightchordarraylist.contains(index);
   }
   /*
    * Below are some helper methods for handling the random walk on markov chain.
